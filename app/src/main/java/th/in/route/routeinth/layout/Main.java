@@ -13,10 +13,11 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemSelected;
 import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,8 +42,15 @@ public class Main extends Fragment {
     private Unbinder unbinder;
     @BindView(R.id.departSystem) Spinner departSystemSpinner;
     @BindView(R.id.departStation) Spinner departStationSpinner;
+    @BindView(R.id.arriveSystem) Spinner arriveSystemSpinner;
+    @BindView(R.id.arriveStation) Spinner arriveStationSpinner;
+    @BindView(R.id.calculateButton) Button calculateButton;
 
     private List<POJOSystem> systems;
+    private ArrayAdapter<String> departStationSpinnerAdapter;
+    private ArrayList<String> departStationList;
+    private ArrayAdapter<String> arriveStationSpinnerAdapter;
+    private ArrayList<String> arriveStationList;
 
     public Main() {
         // Required empty public constructor
@@ -89,14 +97,19 @@ public class Main extends Fragment {
 
                 ArrayAdapter<String> systemSpinnerAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, systemList);
                 departSystemSpinner.setAdapter(systemSpinnerAdapter);
+                arriveSystemSpinner.setAdapter(systemSpinnerAdapter);
 
-                ArrayList<String> stationList = new ArrayList<>();
+                departStationList = new ArrayList<>();
+                arriveStationList = new ArrayList<>();
                 for (Detail detail: systems.get(0).option.values()) {
-                    stationList.add(detail.th);
+                    departStationList.add(detail.th);
+                    arriveStationList.add(detail.th);
                 }
 
-                ArrayAdapter<String> stationSpinnerAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, stationList);
-                departStationSpinner.setAdapter(stationSpinnerAdapter);
+                departStationSpinnerAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, departStationList);
+                arriveStationSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, arriveStationList);
+                departStationSpinner.setAdapter(departStationSpinnerAdapter);
+                arriveStationSpinner.setAdapter(arriveStationSpinnerAdapter);
             }
 
             @Override
@@ -106,6 +119,30 @@ public class Main extends Fragment {
         });
         return v;
     }
+
+    @OnItemSelected(R.id.departSystem)
+    void onDepartItemSelected(int position) {
+        departStationList.clear();
+        for (Detail detail: systems.get(position).option.values()) {
+            departStationList.add(detail.th);
+        }
+        departStationSpinnerAdapter.notifyDataSetChanged();
+    }
+
+    @OnItemSelected(R.id.arriveSystem)
+    void onArriveItemSelected(int position) {
+        arriveStationList.clear();
+        for (Detail detail: systems.get(position).option.values()) {
+            arriveStationList.add(detail.th);
+        }
+        arriveStationSpinnerAdapter.notifyDataSetChanged();
+    }
+
+    @OnClick(R.id.calculateButton)
+    void onCalculateClicked(View v) {
+        Log.d("departSystem", departSystemSpinner.getSelectedItem().toString());
+    }
+
 
     public void onButtonPressed() {
         if (mListener != null) {
