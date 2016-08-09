@@ -8,4 +8,8 @@ import java.util.Map;
 public class POJOSystem {
     public String name;
     public Map<String, Detail> option;
+
+    public String toString() {
+        return name;
+    }
 }

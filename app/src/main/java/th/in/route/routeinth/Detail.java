@@ -7,4 +7,9 @@ public class Detail {
     public String th;
     public String en;
     public String code;
+    public String key;
+
+    public String toString() {
+        return th;
+    }
 }

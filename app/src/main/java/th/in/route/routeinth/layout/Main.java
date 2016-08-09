@@ -13,6 +13,7 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,10 +25,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import th.in.route.routeinth.APIServices;
-import th.in.route.routeinth.Detail;
-import th.in.route.routeinth.POJOSystem;
-import th.in.route.routeinth.R;
+import th.in.route.routeinth.*;
+import th.in.route.routeinth.Result;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,10 +46,10 @@ public class Main extends Fragment {
     @BindView(R.id.calculateButton) Button calculateButton;
 
     private List<POJOSystem> systems;
-    private ArrayAdapter<String> departStationSpinnerAdapter;
-    private ArrayList<String> departStationList;
-    private ArrayAdapter<String> arriveStationSpinnerAdapter;
-    private ArrayList<String> arriveStationList;
+    private ArrayAdapter<Detail> departStationSpinnerAdapter;
+    private List<Detail> departStationList;
+    private ArrayAdapter<Detail> arriveStationSpinnerAdapter;
+    private List<Detail> arriveStationList;
 
     public Main() {
         // Required empty public constructor
@@ -82,7 +81,7 @@ public class Main extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, v);
 
-        Retrofit retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl("http://route.in.th/api/public/").build();
+        Retrofit retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl("http://103.253.134.235:8888/").build();
 
         APIServices apiServices = retrofit.create(APIServices.class);
         Call<List<POJOSystem>> call = apiServices.getSystem();
@@ -90,23 +89,15 @@ public class Main extends Fragment {
             @Override
             public void onResponse(Call<List<POJOSystem>> call, Response<List<POJOSystem>> response) {
                 systems = response.body();
-                ArrayList<String> systemList = new ArrayList<>();
-                for (POJOSystem s: systems) {
-                    systemList.add(s.name);
-                }
 
-                ArrayAdapter<String> systemSpinnerAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, systemList);
+                ArrayAdapter<POJOSystem> systemSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, systems);
                 departSystemSpinner.setAdapter(systemSpinnerAdapter);
                 arriveSystemSpinner.setAdapter(systemSpinnerAdapter);
 
-                departStationList = new ArrayList<>();
-                arriveStationList = new ArrayList<>();
-                for (Detail detail: systems.get(0).option.values()) {
-                    departStationList.add(detail.th);
-                    arriveStationList.add(detail.th);
-                }
+                departStationList = new ArrayList<>(systems.get(0).option.values());
+                arriveStationList = new ArrayList<>(systems.get(0).option.values());
 
-                departStationSpinnerAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, departStationList);
+                departStationSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, departStationList);
                 arriveStationSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, arriveStationList);
                 departStationSpinner.setAdapter(departStationSpinnerAdapter);
                 arriveStationSpinner.setAdapter(arriveStationSpinnerAdapter);
@@ -123,24 +114,49 @@ public class Main extends Fragment {
     @OnItemSelected(R.id.departSystem)
     void onDepartItemSelected(int position) {
         departStationList.clear();
-        for (Detail detail: systems.get(position).option.values()) {
-            departStationList.add(detail.th);
-        }
+        departStationList.addAll(systems.get(position).option.values());
         departStationSpinnerAdapter.notifyDataSetChanged();
     }
 
     @OnItemSelected(R.id.arriveSystem)
     void onArriveItemSelected(int position) {
         arriveStationList.clear();
-        for (Detail detail: systems.get(position).option.values()) {
-            arriveStationList.add(detail.th);
-        }
+        arriveStationList.addAll(systems.get(position).option.values());
         arriveStationSpinnerAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.calculateButton)
     void onCalculateClicked(View v) {
-        Log.d("departSystem", departSystemSpinner.getSelectedItem().toString());
+        Log.d("departSystemPos", Integer.toString(departStationSpinner.getSelectedItemPosition()));
+        Log.d("departSystem", departStationSpinner.getSelectedItem().toString());
+        Log.d("code", ((Detail) departStationSpinner.getSelectedItem()).key);
+        String departKey = ((Detail) departStationSpinner.getSelectedItem()).key;
+        String arriveKey = ((Detail) arriveStationSpinner.getSelectedItem()).key;
+        Input input = new Input();
+        input.origin = departKey;
+        input.destination = arriveKey;
+        input.card_type_bts = "0";
+        input.card_type_mrt = "0";
+        input.card_type_arl = "0";
+
+        Retrofit retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl("http://103.253.134.235:8888/").build();
+
+        APIServices apiServices = retrofit.create(APIServices.class);
+        Call<Result> resultCall = apiServices.calculate(input);
+
+        resultCall.enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                Result result = response.body();
+                Log.d("sta_cnt", Integer.toString(result.object_route.get(1).station_cnt));
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                Log.e("error", t.getMessage());
+            }
+        });
+
     }
 
 
