@@ -11,7 +11,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import th.in.route.routeinth.model.Result;
+import th.in.route.routeinth.model.result.Result;
 
 /**
  * A simple {@link Fragment} subclass.

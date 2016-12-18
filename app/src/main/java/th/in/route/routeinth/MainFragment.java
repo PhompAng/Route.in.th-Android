@@ -24,10 +24,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import th.in.route.routeinth.model.Detail;
-import th.in.route.routeinth.model.Input;
-import th.in.route.routeinth.model.POJOSystem;
-import th.in.route.routeinth.model.Result;
+import th.in.route.routeinth.model.system.Detail;
+import th.in.route.routeinth.model.result.Input;
+import th.in.route.routeinth.model.system.POJOSystem;
+import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.services.APIServices;
 
 /**

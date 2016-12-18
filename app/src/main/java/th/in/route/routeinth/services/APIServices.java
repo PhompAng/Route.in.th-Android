@@ -6,9 +6,9 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import th.in.route.routeinth.model.Input;
-import th.in.route.routeinth.model.POJOSystem;
-import th.in.route.routeinth.model.Result;
+import th.in.route.routeinth.model.result.Input;
+import th.in.route.routeinth.model.system.POJOSystem;
+import th.in.route.routeinth.model.result.Result;
 
 /**
  * Created by Pichai Sivawat on 6/5/2016.

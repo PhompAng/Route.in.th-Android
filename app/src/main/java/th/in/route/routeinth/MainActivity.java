@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import th.in.route.routeinth.model.Result;
+import th.in.route.routeinth.model.result.Result;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.OnCalculateBtnPressedListener, ResultFragment.OnTest {
     @BindView(R.id.toolbar) Toolbar toolbar;
