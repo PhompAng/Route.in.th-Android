@@ -1,4 +1,4 @@
-package th.in.route.routeinth;
+package th.in.route.routeinth.services;
 
 import java.util.List;
 
@@ -6,6 +6,9 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import th.in.route.routeinth.model.Input;
+import th.in.route.routeinth.model.POJOSystem;
+import th.in.route.routeinth.model.Result;
 
 /**
  * Created by Pichai Sivawat on 6/5/2016.

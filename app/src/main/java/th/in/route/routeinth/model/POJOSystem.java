@@ -1,4 +1,4 @@
-package th.in.route.routeinth;
+package th.in.route.routeinth.model;
 
 import java.util.Map;
 

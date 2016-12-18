@@ -1,4 +1,4 @@
-package th.in.route.routeinth.activity;
+package th.in.route.routeinth;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -7,11 +7,9 @@ import android.support.v7.widget.Toolbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import th.in.route.routeinth.layout.MainFragment;
-import th.in.route.routeinth.layout.ResultFragment;
-import th.in.route.routeinth.R;
+import th.in.route.routeinth.model.Result;
 
-public class  MainActivity extends AppCompatActivity implements MainFragment.OnCalculateBtnPressedListener, ResultFragment.OnTest {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnCalculateBtnPressedListener, ResultFragment.OnTest {
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
@@ -28,7 +26,7 @@ public class  MainActivity extends AppCompatActivity implements MainFragment.OnC
     }
 
     @Override
-    public void OnCalculateBtnPressed(th.in.route.routeinth.Result result) {
+    public void OnCalculateBtnPressed(Result result) {
         ResultFragment resultFragment = ResultFragment.newInstance();
         resultFragment.setResult(result);
 

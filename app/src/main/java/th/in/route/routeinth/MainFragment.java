@@ -1,4 +1,4 @@
-package th.in.route.routeinth.layout;
+package th.in.route.routeinth;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -24,8 +24,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import th.in.route.routeinth.*;
-import th.in.route.routeinth.Result;
+import th.in.route.routeinth.model.Detail;
+import th.in.route.routeinth.model.Input;
+import th.in.route.routeinth.model.POJOSystem;
+import th.in.route.routeinth.model.Result;
+import th.in.route.routeinth.services.APIServices;
 
 /**
  * A simple {@link Fragment} subclass.

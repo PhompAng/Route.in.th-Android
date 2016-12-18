@@ -1,4 +1,4 @@
-package th.in.route.routeinth;
+package th.in.route.routeinth.model;
 
 /**
  * Created by Pichai Sivawat on 6/5/2016.
