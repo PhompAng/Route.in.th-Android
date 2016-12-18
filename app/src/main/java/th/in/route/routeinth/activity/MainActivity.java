@@ -4,15 +4,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import th.in.route.routeinth.layout.Result;
+import th.in.route.routeinth.layout.MainFragment;
+import th.in.route.routeinth.layout.ResultFragment;
 import th.in.route.routeinth.R;
-import th.in.route.routeinth.layout.Main;
 
-public class  MainActivity extends AppCompatActivity implements Main.OnFragmentInteractionListener, Result.OnTest {
+public class  MainActivity extends AppCompatActivity implements MainFragment.OnCalculateBtnPressedListener, ResultFragment.OnTest {
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
@@ -22,15 +21,19 @@ public class  MainActivity extends AppCompatActivity implements Main.OnFragmentI
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        Main mainFragment = Main.newInstance();
+        MainFragment mainFragmentFragment = MainFragment.newInstance();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, mainFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, mainFragmentFragment).commit();
     }
 
     @Override
-    public void onFragmentInteraction() {
-        Log.i("aaaaaaaaaa", "aaaaaaaaaaa");
+    public void OnCalculateBtnPressed(th.in.route.routeinth.Result result) {
+        ResultFragment resultFragment = ResultFragment.newInstance();
+        resultFragment.setResult(result);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, resultFragment).addToBackStack(null).commit();
     }
 
     @Override

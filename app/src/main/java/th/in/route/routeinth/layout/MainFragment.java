@@ -13,7 +13,6 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,13 +30,13 @@ import th.in.route.routeinth.Result;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Main.OnFragmentInteractionListener} interface
+ * {@link MainFragment.OnCalculateBtnPressedListener} interface
  * to handle interaction events.
- * Use the {@link Main#newInstance} factory method to
+ * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Main extends Fragment {
-    private OnFragmentInteractionListener mListener;
+public class MainFragment extends Fragment {
+    private OnCalculateBtnPressedListener mListener;
     private Unbinder unbinder;
     @BindView(R.id.departSystem) Spinner departSystemSpinner;
     @BindView(R.id.departStation) Spinner departStationSpinner;
@@ -51,7 +50,7 @@ public class Main extends Fragment {
     private ArrayAdapter<Detail> arriveStationSpinnerAdapter;
     private List<Detail> arriveStationList;
 
-    public Main() {
+    public MainFragment() {
         // Required empty public constructor
     }
 
@@ -59,10 +58,10 @@ public class Main extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment Main.
+     * @return A new instance of fragment MainFragment.
      */
-    public static Main newInstance() {
-        Main fragment = new Main();
+    public static MainFragment newInstance() {
+        MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -127,9 +126,6 @@ public class Main extends Fragment {
 
     @OnClick(R.id.calculateButton)
     void onCalculateClicked(View v) {
-        Log.d("departSystemPos", Integer.toString(departStationSpinner.getSelectedItemPosition()));
-        Log.d("departSystem", departStationSpinner.getSelectedItem().toString());
-        Log.d("code", ((Detail) departStationSpinner.getSelectedItem()).key);
         String departKey = ((Detail) departStationSpinner.getSelectedItem()).key;
         String arriveKey = ((Detail) arriveStationSpinner.getSelectedItem()).key;
         Input input = new Input();
@@ -148,7 +144,7 @@ public class Main extends Fragment {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 Result result = response.body();
-                Log.d("sta_cnt", Integer.toString(result.object_route.get(1).station_cnt));
+                calculate(result);
             }
 
             @Override
@@ -160,17 +156,17 @@ public class Main extends Fragment {
     }
 
 
-    public void onButtonPressed() {
+    public void calculate(Result result) {
         if (mListener != null) {
-            mListener.onFragmentInteraction();
+            mListener.OnCalculateBtnPressed(result);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnCalculateBtnPressedListener) {
+            mListener = (OnCalculateBtnPressedListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -199,7 +195,7 @@ public class Main extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction();
+    public interface OnCalculateBtnPressedListener {
+        void OnCalculateBtnPressed(Result result);
     }
 }

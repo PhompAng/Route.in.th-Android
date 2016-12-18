@@ -6,21 +6,29 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import th.in.route.routeinth.R;
+import th.in.route.routeinth.Result;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Result.OnTest} interface
+ * {@link ResultFragment.OnTest} interface
  * to handle interaction events.
- * Use the {@link Result#newInstance} factory method to
+ * Use the {@link ResultFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Result extends Fragment {
+public class ResultFragment extends Fragment {
     private OnTest mListener;
+    private Unbinder unbinder;
+    @BindView(R.id.resultOrigin) TextView resultOrigin;
+    private Result result;
 
-    public Result() {
+    public ResultFragment() {
         // Required empty public constructor
     }
 
@@ -28,10 +36,10 @@ public class Result extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment Result.
+     * @return A new instance of fragment ResultFragment.
      */
-    public static Result newInstance() {
-        Result fragment = new Result();
+    public static ResultFragment newInstance() {
+        ResultFragment fragment = new ResultFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -48,7 +56,12 @@ public class Result extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_result, container, false);
+        View v = inflater.inflate(R.layout.fragment_result, container, false);
+        unbinder = ButterKnife.bind(this, v);
+
+        resultOrigin.setText(this.result.origin.th);
+
+        return v;
     }
 
     public void onButtonPressed() {
@@ -72,6 +85,10 @@ public class Result extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
     }
 
     /**

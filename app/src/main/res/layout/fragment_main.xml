@@ -3,15 +3,16 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
-    android:gravity="center_horizontal"
-    android:layout_margin="@dimen/activity_horizontal_margin">
+    android:background="@color/colorPrimary"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:gravity="center_horizontal">
 
     <TextView
         android:id="@+id/departTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="Depart"/>
+        android:text="@string/origin"/>
     <Spinner
         android:id="@+id/departSystem"
         android:layout_width="100dp"
@@ -30,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/departSystem"
         android:textSize="24sp"
-        android:text="Arrive"/>
+        android:text="@string/destination"/>
     <Spinner
         android:id="@+id/arriveSystem"
         android:layout_width="100dp"
