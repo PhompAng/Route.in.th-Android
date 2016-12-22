@@ -11,7 +11,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimaryDark"
+            android:background="?attr/colorPrimary"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
     </android.support.design.widget.AppBarLayout>
@@ -35,7 +35,7 @@
         android:layout_alignParentBottom="true"
         android:elevation="8dp"
         android:outlineProvider="bounds"
-        app:itemBackground="@color/white"
+        app:itemBackground="@android:color/white"
         app:itemIconTint="@drawable/nav_color_list"
         app:itemTextColor="@drawable/nav_color_list"
         app:menu="@menu/main"/>
