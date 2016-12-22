@@ -6,6 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 
 /**
@@ -55,11 +60,25 @@ public class DirectionFragment extends Fragment {
         }
     }
 
+    private Unbinder unbinder;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_direction, container, false);
+        View v = inflater.inflate(R.layout.fragment_direction, container, false);
+        unbinder = ButterKnife.bind(this, v);
+        return v;
+    }
+
+    @OnClick(R.id.test)
+    public void test() {
+        Toast.makeText(getContext(), "yeah", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
 }
