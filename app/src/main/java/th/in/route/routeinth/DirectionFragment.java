@@ -70,6 +70,12 @@ public class DirectionFragment extends Fragment {
         return v;
     }
 
+    @OnClick(R.id.origin_system)
+    public void sss() {
+        StationSelectFragment stationSelectFragment = StationSelectFragment.newInstance("test", "test");
+        getFragmentManager().beginTransaction().replace(R.id.flContent, stationSelectFragment).addToBackStack(null).commit();
+    }
+
     @OnClick(R.id.test)
     public void test() {
         Toast.makeText(getContext(), "yeah", Toast.LENGTH_SHORT).show();
