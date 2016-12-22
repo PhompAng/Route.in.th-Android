@@ -1,6 +1,7 @@
 package th.in.route.routeinth;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -16,10 +17,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-//
-//        MainFragment mainFragmentFragment = MainFragment.newInstance();
-//
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.flContent, mainFragmentFragment).commit();
+
+        DirectionFragment directionFragment = DirectionFragment.newInstance("test", "test");
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, directionFragment).commit();
     }
 }
