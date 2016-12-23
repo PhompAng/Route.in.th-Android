@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,20 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 import th.in.route.routeinth.adapter.StationAdapter;
+import th.in.route.routeinth.model.system.Detail;
+import th.in.route.routeinth.model.system.POJOSystem;
 import th.in.route.routeinth.model.system.RailSystem;
 import th.in.route.routeinth.model.system.Station;
+import th.in.route.routeinth.services.APIServices;
 
 
 /**
@@ -86,6 +98,49 @@ public class StationSelectFragment extends Fragment {
         mStationAdapter = new StationAdapter(makeList());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mStationAdapter);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://103.253.134.235:8888/").build();
+
+        APIServices apiServices = retrofit.create(APIServices.class);
+        Observable<List<POJOSystem>> observable = apiServices.getSystem();
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<List<POJOSystem>, List<? extends ExpandableGroup>>() {
+                    @Override
+                    public List<? extends ExpandableGroup> call(List<POJOSystem> pojoSystems) {
+                        List<RailSystem> systems = new ArrayList<>();
+
+                        for (POJOSystem pojoSystem: pojoSystems) {
+                            List<Station> stations = new ArrayList<>();
+                            for (Detail detail: pojoSystem.option.values()) {
+                                stations.add(new Station(detail.th, detail.en, detail.code, detail.key));
+                            }
+                            systems.add(new RailSystem(pojoSystem.name, stations));
+                        }
+
+                        return systems;
+                    }
+                })
+                .subscribe(new Observer<List<? extends ExpandableGroup>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<? extends ExpandableGroup> expandableGroups) {
+                        Log.d("group", expandableGroups.get(0).toString());
+                    }
+                });
+
 
         return v;
     }
