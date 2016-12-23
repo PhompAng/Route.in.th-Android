@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +26,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import th.in.route.routeinth.adapter.StationAdapter;
+import th.in.route.routeinth.adapter.viewholder.StationViewHolder;
+import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.system.POJOSystem;
 import th.in.route.routeinth.model.system.RailSystem;
 import th.in.route.routeinth.model.system.RailSystemMapper;
+import th.in.route.routeinth.model.system.Station;
 import th.in.route.routeinth.services.APIServices;
 
 
@@ -35,15 +40,12 @@ import th.in.route.routeinth.services.APIServices;
  * Use the {@link StationSelectFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StationSelectFragment extends Fragment {
+public class StationSelectFragment extends Fragment implements StationViewHolder.OnStationClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "type";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int type;
 
 
     public StationSelectFragment() {
@@ -54,16 +56,14 @@ public class StationSelectFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param type Parameter 1.
      * @return A new instance of fragment StationSelectFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static StationSelectFragment newInstance(String param1, String param2) {
+    public static StationSelectFragment newInstance(int type) {
         StationSelectFragment fragment = new StationSelectFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM1, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,8 +73,7 @@ public class StationSelectFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            type = getArguments().getInt(ARG_PARAM1);
         }
     }
 
@@ -91,7 +90,7 @@ public class StationSelectFragment extends Fragment {
         unbinder = ButterKnife.bind(this, v);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mStationAdapter = new StationAdapter(getContext(), new ArrayList<RailSystem>());
+        mStationAdapter = new StationAdapter(getContext(), new ArrayList<RailSystem>(), this);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mStationAdapter);
 
@@ -132,4 +131,10 @@ public class StationSelectFragment extends Fragment {
         unbinder.unbind();
     }
 
+    @Override
+    public void onClick(int parentPosition, int childPosition) {
+        Station station = mStationAdapter.getParentList().get(parentPosition).getChildList().get(childPosition);
+        EventBus.getDefault().postSticky(new StationEvent(station, type));
+        getFragmentManager().popBackStack();
+    }
 }

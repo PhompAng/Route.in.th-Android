@@ -22,6 +22,7 @@ import th.in.route.routeinth.model.system.Station;
 
 public class StationAdapter extends ExpandableRecyclerAdapter<RailSystem, Station, SystemViewHolder, StationViewHolder> {
 
+    private StationViewHolder.OnStationClickListener listener;
     private LayoutInflater mInflater;
     private List<RailSystem> systems;
 
@@ -41,10 +42,11 @@ public class StationAdapter extends ExpandableRecyclerAdapter<RailSystem, Statio
      * @param parentList List of all parents to be displayed in the RecyclerView that this
      *                   adapter is linked to
      */
-    public StationAdapter(Context context, @NonNull List<RailSystem> parentList) {
+    public StationAdapter(Context context, @NonNull List<RailSystem> parentList, StationViewHolder.OnStationClickListener listener) {
         super(parentList);
         mInflater = LayoutInflater.from(context);
         systems = parentList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -58,7 +60,7 @@ public class StationAdapter extends ExpandableRecyclerAdapter<RailSystem, Statio
     @Override
     public StationViewHolder onCreateChildViewHolder(@NonNull ViewGroup childViewGroup, int viewType) {
         View v = mInflater.inflate(R.layout.layout_station_viewholder, childViewGroup, false);
-        return new StationViewHolder(v);
+        return new StationViewHolder(v, listener);
     }
 
     @Override
