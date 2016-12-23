@@ -3,15 +3,23 @@ package th.in.route.routeinth;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import th.in.route.routeinth.adapter.RouteAdapter;
 import th.in.route.routeinth.model.result.Result;
+import th.in.route.routeinth.model.result.Route;
+import th.in.route.routeinth.model.view.RouteItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +33,16 @@ public class ResultFragment extends Fragment {
     private OnTest mListener;
     private Unbinder unbinder;
     @BindView(R.id.resultOrigin) TextView resultOrigin;
+    @BindView(R.id.resultDestination) TextView resultDestination;
+    @BindView(R.id.resultTripFareTotal) TextView resultTripFareTotal;
+    @BindView(R.id.resultBTSFare) TextView resultBTSFare;
+    @BindView(R.id.resultMRTFare) TextView resultMRTFare;
+    @BindView(R.id.resultARLFare) TextView resultARLFare;
+    @BindView(R.id.routeRecycler) RecyclerView routeRecycler;
+    RouteAdapter routeAdapter;
+    LinearLayoutManager linearLayoutManager;
     private Result result;
+    private ArrayList<RouteItem> routeItems;
 
     public ResultFragment() {
         // Required empty public constructor
@@ -59,6 +76,27 @@ public class ResultFragment extends Fragment {
         unbinder = ButterKnife.bind(this, v);
 
         resultOrigin.setText(this.result.origin.th);
+        resultDestination.setText(this.result.destination.th);
+        resultTripFareTotal.setText(String.format("%d บาท", this.result.fare.total));
+        Log.wtf("result.object_route.get(position).name.th", result.object_route.get(0).name.th);
+        if(this.result.fare.BTS != 0){
+            resultBTSFare.setVisibility(View.VISIBLE);
+            resultBTSFare.setText(String.format("BTS    %d บาท", this.result.fare.BTS));
+        }
+        if(this.result.fare.MRT != 0){
+            resultMRTFare.setVisibility(View.VISIBLE);
+            resultMRTFare.setText(String.format("MRT    %d บาท",  this.result.fare.MRT));
+        }
+        if(this.result.fare.ARL != 0){
+            resultARLFare.setVisibility(View.VISIBLE);
+            resultARLFare.setText(String.format("ARL    %d บาท", this.result.fare.ARL));
+        }
+
+        routeAdapter = new RouteAdapter(result, getContext());
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        routeRecycler.setHasFixedSize(true);
+        routeRecycler.setLayoutManager(linearLayoutManager);
+        routeRecycler.setAdapter(routeAdapter);
 
         return v;
     }
@@ -102,5 +140,12 @@ public class ResultFragment extends Fragment {
      */
     public interface OnTest {
         void onTest();
+    }
+
+    private void getStationEachSystem(Result result){
+        for (Route route: result.object_route){
+            RouteItem routeItem = new RouteItem();
+            if(routeItem)
+        }
     }
 }
