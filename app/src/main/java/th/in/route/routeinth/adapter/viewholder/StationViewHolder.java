@@ -1,9 +1,10 @@
 package th.in.route.routeinth.adapter.viewholder;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
-import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
+import com.bignerdranch.expandablerecyclerview.ChildViewHolder;
 
 import th.in.route.routeinth.R;
 
@@ -18,7 +19,7 @@ public class StationViewHolder extends ChildViewHolder {
         this.name = (TextView) itemView.findViewById(R.id.name);
     }
 
-    public void setName(String name) {
+    public void bind(@NonNull String name) {
         this.name.setText(name);
     }
 }

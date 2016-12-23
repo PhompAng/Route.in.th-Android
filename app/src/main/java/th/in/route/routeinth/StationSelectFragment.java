@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +20,13 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import th.in.route.routeinth.adapter.StationAdapter;
-import th.in.route.routeinth.model.system.Detail;
 import th.in.route.routeinth.model.system.POJOSystem;
 import th.in.route.routeinth.model.system.RailSystem;
-import th.in.route.routeinth.model.system.Station;
+import th.in.route.routeinth.model.system.RailSystemMapper;
 import th.in.route.routeinth.services.APIServices;
 
 
@@ -95,10 +91,16 @@ public class StationSelectFragment extends Fragment {
         unbinder = ButterKnife.bind(this, v);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mStationAdapter = new StationAdapter(makeList());
+        mStationAdapter = new StationAdapter(getContext(), new ArrayList<RailSystem>());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mStationAdapter);
 
+        retrieveStations();
+
+        return v;
+    }
+
+    private void retrieveStations() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -108,62 +110,20 @@ public class StationSelectFragment extends Fragment {
         Observable<List<POJOSystem>> observable = apiServices.getSystem();
         observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<List<POJOSystem>, List<? extends ExpandableGroup>>() {
+                .map(new RailSystemMapper())
+                .doOnNext(new Action1<List<RailSystem>>() {
                     @Override
-                    public List<? extends ExpandableGroup> call(List<POJOSystem> pojoSystems) {
-                        List<RailSystem> systems = new ArrayList<>();
-
-                        for (POJOSystem pojoSystem: pojoSystems) {
-                            List<Station> stations = new ArrayList<>();
-                            for (Detail detail: pojoSystem.option.values()) {
-                                stations.add(new Station(detail.th, detail.en, detail.code, detail.key));
-                            }
-                            systems.add(new RailSystem(pojoSystem.name, stations));
-                        }
-
-                        return systems;
+                    public void call(List<RailSystem> railSystems) {
+                        mStationAdapter.setParentList(railSystems, false);
                     }
                 })
-                .subscribe(new Observer<List<? extends ExpandableGroup>>() {
+                .doOnError(new Action1<Throwable>() {
                     @Override
-                    public void onCompleted() {
-
+                    public void call(Throwable throwable) {
+                        Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<? extends ExpandableGroup> expandableGroups) {
-                        Log.d("group", expandableGroups.get(0).toString());
-                    }
-                });
-
-
-        return v;
-    }
-
-    private List<? extends ExpandableGroup> makeList() {
-        List<Station> arl = new ArrayList<>();
-        arl.add(new Station("ARL สุวรรณภูมิ", "ARL Suvarnabhumi", "A1", "A1"));
-        arl.add(new Station("ARL ลาดกระบัง", "ARL Lat Krabang", "A2", "A2"));
-
-        List<Station> bts = new ArrayList<>();
-        bts.add(new Station("BTS หมอชิต", "BTS Mo Chit", "N8", "BN8"));
-        bts.add(new Station("BTS สะพานควาย", "BTS Saphan Khwai", "N7", "BN7"));
-
-        List<Station> mrt = new ArrayList<>();
-        mrt.add(new Station("MRT บางซื่อ", "MRT Bang Sue", "BAN", "M1"));
-        mrt.add(new Station("MRT กำแพงเพชร", "MRT Kamphaeng Phet", "KAM", "M2"));
-
-        List<RailSystem> systems = new ArrayList<>();
-        systems.add(new RailSystem("Airport Rail Link", arl));
-        systems.add(new RailSystem("BTS Sky Train", bts));
-        systems.add(new RailSystem("Metropolitan Rapid Transit", mrt));
-
-        return systems;
+                })
+                .subscribe();
     }
 
     @Override
