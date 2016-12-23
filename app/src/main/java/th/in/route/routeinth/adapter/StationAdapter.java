@@ -70,6 +70,6 @@ public class StationAdapter extends ExpandableRecyclerAdapter<RailSystem, Statio
 
     @Override
     public void onBindChildViewHolder(@NonNull StationViewHolder childViewHolder, int parentPosition, int childPosition, @NonNull Station child) {
-        childViewHolder.bind(child.getTh());
+        childViewHolder.bind(child.getTh(), child);
     }
 }
