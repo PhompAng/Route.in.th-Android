@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -36,16 +35,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"/>
 
-    <TextView
+    <th.in.route.routeinth.view.StationChip
         android:id="@+id/origin_station_chip"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:background="@drawable/arl_chip"
-        android:gravity="center"
-        android:elevation="1dp"
-        android:text="A1"
-        android:textSize="13sp"
-        android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@+id/origin"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="8dp"
@@ -78,16 +71,10 @@
         android:layout_marginStart="8dp"
         app:layout_constraintHorizontal_bias="1.0" />
 
-    <TextView
+    <th.in.route.routeinth.view.StationChip
         android:id="@+id/destination_station_chip"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:background="@drawable/bts_chip"
-        android:gravity="center"
-        android:elevation="1dp"
-        android:text="BN8"
-        android:textSize="13sp"
-        android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@+id/destination"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginEnd="8dp"

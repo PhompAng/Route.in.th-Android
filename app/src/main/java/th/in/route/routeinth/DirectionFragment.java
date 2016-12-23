@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import th.in.route.routeinth.model.StationEvent;
+import th.in.route.routeinth.view.StationChip;
 
 
 /**
@@ -82,6 +83,10 @@ public class DirectionFragment extends Fragment {
     TextView mOrigin;
     @BindView(R.id.destination)
     TextView mDestination;
+    @BindView(R.id.origin_station_chip)
+    StationChip mOriginChip;
+    @BindView(R.id.destination_station_chip)
+    StationChip mDestinationChip;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,14 +130,20 @@ public class DirectionFragment extends Fragment {
     private void setStation() {
         if (stations.get(0) != null) {
             mOrigin.setText(stations.get(0).getStation().getEn().replaceFirst(" ", "\n"));
+            mOriginChip.setVisibility(View.VISIBLE);
+            mOriginChip.setStation(stations.get(0).getStation());
         } else {
             mOrigin.setText(getString(R.string.select_origin_station));
+            mOriginChip.setVisibility(View.INVISIBLE);
         }
 
         if (stations.get(1) != null) {
             mDestination.setText(stations.get(1).getStation().getEn().replaceFirst(" ", "\n"));
+            mDestinationChip.setVisibility(View.VISIBLE);
+            mDestinationChip.setStation(stations.get(1).getStation());
         } else {
             mDestination.setText(getString(R.string.select_destination_station));
+            mDestinationChip.setVisibility(View.INVISIBLE);
         }
     }
 
