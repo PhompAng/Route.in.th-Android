@@ -25,12 +25,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginEnd="@dimen/activity_vertical_margin"/>
-    
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/divider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
