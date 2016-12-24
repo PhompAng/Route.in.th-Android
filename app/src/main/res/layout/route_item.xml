@@ -11,7 +11,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/resultStationImage"/>
+        android:id="@+id/resultStationImage" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,5 +20,15 @@
         android:gravity="left"
         android:paddingTop="16dp"
         android:id="@+id/resultStationName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/view_all_station_label"
+        android:id="@+id/viewAllStationLabel"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:layout_marginLeft="16dp"/>
 
 </LinearLayout>

@@ -1,5 +1,7 @@
 package th.in.route.routeinth.model.view;
 
+import th.in.route.routeinth.model.result.Route;
+
 /**
  * Created by Acer on 23/12/2559.
  */
@@ -7,7 +9,8 @@ package th.in.route.routeinth.model.view;
 public class RouteItem {
     private String type;
     private String stationOf;
-    private String Label;
+    private Route route;
+    private int system;
 
     public String getType() {
         return type;
@@ -25,11 +28,21 @@ public class RouteItem {
         this.stationOf = stationOf;
     }
 
-    public String getLabel() {
-        return Label;
+    public Route getRoute() {
+        return route;
     }
 
-    public void setLabel(String label) {
-        Label = label;
+    public void setRoute(Route route) {
+        this.route = route;
     }
+
+    public int getSystem() {
+        return system;
+    }
+
+    public void setSystem(int system) {
+        this.system = system;
+    }
+
+
 }

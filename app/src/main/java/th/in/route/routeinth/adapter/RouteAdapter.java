@@ -1,19 +1,29 @@
 package th.in.route.routeinth.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 import butterknife.BindView;
+import th.in.route.routeinth.MainActivity;
 import th.in.route.routeinth.R;
 import th.in.route.routeinth.ResultFragment;
 import th.in.route.routeinth.model.result.Result;
+import th.in.route.routeinth.model.result.Route;
+import th.in.route.routeinth.model.view.RouteItem;
 
 /**
  * Created by Acer on 20/12/2559.
@@ -22,21 +32,25 @@ import th.in.route.routeinth.model.result.Result;
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> {
 
     Context mContext;
-    Result result;
+    List<RouteItem> routeItems;
+    ResultFragment fragment;
 
-    public RouteAdapter(Result result, Context mContext) {
-        this.result = result;
+    public RouteAdapter(List<RouteItem> routeItems, Context mContext, ResultFragment resultFragment) {
+        this.routeItems = routeItems;
         this.mContext = mContext;
+        this.fragment = resultFragment;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView stationNameLabel;
         private ImageView resourceStationImage;
+        private TextView viewAllStationLabel;
         private LinearLayout routeItem;
         public ViewHolder(View itemView) {
             super(itemView);
             stationNameLabel = (TextView) itemView.findViewById(R.id.resultStationName);
             resourceStationImage = (ImageView) itemView.findViewById(R.id.resultStationImage);
+            viewAllStationLabel = (TextView) itemView.findViewById(R.id.viewAllStationLabel);
             routeItem = (LinearLayout) itemView.findViewById(R.id.routeItem);
         }
     }
@@ -49,20 +63,89 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(RouteAdapter.ViewHolder holder, int position) {
-        holder.stationNameLabel.setText(result.object_route.get(position).name.th);
-        if(position == 0 && result.object_route.get(position).name.th.charAt(0) == 'A'){
-            holder.resourceStationImage.setImageResource(R.drawable.arl_ori);
-            holder.resourceStationImage.setColorFilter(R.color.colorPrimaryDark);
-        }else if (position == result.object_route.size()-1 && result.object_route.get(position).name.th.charAt(0) == 'A'){
-            holder.resourceStationImage.setImageResource(R.drawable.arl_des);
+    public void onBindViewHolder(final RouteAdapter.ViewHolder holder, final int position) {
+
+        //set up color of each system
+        int color;
+        if(routeItems.get(position).getStationOf().equals("A")){
+            color = R.color.colorArl;
+        }else if(routeItems.get(position).getStationOf().equals("B")){
+            color = R.color.colorBts;
         }else {
-            holder.resourceStationImage.setImageResource(R.drawable.arl_between);
+            color = R.color.colorMrt;
         }
+
+        //each listview
+        if(routeItems.get(position).getType() == "ori"){
+            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
+            holder.resourceStationImage.setImageResource(R.drawable.route_ori);
+            holder.viewAllStationLabel.setVisibility(View.GONE);
+            holder.stationNameLabel.setTextSize(14);
+            if(fragment.getIsShow(routeItems.get(position).getSystem())){
+                Log.wtf("bbbbbb", routeItems.get(position).getSystem() + "");
+                holder.viewAllStationLabel.setText("HIDE All STATIONS");
+                holder.viewAllStationLabel.setVisibility(View.VISIBLE);
+                holder.stationNameLabel.setTextSize(14);
+                holder.routeItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        fragment.setIsShow(routeItems.get(position).getSystem(), false);
+                    }
+                });
+            }
+        }else if(routeItems.get(position).getType() == "des"){
+            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
+            holder.resourceStationImage.setImageResource(R.drawable.route_des);
+            holder.viewAllStationLabel.setVisibility(View.GONE);
+            holder.stationNameLabel.setTextSize(14);
+        } else if(routeItems.get(position).getType().equals("station")){
+            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
+            holder.resourceStationImage.setImageResource(R.drawable.route_station);
+            holder.viewAllStationLabel.setVisibility(View.GONE);
+            holder.stationNameLabel.setTextSize(14);
+        }
+        else if(routeItems.get(position).getType().equals("start")){
+            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
+            holder.resourceStationImage.setImageResource(R.drawable.route_start);
+            holder.viewAllStationLabel.setVisibility(View.GONE);
+            holder.stationNameLabel.setTextSize(14);
+            if(fragment.getIsShow(routeItems.get(position).getSystem())){
+                Log.wtf("cccc", routeItems.get(position).getSystem() + "");
+                holder.viewAllStationLabel.setText("HIDE All STATIONS");
+                holder.viewAllStationLabel.setVisibility(View.VISIBLE);
+                holder.stationNameLabel.setTextSize(14);
+                holder.routeItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        fragment.setIsShow(routeItems.get(position).getSystem(), false);
+                    }
+                });
+            }
+        }else if (routeItems.get(position).getType().equals("end")){
+            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
+            holder.resourceStationImage.setImageResource(R.drawable.route_end);
+            holder.viewAllStationLabel.setVisibility(View.GONE);
+            holder.stationNameLabel.setTextSize(14);
+        }else if(routeItems.get(position).getType().equals("between")){
+            holder.stationNameLabel.setText(routeItems.get(position).getRoute().station_cnt + " สถานี");
+            holder.stationNameLabel.setTextSize(10);
+            holder.viewAllStationLabel.setVisibility(View.VISIBLE);
+            holder.viewAllStationLabel.setText("VIEW ALL STATIONS");
+            holder.resourceStationImage.setImageResource(R.drawable.route_between);
+            holder.routeItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    fragment.setIsShow(routeItems.get(position).getSystem(), true);
+                }
+            });
+        }else {
+
+        }
+        holder.resourceStationImage.setColorFilter(ContextCompat.getColor(mContext, color));
     }
 
     @Override
     public int getItemCount() {
-        return result.object_route.size();
+        return routeItems.size();
     }
 }
