@@ -24,10 +24,12 @@ public class SystemViewHolder extends ParentViewHolder {
 
     private TextView title;
     private ImageView arrow;
+    public View topDivider;
     public SystemViewHolder(View itemView) {
         super(itemView);
         title = (TextView) itemView.findViewById(R.id.title);
         arrow = (ImageView) itemView.findViewById(R.id.arrow);
+        topDivider = itemView.findViewById(R.id.top_divider);
     }
 
     public void bind(@NonNull RailSystem railSystem) {

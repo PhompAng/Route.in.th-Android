@@ -65,11 +65,14 @@ public class StationAdapter extends ExpandableRecyclerAdapter<RailSystem, Statio
 
     @Override
     public void onBindParentViewHolder(@NonNull SystemViewHolder parentViewHolder, int parentPosition, @NonNull RailSystem parent) {
+        if (parentPosition != 0) {
+            parentViewHolder.topDivider.setVisibility(View.INVISIBLE);
+        }
         parentViewHolder.bind(parent);
     }
 
     @Override
     public void onBindChildViewHolder(@NonNull StationViewHolder childViewHolder, int parentPosition, int childPosition, @NonNull Station child) {
-        childViewHolder.bind(child.getTh(), child);
+        childViewHolder.bind(child.getEn(), child);
     }
 }

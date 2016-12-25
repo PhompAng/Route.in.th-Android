@@ -3,12 +3,15 @@ package th.in.route.routeinth;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.arlib.floatingsearchview.FloatingSearchView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,7 +43,7 @@ import th.in.route.routeinth.services.APIServices;
  * Use the {@link StationSelectFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StationSelectFragment extends Fragment implements StationViewHolder.OnStationClickListener {
+public class StationSelectFragment extends Fragment implements StationViewHolder.OnStationClickListener, FloatingSearchView.OnHomeActionClickListener, FloatingSearchView.OnQueryChangeListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "type";
@@ -75,10 +78,15 @@ public class StationSelectFragment extends Fragment implements StationViewHolder
         if (getArguments() != null) {
             type = getArguments().getInt(ARG_PARAM1);
         }
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     private Unbinder unbinder;
+    private List<RailSystem> systems = new ArrayList<>();
     private StationAdapter mStationAdapter;
+    @BindView(R.id.floating_search_view)
+    FloatingSearchView mSearchView;
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
 
@@ -93,6 +101,9 @@ public class StationSelectFragment extends Fragment implements StationViewHolder
         mStationAdapter = new StationAdapter(getContext(), new ArrayList<RailSystem>(), this);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mStationAdapter);
+
+        mSearchView.setOnHomeActionClickListener(this);
+        mSearchView.setOnQueryChangeListener(this);
 
         retrieveStations();
 
@@ -113,6 +124,7 @@ public class StationSelectFragment extends Fragment implements StationViewHolder
                 .doOnNext(new Action1<List<RailSystem>>() {
                     @Override
                     public void call(List<RailSystem> railSystems) {
+                        systems.addAll(railSystems);
                         mStationAdapter.setParentList(railSystems, false);
                     }
                 })
@@ -136,5 +148,33 @@ public class StationSelectFragment extends Fragment implements StationViewHolder
         Station station = mStationAdapter.getParentList().get(parentPosition).getChildList().get(childPosition);
         EventBus.getDefault().postSticky(new StationEvent(station, type));
         getFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onHomeClicked() {
+        getFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onSearchTextChanged(String oldQuery, String newQuery) {
+        if (newQuery.isEmpty()) {
+            mStationAdapter.setParentList(systems, true);
+            return;
+        }
+        List<RailSystem> newList = new ArrayList<>();
+        for (RailSystem railSystem: systems) {
+            List<Station> stations = new ArrayList<>();
+            for (Station station: railSystem.getChildList()) {
+                if (station.getEn().contains(newQuery)) {
+                    stations.add(station);
+                }
+            }
+            if (stations.size() > 0) {
+                RailSystem system = new RailSystem(railSystem.getTitle(), stations);
+                newList.add(system);
+            }
+        }
+        mStationAdapter.setParentList(newList, true);
+        mStationAdapter.expandAllParents();
     }
 }
