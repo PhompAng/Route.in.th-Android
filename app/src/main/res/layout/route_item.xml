@@ -12,6 +12,14 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/resultStationImage" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/view_all_station_label"
+        android:id="@+id/viewCodeLabel"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="wrap_content"

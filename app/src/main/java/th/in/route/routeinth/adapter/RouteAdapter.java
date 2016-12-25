@@ -2,7 +2,10 @@ package th.in.route.routeinth.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,12 +48,14 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         private TextView stationNameLabel;
         private ImageView resourceStationImage;
         private TextView viewAllStationLabel;
+        private TextView viewCodeLabel;
         private LinearLayout routeItem;
         public ViewHolder(View itemView) {
             super(itemView);
             stationNameLabel = (TextView) itemView.findViewById(R.id.resultStationName);
             resourceStationImage = (ImageView) itemView.findViewById(R.id.resultStationImage);
             viewAllStationLabel = (TextView) itemView.findViewById(R.id.viewAllStationLabel);
+            viewCodeLabel = (TextView) itemView.findViewById(R.id.viewCodeLabel);
             routeItem = (LinearLayout) itemView.findViewById(R.id.routeItem);
         }
     }
@@ -73,6 +78,18 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             color = R.color.colorBts;
         }else {
             color = R.color.colorMrt;
+        }
+
+        GradientDrawable viewAllStationbg = (GradientDrawable) holder.viewAllStationLabel.getBackground();
+
+        //set code label
+        if (routeItems.get(position).getType() != "between"){
+            holder.viewCodeLabel.setText(routeItems.get(position).getRoute().code);
+            GradientDrawable labelBg = (GradientDrawable) holder.viewCodeLabel.getBackground();
+            labelBg.setColorFilter(ContextCompat.getColor(mContext, color), PorterDuff.Mode.ADD);
+            holder.viewCodeLabel.setVisibility(View.VISIBLE);
+        }else {
+            holder.viewCodeLabel.setVisibility(View.GONE);
         }
 
         //each listview
@@ -112,6 +129,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             if(fragment.getIsShow(routeItems.get(position).getSystem())){
                 Log.wtf("cccc", routeItems.get(position).getSystem() + "");
                 holder.viewAllStationLabel.setText("HIDE All STATIONS");
+                viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
                 holder.viewAllStationLabel.setVisibility(View.VISIBLE);
                 holder.stationNameLabel.setTextSize(14);
                 holder.routeItem.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +149,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.stationNameLabel.setTextSize(10);
             holder.viewAllStationLabel.setVisibility(View.VISIBLE);
             holder.viewAllStationLabel.setText("VIEW ALL STATIONS");
+            viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
+            holder.viewCodeLabel.setVisibility(View.GONE);
             holder.resourceStationImage.setImageResource(R.drawable.route_between);
             holder.routeItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,7 +159,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                 }
             });
         }else {
-
+            Log.d("out of case", "TRUE");
         }
         holder.resourceStationImage.setColorFilter(ContextCompat.getColor(mContext, color));
     }
