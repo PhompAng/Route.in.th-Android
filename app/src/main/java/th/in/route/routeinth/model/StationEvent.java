@@ -1,22 +1,32 @@
 package th.in.route.routeinth.model;
 
-import org.parceler.Parcel;
-import org.parceler.ParcelConstructor;
+import com.google.android.gms.location.places.Place;
 
 import th.in.route.routeinth.model.system.Station;
 
 /**
  * Created by phompang on 12/23/2016 AD.
  */
-@Parcel
 public class StationEvent {
     Station station;
     int type;
+    boolean isStation;
+    Place place;
 
-    @ParcelConstructor
-    public StationEvent(Station station, int type) {
+    public StationEvent(Station station, int type, boolean isStation) {
         this.station = station;
         this.type = type;
+        this.isStation = isStation;
+    }
+
+    public StationEvent(Place place, int type, boolean isStation) {
+        this.place = place;
+        this.type = type;
+        this.isStation = isStation;
+    }
+
+    public String toString() {
+        return isStation() ? getStation().getEn().replaceFirst(" ", "\n"):getPlace().getName().toString();
     }
 
     public Station getStation() {
@@ -33,5 +43,21 @@ public class StationEvent {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public boolean isStation() {
+        return isStation;
+    }
+
+    public void setStation(boolean station) {
+        isStation = station;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
     }
 }

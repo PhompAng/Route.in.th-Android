@@ -1,17 +1,23 @@
 package th.in.route.routeinth;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -37,16 +43,23 @@ import th.in.route.routeinth.model.system.RailSystemMapper;
 import th.in.route.routeinth.model.system.Station;
 import th.in.route.routeinth.services.APIServices;
 
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link StationSelectFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StationSelectFragment extends Fragment implements StationViewHolder.OnStationClickListener, FloatingSearchView.OnHomeActionClickListener, FloatingSearchView.OnQueryChangeListener {
+public class StationSelectFragment extends Fragment implements
+        StationViewHolder.OnStationClickListener,
+        FloatingSearchView.OnHomeActionClickListener,
+        FloatingSearchView.OnQueryChangeListener,
+        FloatingSearchView.OnMenuItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "type";
+    private static final int PLACE_PICKER_REQUEST = 1;
 
     private int type;
 
@@ -104,6 +117,7 @@ public class StationSelectFragment extends Fragment implements StationViewHolder
 
         mSearchView.setOnHomeActionClickListener(this);
         mSearchView.setOnQueryChangeListener(this);
+        mSearchView.setOnMenuItemClickListener(this);
 
         retrieveStations();
 
@@ -146,7 +160,7 @@ public class StationSelectFragment extends Fragment implements StationViewHolder
     @Override
     public void onClick(int parentPosition, int childPosition) {
         Station station = mStationAdapter.getParentList().get(parentPosition).getChildList().get(childPosition);
-        EventBus.getDefault().postSticky(new StationEvent(station, type));
+        EventBus.getDefault().postSticky(new StationEvent(station, type, true));
         getFragmentManager().popBackStack();
     }
 
@@ -176,5 +190,33 @@ public class StationSelectFragment extends Fragment implements StationViewHolder
         }
         mStationAdapter.setParentList(newList, true);
         mStationAdapter.expandAllParents();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(getContext(), data);
+//                String toastMsg = String.format("Place: %s", place.getName());
+//                Toast.makeText(getContext(), toastMsg, Toast.LENGTH_LONG).show();
+                EventBus.getDefault().postSticky(new StationEvent(place, type, false));
+                getFragmentManager().popBackStack();
+            }
+        }
+    }
+
+    @Override
+    public void onActionMenuItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_landmark) {
+            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+            try {
+                startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

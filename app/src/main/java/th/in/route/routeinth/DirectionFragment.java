@@ -127,23 +127,32 @@ public class DirectionFragment extends Fragment {
         setStation();
     }
 
+    //TODO Refactor
     private void setStation() {
         if (stations.get(0) != null) {
-            mOrigin.setText(stations.get(0).getStation().getEn().replaceFirst(" ", "\n"));
+            mOrigin.setText(stations.get(0).toString());
             mOriginChip.setVisibility(View.VISIBLE);
-            mOriginChip.setStation(stations.get(0).getStation());
+            if (stations.get(0).isStation()) {
+                mOriginChip.setStation(stations.get(0).getStation());
+            } else {
+                mOriginChip.setVisibility(View.GONE);
+            }
         } else {
             mOrigin.setText(getString(R.string.select_origin_station));
-            mOriginChip.setVisibility(View.INVISIBLE);
+            mOriginChip.setVisibility(View.GONE);
         }
 
         if (stations.get(1) != null) {
-            mDestination.setText(stations.get(1).getStation().getEn().replaceFirst(" ", "\n"));
+            mDestination.setText(stations.get(1).toString());
             mDestinationChip.setVisibility(View.VISIBLE);
-            mDestinationChip.setStation(stations.get(1).getStation());
+            if (stations.get(1).isStation()) {
+                mDestinationChip.setStation(stations.get(1).getStation());
+            } else {
+                mDestinationChip.setVisibility(View.GONE);
+            }
         } else {
             mDestination.setText(getString(R.string.select_destination_station));
-            mDestinationChip.setVisibility(View.INVISIBLE);
+            mDestinationChip.setVisibility(View.GONE);
         }
     }
 
