@@ -93,7 +93,13 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         }
 
         //each listview
-        if(routeItems.get(position).getType() == "ori"){
+        if(routeItems.get(position).getType().equals("ori_one")){
+            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
+            holder.resourceStationImage.setImageResource(R.drawable.route_one_ori);
+        }else if(routeItems.get(position).getType().equals("des_one")){
+            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
+            holder.resourceStationImage.setImageResource(R.drawable.route_one_des);
+        } else if(routeItems.get(position).getType() == "ori"){
             holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
             holder.resourceStationImage.setImageResource(R.drawable.route_ori);
             holder.viewAllStationLabel.setVisibility(View.GONE);
