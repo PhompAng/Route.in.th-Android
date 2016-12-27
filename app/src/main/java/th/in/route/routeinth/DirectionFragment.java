@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -21,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.view.StationChip;
 
@@ -123,6 +126,11 @@ public class DirectionFragment extends Fragment {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void retrieveStation(StationEvent station) {
+        if (!station.isStation()) {
+            DistanceUtils distanceUtils = DistanceUtils.getInstancec();
+            LatLng latLng = station.getPlace().getLatLng();
+            Toast.makeText(getContext(), distanceUtils.getNearestStation(latLng.latitude, latLng.longitude), Toast.LENGTH_SHORT).show();
+        }
         stations.set(station.getType(), station);
         setStation();
     }
