@@ -3,7 +3,11 @@ package th.in.route.routeinth.app;
 import android.location.Location;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import th.in.route.routeinth.model.system.RailSystem;
+import th.in.route.routeinth.model.system.Station;
 
 /**
  * Created by phompang on 12/27/2016 AD.
@@ -12,7 +16,8 @@ import java.util.Map;
 public class DistanceUtils {
     private static DistanceUtils sDistanceUtils;
 
-    private Map<String, Location> locationMap;
+    private Map<Station, Location> locationMap;
+    private List<RailSystem> systems;
 
     private double[][] locations = new double[][]
             {
@@ -21,17 +26,21 @@ public class DistanceUtils {
             };
 
     private DistanceUtils() {
+        systems = StationUtils.getInstance().getSystems();
+
         locationMap = new HashMap<>();
-        Location a1 = new Location("A1");
-        a1.setLatitude(locations[0][0]);
-        a1.setLongitude(locations[0][1]);
-        locationMap.put("A1", a1);
+        Location a1 = setLocation(locations[0][0], locations[0][1]);
+        locationMap.put(systems.get(0).getChildList().get(0), a1);
 
+        Location a2 = setLocation(locations[1][0], locations[1][1]);
+        locationMap.put(systems.get(0).getChildList().get(1), a2);
+    }
 
-        Location a2 = new Location("A2");
-        a2.setLatitude(locations[1][0]);
-        a2.setLongitude(locations[1][1]);
-        locationMap.put("A2", a2);
+    private Location setLocation(double lat, double lng) {
+        Location location = new Location("");
+        location.setLatitude(lat);
+        location.setLongitude(lng);
+        return location;
     }
 
     public static DistanceUtils getInstancec() {
@@ -41,18 +50,15 @@ public class DistanceUtils {
         return sDistanceUtils;
     }
 
-    public String getNearestStation(double lat, double lon) {
-        Location location = new Location("place");
-        location.setLatitude(lat);
-        location.setLongitude(lon);
-
+    public Station getNearestStation(double lat, double lng) {
+        Location location = setLocation(lat, lng);
         double distance = Double.MAX_VALUE;
-        String out = "";
-        for (String key: locationMap.keySet()) {
-            double thisDis = location.distanceTo(locationMap.get(key));
+        Station out = null;
+        for (Station station: locationMap.keySet()) {
+            double thisDis = location.distanceTo(locationMap.get(station));
             if (thisDis < distance) {
                 distance = thisDis;
-                out = key;
+                out = station;
             }
         }
 

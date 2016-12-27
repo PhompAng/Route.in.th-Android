@@ -129,7 +129,7 @@ public class DirectionFragment extends Fragment {
         if (!station.isStation()) {
             DistanceUtils distanceUtils = DistanceUtils.getInstancec();
             LatLng latLng = station.getPlace().getLatLng();
-            Toast.makeText(getContext(), distanceUtils.getNearestStation(latLng.latitude, latLng.longitude), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), distanceUtils.getNearestStation(latLng.latitude, latLng.longitude).getCode(), Toast.LENGTH_SHORT).show();
         }
         stations.set(station.getType(), station);
         setStation();
