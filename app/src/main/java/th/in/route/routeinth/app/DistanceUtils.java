@@ -1,13 +1,21 @@
 package th.in.route.routeinth.app;
 
 import android.location.Location;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+import th.in.route.routeinth.model.place.PlaceResponse;
 import th.in.route.routeinth.model.system.RailSystem;
 import th.in.route.routeinth.model.system.Station;
+import th.in.route.routeinth.services.GooglePlaceService;
 
 /**
  * Created by phompang on 12/27/2016 AD.
@@ -19,21 +27,15 @@ public class DistanceUtils {
     private Map<Station, Location> locationMap;
     private List<RailSystem> systems;
 
-    private double[][] locations = new double[][]
-            {
-                    {13.6939843,100.7484582},
-                    {13.7234914,100.7499419}
-            };
-
     private DistanceUtils() {
         systems = StationUtils.getInstance().getSystems();
 
         locationMap = new HashMap<>();
-        Location a1 = setLocation(locations[0][0], locations[0][1]);
-        locationMap.put(systems.get(0).getChildList().get(0), a1);
-
-        Location a2 = setLocation(locations[1][0], locations[1][1]);
-        locationMap.put(systems.get(0).getChildList().get(1), a2);
+        for (RailSystem system: systems) {
+            for (Station station: system.getChildList()) {
+                setStationLocation(station);
+            }
+        }
     }
 
     private Location setLocation(double lat, double lng) {
@@ -43,7 +45,32 @@ public class DistanceUtils {
         return location;
     }
 
-    public static DistanceUtils getInstancec() {
+    private void setStationLocation(final Station station) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://maps.googleapis.com/maps/")
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        GooglePlaceService service = retrofit.create(GooglePlaceService.class);
+        service.getPlace(station.getEn())
+                .subscribeOn(Schedulers.newThread())
+                .doOnNext(new Action1<PlaceResponse>() {
+                    @Override
+                    public void call(PlaceResponse response) {
+                        th.in.route.routeinth.model.place.Location location = response.getResults().get(0).getGeometry().getLocation();
+                        locationMap.put(station, setLocation(location.getLat(), location.getLng()));
+                    }
+                })
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.e("DistanceUtils", throwable.getMessage());
+                    }
+                })
+                .subscribe();
+    }
+
+    public static DistanceUtils getInstance() {
         if (sDistanceUtils == null) {
             sDistanceUtils = new DistanceUtils();
         }

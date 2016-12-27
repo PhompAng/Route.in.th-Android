@@ -127,9 +127,10 @@ public class DirectionFragment extends Fragment {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void retrieveStation(StationEvent station) {
         if (!station.isStation()) {
-            DistanceUtils distanceUtils = DistanceUtils.getInstancec();
+            DistanceUtils distanceUtils = DistanceUtils.getInstance();
             LatLng latLng = station.getPlace().getLatLng();
             Toast.makeText(getContext(), distanceUtils.getNearestStation(latLng.latitude, latLng.longitude).getCode(), Toast.LENGTH_SHORT).show();
+            //TODO set station to stations
         }
         stations.set(station.getType(), station);
         setStation();
