@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -27,21 +26,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import th.in.route.routeinth.adapter.StationAdapter;
 import th.in.route.routeinth.adapter.viewholder.StationViewHolder;
+import th.in.route.routeinth.app.StationUtils;
 import th.in.route.routeinth.model.StationEvent;
-import th.in.route.routeinth.model.system.POJOSystem;
 import th.in.route.routeinth.model.system.RailSystem;
-import th.in.route.routeinth.model.system.RailSystemMapper;
 import th.in.route.routeinth.model.system.Station;
-import th.in.route.routeinth.services.APIServices;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -119,36 +109,10 @@ public class StationSelectFragment extends Fragment implements
         mSearchView.setOnQueryChangeListener(this);
         mSearchView.setOnMenuItemClickListener(this);
 
-        retrieveStations();
+        systems.addAll(StationUtils.getInstance().getSystems());
+        mStationAdapter.setParentList(systems, false);
 
         return v;
-    }
-
-    private void retrieveStations() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://103.253.134.235:8888/").build();
-
-        APIServices apiServices = retrofit.create(APIServices.class);
-        Observable<List<POJOSystem>> observable = apiServices.getSystem();
-        observable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(new RailSystemMapper())
-                .doOnNext(new Action1<List<RailSystem>>() {
-                    @Override
-                    public void call(List<RailSystem> railSystems) {
-                        systems.addAll(railSystems);
-                        mStationAdapter.setParentList(railSystems, false);
-                    }
-                })
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                })
-                .subscribe();
     }
 
     @Override
