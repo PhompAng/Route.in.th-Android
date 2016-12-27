@@ -10,6 +10,9 @@ public class Station {
     private String code;
     private String key;
 
+    public Station() {
+    }
+
     public Station(String th, String en, String code, String key) {
         this.setTh(th);
         this.setEn(en);

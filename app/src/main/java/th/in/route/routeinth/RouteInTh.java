@@ -2,7 +2,6 @@ package th.in.route.routeinth;
 
 import android.app.Application;
 
-import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.app.StationUtils;
 
 /**
@@ -15,7 +14,6 @@ public class RouteInTh extends Application {
     public RouteInTh() {
         instance = this;
         StationUtils.getInstance();
-        DistanceUtils.getInstance();
     }
 
     public static RouteInTh getInstance() {

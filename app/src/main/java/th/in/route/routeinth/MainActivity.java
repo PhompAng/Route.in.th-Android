@@ -13,6 +13,7 @@ import com.google.android.gms.location.places.Places;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import th.in.route.routeinth.app.DistanceUtils;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
+        DistanceUtils.getInstance();
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient
                     .Builder(this)
