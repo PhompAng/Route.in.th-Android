@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,6 +91,8 @@ public class DirectionFragment extends Fragment {
     StationChip mOriginChip;
     @BindView(R.id.destination_station_chip)
     StationChip mDestinationChip;
+    @BindView(R.id.calculate)
+    Button mCalculate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -162,6 +165,12 @@ public class DirectionFragment extends Fragment {
         } else {
             mDestination.setText(getString(R.string.select_destination_station));
             mDestinationChip.setVisibility(View.GONE);
+        }
+
+        if (stations.get(0) != null && stations.get(1) != null) {
+            mCalculate.setVisibility(View.VISIBLE);
+        } else {
+            mCalculate.setVisibility(View.GONE);
         }
     }
 

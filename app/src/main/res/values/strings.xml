@@ -12,4 +12,5 @@
     <string name="select_destination_station">Select Destination Station</string>
     <string name="select_origin_station">Select Origin Station</string>
     <string name="landmark">Landmark</string>
+    <string name="calculate">Calculate</string>
 </resources>
