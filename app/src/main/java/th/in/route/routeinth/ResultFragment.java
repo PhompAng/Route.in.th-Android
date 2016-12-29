@@ -46,7 +46,6 @@ public class ResultFragment extends Fragment {
     private Result result;
     private ArrayList<RouteItem> routeItems;
     private ArrayList<Boolean> isShow;
-    private ArrayList<ArrayList<RouteItem>> subRoutes;
     private int flag = 0;
 
     public ResultFragment() {
@@ -105,7 +104,6 @@ public class ResultFragment extends Fragment {
         routeRecycler.setLayoutManager(linearLayoutManager);
         routeRecycler.setAdapter(routeAdapter);
 
-//        getStationEachSystem(result);
         getStation();
 
         return v;
@@ -152,83 +150,66 @@ public class ResultFragment extends Fragment {
         void onTest();
     }
 
-//    private void getStationEachSystem(Result result){
-//        List<Route> routes = result.object_route;
-//        routeItems.clear();
-//        for (int i=0; i < result.object_route.size(); i++){
-//            RouteItem routeItem = new RouteItem();
-//            if(routes.get(i).station_cnt != 0){
-//                routeItem.setStationOf(routes.get(i).code.charAt(0)+"");
-//                routeItem.setType("start");
-//                Log.d("start", routeItem.getType() + routeItem.getStationOf());
-//                routeItem.setRoute(routes.get(i));
-//                routeItems.add(routeItem);
-//
-//                RouteItem routeBetween = new RouteItem();
-//                routeBetween.setType("between");
-//                routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
-//                routeBetween.setRoute(routes.get(i));
-//                routeItems.add(routeBetween);
-//                i+=routes.get(i).station_cnt-1;
-//            }
-//// else if(routes.get(i).station_cnt == 0){
-////                routeItem.setType("one");
-////                routeItem.setStationOf(routes.get(i).code.charAt(0)+"");
-////                routeItem.setRoute(routes.get(i));
-////                routeItems.add(routeItem);
-////                i+=1;
-////            }
-//                else{
-//                Log.d("aaaaaaaaa", routes.get(i).name.th);
-//                routeItem.setType("end");
-//                routeItem.setStationOf(routes.get(i).code.charAt(0)+"");
-//                routeItem.setRoute(routes.get(i));
-//                routeItems.add(routeItem);
-//            }
-//        }
-//        routeAdapter.notifyDataSetChanged();
-//
-//    }
-
     public void getStation(){
         List<Route> routes = result.object_route;
-        subRoutes = new ArrayList<>();
         routeItems.clear();
         Character now = 'N';
-        Character code = 'C';
         int system = 0;
         for (int i=0; i<routes.size(); i++){
+            Log.wtf("route", routes.get(i).code);
             RouteItem routeItem = new RouteItem();
             routeItem.setStationOf(routes.get(i).code.charAt(0)+"");
             routeItem.setRoute(routes.get(i));
             routeItem.setSystem(system);
-            if((routes.get(i).station_cnt == 0 && i == routes.size()-1) || (routes.get(i).station_cnt == 0 && routes.get(i).code.charAt(0) != routes.get(i-1).code.charAt(0))){
+            if((routes.get(i).name.code.equals(routes.get(i).heading.code) &&  i == 0) ||
+                    (i == routes.size()-1 && !(routes.get(i).code.charAt(0) == routes.get(i-1).code.charAt(0)))){
                 if(i == 0){
                     routeItem.setType("ori_one");
                 }else {
                     routeItem.setType("des_one");
                 }
+                if(flag == 0){
+                    isShow.add(false);
+                }
                 system += 1;
                 routeItems.add(routeItem);
-            }else if(routes.get(i).code.charAt(0) != now) {
+            }else
+            if(routes.get(i).code.charAt(0) != now || routes.get(i).station_cnt > 0) {
+                Log.wtf("agggggggg", routes.get(i).code);
                 if (i == 0) {
                     routeItem.setType("ori");
+                }else if(routes.get(i).code.equals("BCEN") && result.BTS_same_line == 0){
+                    system+=1;
+                    routeItem.setType("siam");
+                    routeItem.setSystem(system);
                 } else {
                     routeItem.setType("start");
                 }
                 if(flag == 0){
                     isShow.add(false);
                 }
+                Log.wtf("isshow", isShow.toString());
                 now = routes.get(i).code.charAt(0);
                 routeItems.add(routeItem);
                 if (isShow.get(system) == false){
-                    RouteItem routeBetween = new RouteItem();
-                    routeBetween.setRoute(routes.get(i));
-                    routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
-                    routeBetween.setType("between");
-                    routeBetween.setSystem(system);
-                    i+=routes.get(i).station_cnt-1;
-                    routeItems.add(routeBetween);
+                    if(result.BTS_same_line == 0 && routes.get(i+1).code.equals("BCEN")){
+                        RouteItem routeBetween = new RouteItem();
+                        routeBetween.setRoute(routes.get(i));
+                        routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
+                        routeBetween.setType("between");
+                        routeBetween.setSystem(system);
+                        i+=routes.get(i).station_cnt-2;
+                        routeItems.add(routeBetween);
+                    }else {
+                        Log.wtf("BCEN", "BCEN3");
+                        RouteItem routeBetween = new RouteItem();
+                        routeBetween.setRoute(routes.get(i));
+                        routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
+                        routeBetween.setType("between");
+                        routeBetween.setSystem(system);
+                        i+=routes.get(i).station_cnt-1;
+                        routeItems.add(routeBetween);
+                    }
                 }
             }else if(i == routes.size()-1 || routes.get(i).code.charAt(0) != routes.get(i+1).code.charAt(0)){
                 if(i == routes.size()-1){
@@ -238,9 +219,8 @@ public class ResultFragment extends Fragment {
                 }
                 system += 1;
                 routeItems.add(routeItem);
-                subRoutes.add(routeItems);
             }else if(routes.get(i).code.charAt(0) == now && isShow.get(system)){
-                    routeItem.setType("station");
+                routeItem.setType("station");
                 routeItems.add(routeItem);
             } else {
                 RouteItem routeBetween = new RouteItem();
@@ -252,62 +232,12 @@ public class ResultFragment extends Fragment {
                 routeItems.add(routeBetween);
                 Log.wtf("subRoute", routeItem.getSystem()+"");
             }
+            Log.wtf(">>>>>", routes.get(i).code + routeItem.getType());
         }
         flag = 1;
         routeAdapter.notifyDataSetChanged();
         Log.wtf("subRoute", routeItems.toString());
     }
-
-//    public void getAllStationOfEachSystem(boolean arlFlag, boolean btsFlag, boolean mrtFlag){
-//        List<Route> routes = result.object_route;
-//        Character system = 'N';
-//        routeItems.clear();
-//        for (int i=0; i < result.object_route.size(); i++){
-//            RouteItem routeItem = new RouteItem();
-//            if(routes.get(i).station_cnt != 0){
-//                routeItem.setStationOf(routes.get(i).code.charAt(0)+"");
-//                routeItem.setType("start");
-//                Log.d("start", routeItem.getType() + routeItem.getStationOf());
-//                routeItem.setRoute(routes.get(i));
-//                routeItems.add(routeItem);
-//                system = routeItem.getStationOf().charAt(0);
-//                if((routeItem.getStationOf().equals("A") && arlFlag == false) ||
-//                        (routeItem.getStationOf().equals("B") && btsFlag == false) ||
-//                        (routeItem.getStationOf().equals("M") && mrtFlag == false)){
-//                    RouteItem routeBetween = new RouteItem();
-//                    routeBetween.setType("between");
-//                    routeBetween.setSystem(system);
-//                    routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
-//                    routeBetween.setRoute(routes.get(i));
-//                    routeItems.add(routeBetween);
-//                    i+=routes.get(i).station_cnt-1;
-//                }
-//                i+=1;
-//            }else if((routes.get(i+1).code.charAt(0) != system) && (i < result.object_route.size()-1)){
-//                routeItem.setType("end");
-//                routeItem.setStationOf(routes.get(i).code.charAt(0)+"");
-//                routeItem.setRoute(routes.get(i));
-//                routeItems.add(routeItem);
-//            }
-//// else if(routes.get(i).station_cnt == 0){
-////                routeItem.setType("one");
-////                routeItem.setStationOf(routes.get(i).code.charAt(0)+"");
-////                routeItem.setRoute(routes.get(i));
-////                routeItems.add(routeItem);
-////                i+=1;
-////            }
-//            else{
-//                Log.d("aaaaaaaaa", routes.get(i).name.th);
-//                routeItem.setType("station");
-//                routeItem.setStationOf(routes.get(i).code.charAt(0)+"");
-//                routeItem.setRoute(routes.get(i));
-//                routeItems.add(routeItem);
-//                i+=1;
-//            }
-//        }
-//        routeAdapter.notifyDataSetChanged();
-//
-//    }
 
     public void setIsShow(int system, Boolean show){
         this.isShow.set(system, show);

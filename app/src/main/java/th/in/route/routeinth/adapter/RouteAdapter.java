@@ -93,12 +93,34 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         }
 
         //each listview
-        if(routeItems.get(position).getType().equals("ori_one")){
+        if(routeItems.get(position).getType().equals("siam")){
+            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
+            holder.resourceStationImage.setImageResource(R.drawable.route_one_between);
+            holder.viewAllStationLabel.setVisibility(View.GONE);
+            holder.stationNameLabel.setTextSize(14);
+            if(fragment.getIsShow(routeItems.get(position).getSystem())){
+                Log.wtf("cccc", routeItems.get(position).getSystem() + "");
+                holder.viewAllStationLabel.setText("HIDE All STATIONS");
+                viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
+                holder.viewAllStationLabel.setVisibility(View.VISIBLE);
+                holder.stationNameLabel.setTextSize(14);
+                holder.routeItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        fragment.setIsShow(routeItems.get(position).getSystem(), false);
+                    }
+                });
+            }
+        } else if(routeItems.get(position).getType().equals("ori_one")){
             holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
             holder.resourceStationImage.setImageResource(R.drawable.route_one_ori);
+            holder.stationNameLabel.setTextSize(14);
+            holder.viewAllStationLabel.setVisibility(View.GONE);
         }else if(routeItems.get(position).getType().equals("des_one")){
             holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
             holder.resourceStationImage.setImageResource(R.drawable.route_one_des);
+            holder.viewAllStationLabel.setVisibility(View.GONE);
+            holder.stationNameLabel.setTextSize(14);
         } else if(routeItems.get(position).getType() == "ori"){
             holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
             holder.resourceStationImage.setImageResource(R.drawable.route_ori);
