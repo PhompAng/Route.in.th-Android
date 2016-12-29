@@ -84,7 +84,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
         //set code label
         if (routeItems.get(position).getType() != "between"){
-            holder.viewCodeLabel.setText(routeItems.get(position).getRoute().code);
+            holder.viewCodeLabel.setText(routeItems.get(position).getRoute().name.code);
             GradientDrawable labelBg = (GradientDrawable) holder.viewCodeLabel.getBackground();
             labelBg.setColorFilter(ContextCompat.getColor(mContext, color), PorterDuff.Mode.ADD);
             holder.viewCodeLabel.setVisibility(View.VISIBLE);
