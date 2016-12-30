@@ -45,8 +45,8 @@ public class ResultFragment extends Fragment {
     RouteAdapter routeAdapter;
     LinearLayoutManager linearLayoutManager;
     private Result result;
-    private ArrayList<RouteItem> routeItems;
-    private ArrayList<Boolean> isShow;
+    private List<RouteItem> routeItems;
+    private List<Boolean> isShow;
     private int flag = 0;
 
     public ResultFragment() {
@@ -72,7 +72,13 @@ public class ResultFragment extends Fragment {
         if (getArguments() != null) {
         }
         setRetainInstance(true);
-        flag = 0;
+
+        routeItems = new ArrayList<>();
+        isShow = new ArrayList<>();
+
+        if (savedInstanceState != null) {
+            isShow = toList(savedInstanceState.getBooleanArray("isShow"));
+        }
     }
 
     @Override
@@ -97,9 +103,6 @@ public class ResultFragment extends Fragment {
             resultARLFare.setVisibility(View.VISIBLE);
             resultARLFare.setText(String.format(Locale.getDefault(), "ARL    %d บาท", this.result.fare.ARL));
         }
-
-        routeItems = new ArrayList<>();
-        isShow = new ArrayList<>();
 
         routeAdapter = new RouteAdapter(routeItems, getContext(), ResultFragment.this);
         linearLayoutManager = new LinearLayoutManager(getContext());
@@ -127,6 +130,29 @@ public class ResultFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnTest");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBooleanArray("isShow", toPrimitiveArray(isShow));
+    }
+
+    private boolean[] toPrimitiveArray(final List<Boolean> booleanList) {
+        final boolean[] primitives = new boolean[booleanList.size()];
+        int index = 0;
+        for (Boolean object : booleanList) {
+            primitives[index++] = object;
+        }
+        return primitives;
+    }
+
+    private List<Boolean> toList(final boolean[] booleanArray) {
+        List<Boolean> booleanList = new ArrayList<>();
+        for (boolean b: booleanArray) {
+            booleanList.add(b);
+        }
+        return booleanList;
     }
 
     @Override
