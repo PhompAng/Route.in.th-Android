@@ -3,6 +3,7 @@ package th.in.route.routeinth;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,6 +87,8 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, v);
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         systems = new ArrayList<>();
         systemSpinnerAdapter = new MyArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, systems);
