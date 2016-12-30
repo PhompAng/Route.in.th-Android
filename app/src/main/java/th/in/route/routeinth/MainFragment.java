@@ -103,12 +103,12 @@ public class MainFragment extends Fragment {
         departStationSpinner.setAdapter(departStationSpinnerAdapter);
         arriveStationSpinner.setAdapter(arriveStationSpinnerAdapter);
 
-        getSystem();
+        getSystem(savedInstanceState);
 
         return v;
     }
 
-    private void getSystem() {
+    private void getSystem(final Bundle savedInstanceState) {
         Retrofit retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl("http://103.253.134.235:8888/").build();
 
         APIServices apiServices = retrofit.create(APIServices.class);
@@ -123,6 +123,14 @@ public class MainFragment extends Fragment {
                 systemSpinnerAdapter.notifyDataSetChanged();
                 departStationSpinnerAdapter.notifyDataSetChanged();
                 arriveStationSpinnerAdapter.notifyDataSetChanged();
+
+                if (savedInstanceState != null) {
+                    //TODO fix wrong station position
+                    departSystemSpinner.setSelection(savedInstanceState.getInt("departSystem", 0));
+                    arriveSystemSpinner.setSelection(savedInstanceState.getInt("arriveSystem", 0));
+                    departStationSpinner.setSelection(savedInstanceState.getInt("departStation", 0));
+                    arriveStationSpinner.setSelection(savedInstanceState.getInt("arriveStation", 0));
+                }
             }
 
             @Override
@@ -131,7 +139,6 @@ public class MainFragment extends Fragment {
             }
         });
     }
-
     @OnItemSelected(R.id.departSystem)
     void onDepartItemSelected(int position) {
         departStationList.clear();
@@ -149,6 +156,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt("departSystem", departSystemSpinner.getSelectedItemPosition());
+        outState.putInt("arriveSystem", arriveSystemSpinner.getSelectedItemPosition());
+        outState.putInt("departStation", departStationSpinner.getSelectedItemPosition());
+        outState.putInt("arriveStation", arriveStationSpinner.getSelectedItemPosition());
     }
 
     @OnClick(R.id.calculateButton)
