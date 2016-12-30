@@ -12,4 +12,6 @@
     <color name="colorMrt">#408DC2</color>
     <color name="white">#FFFFFF</color>
     <color name="gray">#acacac</color>
+    <color name="colorBtsSukhumvit">#63B633</color>
+    <color name="colorBtsSilom">#017f7b</color>
 </resources>

@@ -72,6 +72,7 @@ public class ResultFragment extends Fragment {
         if (getArguments() != null) {
         }
         setRetainInstance(true);
+        flag = 0;
     }
 
     @Override
@@ -198,7 +199,7 @@ public class ResultFragment extends Fragment {
                 Log.wtf("isshow", isShow.toString());
                 now = routes.get(i).code.charAt(0);
                 routeItems.add(routeItem);
-                if (!isShow.get(system)){
+                if (!isShow.isEmpty() && !isShow.get(system)){
                     if(result.BTS_same_line == 0 && routes.get(i+1).code.equals("BCEN")){
                         RouteItem routeBetween = new RouteItem();
                         routeBetween.setRoute(routes.get(i));
@@ -259,6 +260,13 @@ public class ResultFragment extends Fragment {
         return isShow.get(position);
     }
 
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putParcelableArrayList("isShow", isShow);
+//    }
 }
+
+
 
 

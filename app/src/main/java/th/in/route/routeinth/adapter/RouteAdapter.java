@@ -76,8 +76,10 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         int color;
         if(routeItems.get(position).getStationOf().equals("A")){
             color = R.color.colorArl;
-        }else if(routeItems.get(position).getStationOf().equals("B")){
-            color = R.color.colorBts;
+        }else if(routeItems.get(position).getRoute().line.en.equals("Sukhumvit")){
+            color = R.color.colorBtsSukhumvit;
+        }else if(routeItems.get(position).getRoute().line.en.equals("Silom")){
+            color = R.color.colorBtsSilom;
         }else {
             color = R.color.colorMrt;
         }
