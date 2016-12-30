@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.greenrobot.eventbus.EventBus;
@@ -93,6 +95,8 @@ public class DirectionFragment extends Fragment {
     StationChip mDestinationChip;
     @BindView(R.id.calculate)
     Button mCalculate;
+    @BindView(R.id.map)
+    ImageView map;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,6 +105,8 @@ public class DirectionFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_direction, container, false);
         unbinder = ButterKnife.bind(this, v);
         setStation();
+
+        Glide.with(this).load(R.drawable.map).into(map);
         return v;
     }
 
@@ -120,11 +126,6 @@ public class DirectionFragment extends Fragment {
     public void swap() {
         Collections.swap(stations, 0, 1);
         setStation();
-    }
-
-    @OnClick(R.id.test)
-    public void test() {
-        Toast.makeText(getContext(), "yeah", Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)

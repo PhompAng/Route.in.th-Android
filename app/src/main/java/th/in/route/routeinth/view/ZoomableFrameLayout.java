@@ -1,18 +1,18 @@
 package th.in.route.routeinth.view;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.FrameLayout;
 
 /**
  * Created by phompang on 12/22/2016 AD.
  */
 
-public class ZoomableConstraintLayout extends ConstraintLayout implements ScaleGestureDetector.OnScaleGestureListener {
+public class ZoomableFrameLayout extends FrameLayout implements ScaleGestureDetector.OnScaleGestureListener {
     private enum Mode {
         NONE,
         DRAG,
@@ -37,17 +37,17 @@ public class ZoomableConstraintLayout extends ConstraintLayout implements ScaleG
     private float prevDx = 0f;
     private float prevDy = 0f;
 
-    public ZoomableConstraintLayout(Context context) {
+    public ZoomableFrameLayout(Context context) {
         super(context);
         init(context);
     }
 
-    public ZoomableConstraintLayout(Context context, AttributeSet attrs) {
+    public ZoomableFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public ZoomableConstraintLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ZoomableFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
@@ -93,8 +93,8 @@ public class ZoomableConstraintLayout extends ConstraintLayout implements ScaleG
                     float maxDy = (child().getHeight() - (child().getHeight() / scale))/ 2 * scale;
                     dx = Math.min(Math.max(dx, -maxDx), maxDx);
                     dy = Math.min(Math.max(dy, -maxDy), maxDy);
-                    Log.i(TAG, "Width: " + child().getWidth() + ", scale " + scale + ", dx " + dx
-                            + ", max " + maxDx);
+//                    Log.i(TAG, "Width: " + child().getWidth() + ", scale " + scale + ", dx " + dx
+//                            + ", max " + maxDx);
                     applyScaleAndTranslation();
                 }
 

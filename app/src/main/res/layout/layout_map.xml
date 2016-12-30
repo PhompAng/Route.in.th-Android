@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<th.in.route.routeinth.view.ZoomableConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<th.in.route.routeinth.view.ZoomableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@android:color/white">
 
-    <TextView
-        android:id="@+id/test"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="AJKHJKSHJKSHD"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+    <include layout="@layout/map"/>
 
-</th.in.route.routeinth.view.ZoomableConstraintLayout>
+</th.in.route.routeinth.view.ZoomableFrameLayout>
