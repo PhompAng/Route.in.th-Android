@@ -11,5 +11,5 @@ public class Route {
     public Detail name;
     public Line line;
     public Detail heading;
-    public int station_cnt;
+    public int station_cnt = -1;
 }

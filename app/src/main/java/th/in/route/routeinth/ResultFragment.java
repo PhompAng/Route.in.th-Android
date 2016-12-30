@@ -161,8 +161,7 @@ public class ResultFragment extends Fragment {
             routeItem.setStationOf(routes.get(i).code.charAt(0)+"");
             routeItem.setRoute(routes.get(i));
             routeItem.setSystem(system);
-            if((routes.get(i).name.code.equals(routes.get(i).heading.code) &&  i == 0) ||
-                    (i == routes.size()-1 && !(routes.get(i).code.charAt(0) == routes.get(i-1).code.charAt(0)))){
+            if(routes.get(i).station_cnt == 0){
                 if(i == 0){
                     routeItem.setType("ori_one");
                 }else {
@@ -232,7 +231,7 @@ public class ResultFragment extends Fragment {
                 routeItems.add(routeBetween);
                 Log.wtf("subRoute", routeItem.getSystem()+"");
             }
-            Log.wtf(">>>>>", routes.get(i).code + routeItem.getType());
+//            Log.wtf(">>>>>", routes.get(i).code + routeItem.getType());
         }
         flag = 1;
         routeAdapter.notifyDataSetChanged();
