@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -24,10 +23,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import th.in.route.routeinth.model.system.Detail;
+import th.in.route.routeinth.adapter.MyArrayAdapter;
 import th.in.route.routeinth.model.result.Input;
-import th.in.route.routeinth.model.system.POJOSystem;
 import th.in.route.routeinth.model.result.Result;
+import th.in.route.routeinth.model.system.Detail;
+import th.in.route.routeinth.model.system.POJOSystem;
 import th.in.route.routeinth.services.APIServices;
 
 /**
@@ -48,9 +48,10 @@ public class MainFragment extends Fragment {
     @BindView(R.id.calculateButton) Button calculateButton;
 
     private List<POJOSystem> systems;
-    private ArrayAdapter<Detail> departStationSpinnerAdapter;
+    private MyArrayAdapter<POJOSystem> systemSpinnerAdapter;
+    private MyArrayAdapter<Detail> departStationSpinnerAdapter;
     private List<Detail> departStationList;
-    private ArrayAdapter<Detail> arriveStationSpinnerAdapter;
+    private MyArrayAdapter<Detail> arriveStationSpinnerAdapter;
     private List<Detail> arriveStationList;
 
     public MainFragment() {
@@ -76,6 +77,8 @@ public class MainFragment extends Fragment {
         setRetainInstance(true);
         if (getArguments() != null) {
         }
+
+        setRetainInstance(true);
     }
 
     @Override
@@ -84,6 +87,28 @@ public class MainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, v);
 
+        systems = new ArrayList<>();
+        systemSpinnerAdapter = new MyArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, systems);
+        systemSpinnerAdapter.setNotifyOnChange(true);
+        departSystemSpinner.setAdapter(systemSpinnerAdapter);
+        arriveSystemSpinner.setAdapter(systemSpinnerAdapter);
+
+        departStationList = new ArrayList<>();
+        arriveStationList = new ArrayList<>();
+
+        departStationSpinnerAdapter = new MyArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, departStationList);
+        arriveStationSpinnerAdapter = new MyArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, arriveStationList);
+        departStationSpinnerAdapter.setNotifyOnChange(true);
+        arriveStationSpinnerAdapter.setNotifyOnChange(true);
+        departStationSpinner.setAdapter(departStationSpinnerAdapter);
+        arriveStationSpinner.setAdapter(arriveStationSpinnerAdapter);
+
+        getSystem();
+
+        return v;
+    }
+
+    private void getSystem() {
         Retrofit retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl("http://103.253.134.235:8888/").build();
 
         APIServices apiServices = retrofit.create(APIServices.class);
@@ -91,19 +116,13 @@ public class MainFragment extends Fragment {
         call.enqueue(new Callback<List<POJOSystem>>() {
             @Override
             public void onResponse(Call<List<POJOSystem>> call, Response<List<POJOSystem>> response) {
-                systems = response.body();
+                systems.addAll(response.body());
+                departStationList.addAll(systems.get(0).option.values());
+                arriveStationList.addAll(systems.get(0).option.values());
 
-                ArrayAdapter<POJOSystem> systemSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, systems);
-                departSystemSpinner.setAdapter(systemSpinnerAdapter);
-                arriveSystemSpinner.setAdapter(systemSpinnerAdapter);
-
-                departStationList = new ArrayList<>(systems.get(0).option.values());
-                arriveStationList = new ArrayList<>(systems.get(0).option.values());
-
-                departStationSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, departStationList);
-                arriveStationSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, arriveStationList);
-                departStationSpinner.setAdapter(departStationSpinnerAdapter);
-                arriveStationSpinner.setAdapter(arriveStationSpinnerAdapter);
+                systemSpinnerAdapter.notifyDataSetChanged();
+                departStationSpinnerAdapter.notifyDataSetChanged();
+                arriveStationSpinnerAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -111,7 +130,6 @@ public class MainFragment extends Fragment {
                 Log.v("Fail", t.getMessage());
             }
         });
-        return v;
     }
 
     @OnItemSelected(R.id.departSystem)
@@ -126,6 +144,11 @@ public class MainFragment extends Fragment {
         arriveStationList.clear();
         arriveStationList.addAll(systems.get(position).option.values());
         arriveStationSpinnerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @OnClick(R.id.calculateButton)
