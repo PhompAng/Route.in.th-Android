@@ -19,10 +19,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnCa
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        MainFragment mainFragmentFragment = MainFragment.newInstance();
+        if (savedInstanceState == null) {
+            MainFragment mainFragmentFragment = MainFragment.newInstance();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, mainFragmentFragment).commit();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, mainFragmentFragment).commit();
+        }
     }
 
     @Override
