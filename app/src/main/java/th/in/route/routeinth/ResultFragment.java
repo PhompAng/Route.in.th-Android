@@ -3,10 +3,12 @@ package th.in.route.routeinth;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -72,6 +74,7 @@ public class ResultFragment extends Fragment {
         if (getArguments() != null) {
         }
         setRetainInstance(true);
+        setHasOptionsMenu(true);
 
         routeItems = new ArrayList<>();
         isShow = new ArrayList<>();
@@ -87,6 +90,8 @@ public class ResultFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_result, container, false);
         unbinder = ButterKnife.bind(this, v);
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         resultOrigin.setText(this.result.origin.th);
         resultDestination.setText(this.result.destination.th);
@@ -119,6 +124,17 @@ public class ResultFragment extends Fragment {
         if (mListener != null) {
             mListener.onTest();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Log.d("aaa", "aaaaa");
+                getFragmentManager().popBackStack();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
