@@ -14,6 +14,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAiX_rsnYpS8LkLw1RVIufvY_Y60mqzpzE"/>
+        <meta-data
+            android:name="th.in.route.routeinth.app.GlideConfiguration"
+            android:value="GlideModule" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
