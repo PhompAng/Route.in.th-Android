@@ -19,15 +19,29 @@
         android:id="@+id/viewCodeLabel"
         android:textColor="@color/white"
         android:textSize="10sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_gravity="center"/>
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:gravity="left"
-        android:paddingTop="16dp"
-        android:id="@+id/resultStationName" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:gravity="left"
+            android:paddingTop="16dp"
+            android:id="@+id/resultStationName" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:gravity="left"
+            android:textSize="10dp"
+            android:visibility="gone"
+            android:id="@+id/resultHeadingLabel" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,6 +51,7 @@
         android:visibility="gone"
         android:textColor="@color/white"
         android:textSize="10sp"
+        android:layout_gravity="center"
         android:layout_marginLeft="16dp"/>
 
 </LinearLayout>

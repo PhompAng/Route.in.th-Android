@@ -48,6 +48,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         private TextView stationNameLabel;
         private ImageView resourceStationImage;
         private TextView viewAllStationLabel;
+        private TextView viewHeadingLabel;
         private TextView viewCodeLabel;
         private LinearLayout routeItem;
         public ViewHolder(View itemView) {
@@ -56,6 +57,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             resourceStationImage = (ImageView) itemView.findViewById(R.id.resultStationImage);
             viewAllStationLabel = (TextView) itemView.findViewById(R.id.viewAllStationLabel);
             viewCodeLabel = (TextView) itemView.findViewById(R.id.viewCodeLabel);
+            viewHeadingLabel = (TextView) itemView.findViewById(R.id.resultHeadingLabel);
             routeItem = (LinearLayout) itemView.findViewById(R.id.routeItem);
         }
     }
@@ -82,14 +84,17 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
         GradientDrawable viewAllStationbg = (GradientDrawable) holder.viewAllStationLabel.getBackground();
 
-        //set code label
+        //set code label and heading label
         if (routeItems.get(position).getType() != "between"){
             holder.viewCodeLabel.setText(routeItems.get(position).getRoute().name.code);
             GradientDrawable labelBg = (GradientDrawable) holder.viewCodeLabel.getBackground();
             labelBg.setColorFilter(ContextCompat.getColor(mContext, color), PorterDuff.Mode.ADD);
             holder.viewCodeLabel.setVisibility(View.VISIBLE);
+            holder.viewHeadingLabel.setText("ปลายทาง " + routeItems.get(position).getRoute().heading.th);
+            holder.viewHeadingLabel.setVisibility(View.VISIBLE);
         }else {
             holder.viewCodeLabel.setVisibility(View.GONE);
+            holder.viewHeadingLabel.setVisibility(View.GONE);
         }
 
         //each listview
@@ -100,7 +105,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.stationNameLabel.setTextSize(14);
             if(fragment.getIsShow(routeItems.get(position).getSystem())){
                 Log.wtf("cccc", routeItems.get(position).getSystem() + "");
-                holder.viewAllStationLabel.setText("HIDE All STATIONS");
+                holder.viewAllStationLabel.setText("HIDE");
                 viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
                 holder.viewAllStationLabel.setVisibility(View.VISIBLE);
                 holder.stationNameLabel.setTextSize(14);
@@ -128,7 +133,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.stationNameLabel.setTextSize(14);
             if(fragment.getIsShow(routeItems.get(position).getSystem())){
                 Log.wtf("bbbbbb", routeItems.get(position).getSystem() + "");
-                holder.viewAllStationLabel.setText("HIDE All STATIONS");
+                holder.viewAllStationLabel.setText("HIDE");
                 holder.viewAllStationLabel.setVisibility(View.VISIBLE);
                 holder.stationNameLabel.setTextSize(14);
                 holder.routeItem.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +161,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.stationNameLabel.setTextSize(14);
             if(fragment.getIsShow(routeItems.get(position).getSystem())){
                 Log.wtf("cccc", routeItems.get(position).getSystem() + "");
-                holder.viewAllStationLabel.setText("HIDE All STATIONS");
+                holder.viewAllStationLabel.setText("HIDE");
                 viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
                 holder.viewAllStationLabel.setVisibility(View.VISIBLE);
                 holder.stationNameLabel.setTextSize(14);
@@ -176,7 +181,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.stationNameLabel.setText(routeItems.get(position).getRoute().station_cnt + " สถานี");
             holder.stationNameLabel.setTextSize(10);
             holder.viewAllStationLabel.setVisibility(View.VISIBLE);
-            holder.viewAllStationLabel.setText("VIEW ALL STATIONS");
+            holder.viewAllStationLabel.setText("VIEW");
             viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
             holder.viewCodeLabel.setVisibility(View.GONE);
             holder.resourceStationImage.setImageResource(R.drawable.route_between);
