@@ -10,10 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +33,7 @@ import th.in.route.routeinth.model.view.RouteItem;
  */
 public class ResultFragment extends Fragment {
     private OnTest mListener;
+
     private Unbinder unbinder;
     @BindView(R.id.resultOrigin) TextView resultOrigin;
     @BindView(R.id.resultDestination) TextView resultDestination;
@@ -70,6 +71,7 @@ public class ResultFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        setRetainInstance(true);
     }
 
     @Override
@@ -81,18 +83,18 @@ public class ResultFragment extends Fragment {
 
         resultOrigin.setText(this.result.origin.th);
         resultDestination.setText(this.result.destination.th);
-        resultTripFareTotal.setText(String.format("%d บาท", this.result.fare.total));
+        resultTripFareTotal.setText(String.format(Locale.getDefault(), "%d บาท", this.result.fare.total));
         if(this.result.fare.BTS != 0){
             resultBTSFare.setVisibility(View.VISIBLE);
-            resultBTSFare.setText(String.format("BTS    %d บาท", this.result.fare.BTS));
+            resultBTSFare.setText(String.format(Locale.getDefault(), "BTS    %d บาท", this.result.fare.BTS));
         }
         if(this.result.fare.MRT != 0){
             resultMRTFare.setVisibility(View.VISIBLE);
-            resultMRTFare.setText(String.format("MRT    %d บาท",  this.result.fare.MRT));
+            resultMRTFare.setText(String.format(Locale.getDefault(), "MRT    %d บาท",  this.result.fare.MRT));
         }
         if(this.result.fare.ARL != 0){
             resultARLFare.setVisibility(View.VISIBLE);
-            resultARLFare.setText(String.format("ARL    %d บาท", this.result.fare.ARL));
+            resultARLFare.setText(String.format(Locale.getDefault(), "ARL    %d บาท", this.result.fare.ARL));
         }
 
         routeItems = new ArrayList<>();
@@ -130,6 +132,12 @@ public class ResultFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     public void setResult(Result result) {
@@ -190,7 +198,7 @@ public class ResultFragment extends Fragment {
                 Log.wtf("isshow", isShow.toString());
                 now = routes.get(i).code.charAt(0);
                 routeItems.add(routeItem);
-                if (isShow.get(system) == false){
+                if (!isShow.get(system)){
                     if(result.BTS_same_line == 0 && routes.get(i+1).code.equals("BCEN")){
                         RouteItem routeBetween = new RouteItem();
                         routeBetween.setRoute(routes.get(i));
@@ -247,7 +255,7 @@ public class ResultFragment extends Fragment {
         getStation();
     }
 
-    public  boolean getIsShow(int position){
+    public boolean getIsShow(int position){
         return isShow.get(position);
     }
 
