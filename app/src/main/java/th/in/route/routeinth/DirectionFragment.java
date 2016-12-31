@@ -2,6 +2,7 @@ package th.in.route.routeinth;
 
 
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ import th.in.route.routeinth.view.StationChip;
  * Use the {@link DirectionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DirectionFragment extends Fragment {
+public class DirectionFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -95,8 +96,10 @@ public class DirectionFragment extends Fragment {
     StationChip mDestinationChip;
     @BindView(R.id.calculate)
     Button mCalculate;
+    @BindView(R.id.map_img)
+    ImageView map_img;
     @BindView(R.id.map)
-    ImageView map;
+    ConstraintLayout map;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,7 +109,11 @@ public class DirectionFragment extends Fragment {
         unbinder = ButterKnife.bind(this, v);
         setStation();
 
-        Glide.with(this).load(R.drawable.map).into(map);
+        Glide.with(this).load(R.drawable.map).into(map_img);
+
+        for (int i=1; i<map.getChildCount();i++) {
+            map.getChildAt(i).setOnClickListener(this);
+        }
         return v;
     }
 
@@ -193,4 +200,8 @@ public class DirectionFragment extends Fragment {
         unbinder.unbind();
     }
 
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(getContext(), v.getTag().toString(), Toast.LENGTH_SHORT).show();
+    }
 }

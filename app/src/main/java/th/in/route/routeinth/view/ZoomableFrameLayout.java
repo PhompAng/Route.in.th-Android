@@ -2,7 +2,6 @@ package th.in.route.routeinth.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -59,7 +58,6 @@ public class ZoomableFrameLayout extends FrameLayout implements ScaleGestureDete
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
-                        Log.i(TAG, "DOWN");
                         if (scale > MIN_ZOOM) {
                             mode = Mode.DRAG;
                             startX = motionEvent.getX() - prevDx;
@@ -79,7 +77,6 @@ public class ZoomableFrameLayout extends FrameLayout implements ScaleGestureDete
                         mode = Mode.DRAG;
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.i(TAG, "UP");
                         mode = Mode.NONE;
                         prevDx = dx;
                         prevDy = dy;
@@ -105,14 +102,12 @@ public class ZoomableFrameLayout extends FrameLayout implements ScaleGestureDete
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector scaleDetector) {
-        Log.i(TAG, "onScaleBegin");
         return true;
     }
 
     @Override
     public boolean onScale(ScaleGestureDetector scaleDetector) {
         float scaleFactor = scaleDetector.getScaleFactor();
-        Log.i(TAG, "onScale" + scaleFactor);
         if (lastScaleFactor == 0 || (Math.signum(scaleFactor) == Math.signum(lastScaleFactor))) {
             scale *= scaleFactor;
             scale = Math.max(MIN_ZOOM, Math.min(scale, MAX_ZOOM));
@@ -125,7 +120,7 @@ public class ZoomableFrameLayout extends FrameLayout implements ScaleGestureDete
 
     @Override
     public void onScaleEnd(ScaleGestureDetector scaleDetector) {
-        Log.i(TAG, "onScaleEnd");
+//        Log.i(TAG, "onScaleEnd");
     }
 
     private void applyScaleAndTranslation() {
