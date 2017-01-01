@@ -1,9 +1,12 @@
 package th.in.route.routeinth;
 
 
+import android.app.AlertDialog;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +31,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import th.in.route.routeinth.app.DistanceUtils;
+import th.in.route.routeinth.app.StationUtils;
 import th.in.route.routeinth.model.StationEvent;
+import th.in.route.routeinth.model.system.Station;
 import th.in.route.routeinth.view.StationChip;
 
 
@@ -48,6 +53,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
     private String mParam2;
 
     private List<StationEvent> stations;
+    private StationUtils stationUtils;
 
     public DirectionFragment() {
         // Required empty public constructor
@@ -79,6 +85,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         setRetainInstance(true);
+        stationUtils = StationUtils.getInstance();
         stations = new ArrayList<>();
         stations.add(null);
         stations.add(null);
@@ -110,6 +117,8 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         setStation();
 
         Glide.with(this).load(R.drawable.map).into(map_img);
+
+        setPinsTransparent();
 
         for (int i=1; i<map.getChildCount();i++) {
             map.getChildAt(i).setOnClickListener(this);
@@ -154,6 +163,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
             mOriginChip.setVisibility(View.VISIBLE);
             if (stations.get(0).isStation()) {
                 mOriginChip.setStation(stations.get(0).getStation());
+                setPinColor(stations.get(0));
             } else {
                 mOriginChip.setVisibility(View.GONE);
             }
@@ -167,6 +177,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
             mDestinationChip.setVisibility(View.VISIBLE);
             if (stations.get(1).isStation()) {
                 mDestinationChip.setStation(stations.get(1).getStation());
+                setPinColor(stations.get(1));
             } else {
                 mDestinationChip.setVisibility(View.GONE);
             }
@@ -203,5 +214,57 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         Toast.makeText(getContext(), v.getTag().toString(), Toast.LENGTH_SHORT).show();
+        setPinsTransparent();
+        Station station = stationUtils.getStationFromKey(v.getTag().toString());
+        showSelectDialog(station);
+    }
+
+    private void showSelectDialog(final Station station) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_station_select, null);
+        builder.setTitle("Select As")
+                .setView(dialogView)
+                .create();
+        final AlertDialog dialog = builder.show();
+
+        dialogView.findViewById(R.id.origin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stations.set(0, new StationEvent(station, 0, true));
+                setStation();
+                dialog.dismiss();
+            }
+        });
+        dialogView.findViewById(R.id.destination).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stations.set(1, new StationEvent(station, 1, true));
+                setStation();
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void setPinsTransparent() {
+        for (int i=1; i<map.getChildCount(); i++) {
+            View v = map.getChildAt(i);
+            if (v.getTag() != null) {
+                ((GradientDrawable) v.getBackground()).setColor(ContextCompat.getColor(getContext(), android.R.color.transparent));
+            }
+        }
+    }
+
+    private void setPinColor(StationEvent stationEvent) {
+        for (int i=1; i<map.getChildCount(); i++) {
+            View v = map.getChildAt(i);
+            if (v.getTag() != null && v.getTag().toString().equals(stationEvent.getStation().getKey())) {
+                if (stationEvent.getType() == 0) {
+                    ((GradientDrawable) v.getBackground()).setColor(ContextCompat.getColor(getContext(), R.color.colorBts));
+                } else {
+                    ((GradientDrawable) v.getBackground()).setColor(ContextCompat.getColor(getContext(), R.color.colorMrt));
+                }
+
+            }
+        }
     }
 }

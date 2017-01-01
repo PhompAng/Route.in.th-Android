@@ -13,6 +13,7 @@ import rx.observables.BlockingObservable;
 import rx.schedulers.Schedulers;
 import th.in.route.routeinth.model.system.RailSystem;
 import th.in.route.routeinth.model.system.RailSystemMapper;
+import th.in.route.routeinth.model.system.Station;
 import th.in.route.routeinth.services.APIServices;
 
 /**
@@ -62,5 +63,16 @@ public class StationUtils {
 
     public List<RailSystem> getSystems() {
         return observable.first();
+    }
+
+    public Station getStationFromKey(String key) {
+        for (RailSystem system: observable.first()) {
+            for (Station station: system.getChildList()) {
+                if (station.getKey().equals(key)) {
+                    return station;
+                }
+            }
+        }
+        return null;
     }
 }
