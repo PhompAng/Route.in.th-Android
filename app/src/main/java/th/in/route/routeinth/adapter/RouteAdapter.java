@@ -106,7 +106,6 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.viewAllStationLabel.setVisibility(View.GONE);
             holder.stationNameLabel.setTextSize(14);
             if(fragment.getIsShow(routeItems.get(position).getSystem())){
-                Log.wtf("cccc", routeItems.get(position).getSystem() + "");
                 holder.viewAllStationLabel.setText("HIDE");
                 viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
                 holder.viewAllStationLabel.setVisibility(View.VISIBLE);
@@ -128,43 +127,18 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.resourceStationImage.setImageResource(R.drawable.route_one_des);
             holder.viewAllStationLabel.setVisibility(View.GONE);
             holder.stationNameLabel.setTextSize(14);
-        } else if(routeItems.get(position).getType() == "ori"){
-            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
-            holder.resourceStationImage.setImageResource(R.drawable.route_ori);
-            holder.viewAllStationLabel.setVisibility(View.GONE);
-            holder.stationNameLabel.setTextSize(14);
-            if(fragment.getIsShow(routeItems.get(position).getSystem())){
-                Log.wtf("bbbbbb", routeItems.get(position).getSystem() + "");
-                holder.viewAllStationLabel.setText("HIDE");
-                holder.viewAllStationLabel.setVisibility(View.VISIBLE);
-                holder.stationNameLabel.setTextSize(14);
-                holder.routeItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        fragment.setIsShow(routeItems.get(position).getSystem(), false);
-                    }
-                });
+        } else if(routeItems.get(position).getType() == "ori" || routeItems.get(position).getType() == "start"){
+            if(routeItems.get(position).getType() == "ori"){
+                holder.resourceStationImage.setImageResource(R.drawable.route_ori);
+            }else {
+                holder.resourceStationImage.setImageResource(R.drawable.route_start);
             }
-        }else if(routeItems.get(position).getType() == "des"){
             holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
-            holder.resourceStationImage.setImageResource(R.drawable.route_des);
-            holder.viewAllStationLabel.setVisibility(View.GONE);
-            holder.stationNameLabel.setTextSize(14);
-        } else if(routeItems.get(position).getType().equals("station")){
-            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
-            holder.resourceStationImage.setImageResource(R.drawable.route_station);
-            holder.viewAllStationLabel.setVisibility(View.GONE);
-            holder.stationNameLabel.setTextSize(14);
-        }
-        else if(routeItems.get(position).getType().equals("start")){
-            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
-            holder.resourceStationImage.setImageResource(R.drawable.route_start);
             holder.viewAllStationLabel.setVisibility(View.GONE);
             holder.stationNameLabel.setTextSize(14);
             if(fragment.getIsShow(routeItems.get(position).getSystem())){
-                Log.wtf("cccc", routeItems.get(position).getSystem() + "");
-                holder.viewAllStationLabel.setText("HIDE");
                 viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
+                holder.viewAllStationLabel.setText("HIDE");
                 holder.viewAllStationLabel.setVisibility(View.VISIBLE);
                 holder.stationNameLabel.setTextSize(14);
                 holder.routeItem.setOnClickListener(new View.OnClickListener() {
@@ -174,12 +148,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                     }
                 });
             }
-        }else if (routeItems.get(position).getType().equals("end")){
-            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
-            holder.resourceStationImage.setImageResource(R.drawable.route_end);
-            holder.viewAllStationLabel.setVisibility(View.GONE);
-            holder.stationNameLabel.setTextSize(14);
-        }else if(routeItems.get(position).getType().equals("between")){
+        }
+        else if(routeItems.get(position).getType().equals("between")){
             holder.stationNameLabel.setText(routeItems.get(position).getRoute().station_cnt + " สถานี");
             holder.stationNameLabel.setTextSize(10);
             holder.viewAllStationLabel.setVisibility(View.VISIBLE);
@@ -194,7 +164,16 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                 }
             });
         }else {
-            Log.d("out of case", "TRUE");
+            if(routeItems.get(position).getType() == "des"){
+                holder.resourceStationImage.setImageResource(R.drawable.route_des);
+            }else if(routeItems.get(position).getType() == "end"){
+                holder.resourceStationImage.setImageResource(R.drawable.route_end);
+            }else if (routeItems.get(position).getType() == "station"){
+                holder.resourceStationImage.setImageResource(R.drawable.route_station);
+            }
+            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
+            holder.viewAllStationLabel.setVisibility(View.GONE);
+            holder.stationNameLabel.setTextSize(14);
         }
         holder.resourceStationImage.setColorFilter(ContextCompat.getColor(mContext, color));
     }
