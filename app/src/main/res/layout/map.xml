@@ -10,7 +10,6 @@
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:translationZ="-1dp"
-        android:src="@drawable/map"
         android:scaleType="fitStart"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
