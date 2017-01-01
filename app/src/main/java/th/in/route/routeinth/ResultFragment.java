@@ -302,11 +302,6 @@ public class ResultFragment extends Fragment {
         return isShow.get(position);
     }
 
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putParcelableArrayList("isShow", isShow);
-//    }
 }
 
 
