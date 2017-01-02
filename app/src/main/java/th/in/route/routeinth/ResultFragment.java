@@ -91,6 +91,7 @@ public class ResultFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_result, container, false);
         unbinder = ButterKnife.bind(this, v);
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         resultOrigin.setText(this.result.origin.th);

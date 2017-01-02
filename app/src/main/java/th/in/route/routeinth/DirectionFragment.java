@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,6 +127,8 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_direction, container, false);
         unbinder = ButterKnife.bind(this, v);
+        
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         setStation();
 
         Glide.with(this).load(R.drawable.map).into(map_img);
