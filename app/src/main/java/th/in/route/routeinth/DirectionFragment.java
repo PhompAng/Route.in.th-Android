@@ -127,7 +127,8 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_direction, container, false);
         unbinder = ButterKnife.bind(this, v);
-        
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         setStation();
 
