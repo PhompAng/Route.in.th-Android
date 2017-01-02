@@ -11,10 +11,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import th.in.route.routeinth.DirectionFragment.OnCalculate;
 import th.in.route.routeinth.app.DistanceUtils;
+import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.result.Result;
 
 public class MainActivity extends AppCompatActivity
@@ -74,9 +77,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void OnCalculateBtnPressed(Result result) {
+    public void OnCalculateBtnPressed(Result result, List<StationEvent> stationEvents) {
         ResultFragment resultFragment = ResultFragment.newInstance();
         resultFragment.setResult(result);
+        resultFragment.setStations(stationEvents);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, resultFragment).addToBackStack(null).commit();
     }

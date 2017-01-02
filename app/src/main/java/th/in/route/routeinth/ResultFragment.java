@@ -14,16 +14,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import th.in.route.routeinth.adapter.RouteAdapter;
+import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.result.Route;
 import th.in.route.routeinth.model.view.RouteItem;
+import th.in.route.routeinth.view.StationChip;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,18 +41,31 @@ public class ResultFragment extends Fragment {
     private OnTest mListener;
 
     private Unbinder unbinder;
-    @BindView(R.id.resultOrigin) TextView resultOrigin;
-    @BindView(R.id.resultDestination) TextView resultDestination;
+//    @BindView(R.id.resultOrigin) TextView resultOrigin;
+//    @BindView(R.id.resultDestination) TextView resultDestination;
+    @BindView(R.id.origin)
+    TextView mOrigin;
+    @BindView(R.id.destination)
+    TextView mDestination;
+    @BindView(R.id.origin_station_chip)
+    StationChip mOriginChip;
+    @BindView(R.id.destination_station_chip)
+    StationChip mDestinationChip;
     @BindView(R.id.resultTripFareTotal) TextView resultTripFareTotal;
+    @BindView(R.id.bts_station_cnt) TextView btsStationCnt;
     @BindView(R.id.resultBTSFare) TextView resultBTSFare;
+    @BindView(R.id.mrt_station_cnt) TextView mrtStationCnt;
     @BindView(R.id.resultMRTFare) TextView resultMRTFare;
+    @BindView(R.id.arl_station_cnt) TextView arlStationCnt;
     @BindView(R.id.resultARLFare) TextView resultARLFare;
     @BindView(R.id.routeRecycler) RecyclerView routeRecycler;
     RouteAdapter routeAdapter;
     LinearLayoutManager linearLayoutManager;
     private Result result;
+    private List<StationEvent> stations;
     private List<RouteItem> routeItems;
     private List<Boolean> isShow;
+    private Map<String, Integer> stationCnt;
     private int flag = 0;
 
     public ResultFragment() {
@@ -79,8 +96,27 @@ public class ResultFragment extends Fragment {
         routeItems = new ArrayList<>();
         isShow = new ArrayList<>();
 
+        stationCnt = new HashMap<>();
+        stationCnt.put("bts", 0);
+        stationCnt.put("mrt", 0);
+        stationCnt.put("arl", 0);
+
+        calculateStationCnt();
+
         if (savedInstanceState != null) {
             isShow = toList(savedInstanceState.getBooleanArray("isShow"));
+        }
+    }
+
+    private void calculateStationCnt() {
+        for (String station: result.route) {
+            if (station.charAt(0) == 'A') {
+                stationCnt.put("arl", stationCnt.get("arl")+1);
+            } else if (station.charAt(0) == 'B') {
+                stationCnt.put("bts", stationCnt.get("bts")+1);
+            } else {
+                stationCnt.put("mrt", stationCnt.get("mrt")+1);
+            }
         }
     }
 
@@ -88,26 +124,34 @@ public class ResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_result, container, false);
+        View v = inflater.inflate(R.layout.fragment_result2, container, false);
         unbinder = ButterKnife.bind(this, v);
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        resultOrigin.setText(this.result.origin.th);
-        resultDestination.setText(this.result.destination.th);
-        resultTripFareTotal.setText(String.format(Locale.getDefault(), "%d บาท", this.result.fare.total));
+//        resultOrigin.setText(this.result.origin.th);
+//        resultDestination.setText(this.result.destination.th);
+        v.findViewById(R.id.swap).setVisibility(View.INVISIBLE);
+        setStation();
+        resultTripFareTotal.setText(String.format(Locale.getDefault(), "%d", this.result.fare.total));
         if(this.result.fare.BTS != 0){
+            btsStationCnt.setVisibility(View.VISIBLE);
             resultBTSFare.setVisibility(View.VISIBLE);
-            resultBTSFare.setText(String.format(Locale.getDefault(), "BTS    %d บาท", this.result.fare.BTS));
+            btsStationCnt.setText(String.format(Locale.getDefault(), "BTS %d Station (%s)", this.stationCnt.get("bts"), this.result.card_type_bts.en));
+            resultBTSFare.setText(String.format(Locale.getDefault(), "%d Baht", this.result.fare.BTS));
         }
         if(this.result.fare.MRT != 0){
+            mrtStationCnt.setVisibility(View.VISIBLE);
             resultMRTFare.setVisibility(View.VISIBLE);
-            resultMRTFare.setText(String.format(Locale.getDefault(), "MRT    %d บาท",  this.result.fare.MRT));
+            mrtStationCnt.setText(String.format(Locale.getDefault(), "MRT %d Station (%s)", this.stationCnt.get("mrt"), this.result.card_type_mrt.en));
+            resultMRTFare.setText(String.format(Locale.getDefault(), "%d Baht",  this.result.fare.MRT));
         }
         if(this.result.fare.ARL != 0){
+            arlStationCnt.setVisibility(View.VISIBLE);
             resultARLFare.setVisibility(View.VISIBLE);
-            resultARLFare.setText(String.format(Locale.getDefault(), "ARL    %d บาท", this.result.fare.ARL));
+            arlStationCnt.setText(String.format(Locale.getDefault(), "ARL %d Station (%s)", this.stationCnt.get("arl"), this.result.card_type_arl.en));
+            resultARLFare.setText(String.format(Locale.getDefault(), "%d Baht", this.result.fare.ARL));
         }
 
         routeAdapter = new RouteAdapter(routeItems, getContext(), ResultFragment.this);
@@ -186,6 +230,10 @@ public class ResultFragment extends Fragment {
 
     public void setResult(Result result) {
         this.result = result;
+    }
+
+    public void setStations(List<StationEvent> stations) {
+        this.stations = stations;
     }
 
     /**
@@ -297,6 +345,35 @@ public class ResultFragment extends Fragment {
         }
         Log.d("flag", String.valueOf(flag));
         getStation();
+    }
+
+    private void setStation() {
+        for (int i=0;i<2;i++) {
+            TextView textView;
+            StationChip chip;
+            int s;
+            if (i == 0) {
+                textView = mOrigin;
+                chip = mOriginChip;
+                s = R.string.select_origin_station;
+            } else {
+                textView = mDestination;
+                chip = mDestinationChip;
+                s = R.string.select_destination_station;
+            }
+            if (stations.get(i) != null) {
+                textView.setText(stations.get(i).toString());
+                chip.setVisibility(View.VISIBLE);
+                if (stations.get(i).isStation()) {
+                    chip.setStation(stations.get(i).getStation());
+                } else {
+                    chip.setVisibility(View.GONE);
+                }
+            } else {
+                textView.setText(getString(s));
+                chip.setVisibility(View.GONE);
+            }
+        }
     }
 
     public boolean getIsShow(int position){

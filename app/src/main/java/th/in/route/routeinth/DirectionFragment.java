@@ -250,7 +250,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
 
     private void calculate(Result result) {
         if (mListener != null) {
-            mListener.OnCalculateBtnPressed(result);
+            mListener.OnCalculateBtnPressed(result, stations);
         }
     }
 
@@ -358,6 +358,6 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
     }
 
     public interface OnCalculate {
-        void OnCalculateBtnPressed(Result result);
+        void OnCalculateBtnPressed(Result result, List<StationEvent> stationEvents);
     }
 }
