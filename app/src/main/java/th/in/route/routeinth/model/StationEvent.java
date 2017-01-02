@@ -60,4 +60,9 @@ public class StationEvent {
     public void setPlace(Place place) {
         this.place = place;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof StationEvent && getStation().equals(((StationEvent) obj).getStation());
+    }
 }

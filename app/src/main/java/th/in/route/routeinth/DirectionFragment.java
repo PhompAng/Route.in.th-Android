@@ -187,7 +187,11 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         }
 
         if (stations.get(0) != null && stations.get(1) != null) {
-            mCalculate.setVisibility(View.VISIBLE);
+            if (!stations.get(0).equals(stations.get(1))) {
+                mCalculate.setVisibility(View.VISIBLE);
+            } else {
+                mCalculate.setVisibility(View.GONE);
+            }
         } else {
             mCalculate.setVisibility(View.GONE);
         }

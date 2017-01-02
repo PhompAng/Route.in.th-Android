@@ -55,4 +55,10 @@ public class Station {
     public String toString() {
         return getEn();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Station && getKey().equals(((Station) obj).getKey());
+
+    }
 }
