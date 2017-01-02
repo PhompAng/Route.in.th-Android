@@ -13,9 +13,13 @@ import com.google.android.gms.location.places.Places;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import th.in.route.routeinth.DirectionFragment.OnCalculate;
 import th.in.route.routeinth.app.DistanceUtils;
+import th.in.route.routeinth.model.result.Result;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity
+        implements GoogleApiClient.OnConnectionFailedListener,
+        ResultFragment.OnTest, OnCalculate {
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     private GoogleApiClient mGoogleApiClient;
@@ -37,10 +41,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     .build();
         }
 
-        DirectionFragment directionFragment = DirectionFragment.newInstance("test", "test");
+        if (savedInstanceState == null) {
+            DirectionFragment directionFragment = DirectionFragment.newInstance("test", "test");
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, directionFragment).commit();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, directionFragment).commit();
+        }
     }
 
     @Override
@@ -60,5 +66,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onTest() {
+
+    }
+
+    @Override
+    public void OnCalculateBtnPressed(Result result) {
+        ResultFragment resultFragment = ResultFragment.newInstance();
+        resultFragment.setResult(result);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, resultFragment).addToBackStack(null).commit();
     }
 }

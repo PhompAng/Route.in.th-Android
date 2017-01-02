@@ -2,11 +2,13 @@ package th.in.route.routeinth;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +32,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.app.StationUtils;
 import th.in.route.routeinth.model.StationEvent;
+import th.in.route.routeinth.model.result.Input;
+import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.system.Station;
+import th.in.route.routeinth.services.APIServices;
 import th.in.route.routeinth.view.StationChip;
 
 
@@ -43,6 +53,8 @@ import th.in.route.routeinth.view.StationChip;
  * create an instance of this fragment.
  */
 public class DirectionFragment extends Fragment implements View.OnClickListener {
+    private OnCalculate mListener;
+    
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -144,6 +156,8 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         setStation();
     }
 
+
+
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void retrieveStation(StationEvent station) {
         if (!station.isStation()) {
@@ -188,6 +202,55 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         setCalculate();
     }
 
+    @OnClick(R.id.calculate)
+    void onCalculateClicked(View v) {
+        String departKey = stations.get(0).getStation().getKey();
+        String arriveKey = stations.get(1).getStation().getKey();
+        Input input = new Input();
+        input.origin = departKey;
+        input.destination = arriveKey;
+        input.card_type_bts = "0";
+        input.card_type_mrt = "0";
+        input.card_type_arl = "0";
+        Retrofit retrofit = new Retrofit.Builder()
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://103.253.134.235:8888/")
+                .build();
+        APIServices apiServices = retrofit.create(APIServices.class);
+        apiServices.calculate(input)
+        .subscribeOn(Schedulers.newThread())
+        .doOnNext(new Action1<Result>() {
+            @Override
+            public void call(Result result) {
+                calculate(result);
+            }
+        }).doOnError(new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.e("calculate", throwable.getMessage());
+            }
+        })
+        .subscribe();
+//        resultCall.enqueue(new Callback<Result>() {
+//            @Override
+//            public void onResponse(Call<Result> call, Response<Result> response) {
+//                Result result = response.body();
+//                calculate(result);
+//            }
+//            @Override
+//            public void onFailure(Call<Result> call, Throwable t) {
+//                Log.e("error", t.getMessage());
+//            }
+//        });
+    }
+
+    private void calculate(Result result) {
+        if (mListener != null) {
+            mListener.OnCalculateBtnPressed(result);
+        }
+    }
+
     private void setCalculate() {
         if (stations.get(0) != null && stations.get(1) != null) {
             if (!stations.get(0).equals(stations.get(1))) {
@@ -201,6 +264,17 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnCalculate) {
+            mListener = (OnCalculate) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnTest");
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
@@ -210,6 +284,12 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     @Override
@@ -272,5 +352,9 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
                 }
             }
         }
+    }
+
+    public interface OnCalculate {
+        void OnCalculateBtnPressed(Result result);
     }
 }
