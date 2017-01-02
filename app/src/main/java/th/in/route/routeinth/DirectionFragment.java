@@ -149,8 +149,8 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         if (!station.isStation()) {
             DistanceUtils distanceUtils = DistanceUtils.getInstance();
             LatLng latLng = station.getPlace().getLatLng();
-            Toast.makeText(getContext(), distanceUtils.getNearestStation(latLng.latitude, latLng.longitude), Toast.LENGTH_SHORT).show();
-            //TODO set station to stations
+            Station s = stationUtils.getStationFromKey(distanceUtils.getNearestStation(latLng.latitude, latLng.longitude));
+            station.setStation(s);
         }
         stations.set(station.getType(), station);
         setStation();
@@ -163,10 +163,10 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
             mOriginChip.setVisibility(View.VISIBLE);
             if (stations.get(0).isStation()) {
                 mOriginChip.setStation(stations.get(0).getStation());
-                setPinColor(stations.get(0));
             } else {
                 mOriginChip.setVisibility(View.GONE);
             }
+            setPinColor(stations.get(0));
         } else {
             mOrigin.setText(getString(R.string.select_origin_station));
             mOriginChip.setVisibility(View.GONE);
@@ -177,10 +177,10 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
             mDestinationChip.setVisibility(View.VISIBLE);
             if (stations.get(1).isStation()) {
                 mDestinationChip.setStation(stations.get(1).getStation());
-                setPinColor(stations.get(1));
             } else {
                 mDestinationChip.setVisibility(View.GONE);
             }
+            setPinColor(stations.get(1));
         } else {
             mDestination.setText(getString(R.string.select_destination_station));
             mDestinationChip.setVisibility(View.GONE);
@@ -263,7 +263,6 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
                 } else {
                     ((GradientDrawable) v.getBackground()).setColor(ContextCompat.getColor(getContext(), R.color.colorMrt));
                 }
-
             }
         }
     }
