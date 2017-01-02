@@ -156,36 +156,39 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         setStation();
     }
 
-    //TODO Refactor
     private void setStation() {
-        if (stations.get(0) != null) {
-            mOrigin.setText(stations.get(0).toString());
-            mOriginChip.setVisibility(View.VISIBLE);
-            if (stations.get(0).isStation()) {
-                mOriginChip.setStation(stations.get(0).getStation());
+        for (int i=0;i<2;i++) {
+            TextView textView;
+            StationChip chip;
+            int s;
+            if (i == 0) {
+                textView = mOrigin;
+                chip = mOriginChip;
+                s = R.string.select_origin_station;
             } else {
-                mOriginChip.setVisibility(View.GONE);
+                textView = mDestination;
+                chip = mDestinationChip;
+                s = R.string.select_destination_station;
             }
-            setPinColor(stations.get(0));
-        } else {
-            mOrigin.setText(getString(R.string.select_origin_station));
-            mOriginChip.setVisibility(View.GONE);
+            if (stations.get(i) != null) {
+                textView.setText(stations.get(i).toString());
+                chip.setVisibility(View.VISIBLE);
+                if (stations.get(i).isStation()) {
+                    chip.setStation(stations.get(i).getStation());
+                } else {
+                    chip.setVisibility(View.GONE);
+                }
+                setPinColor(stations.get(i));
+            } else {
+                textView.setText(getString(s));
+                chip.setVisibility(View.GONE);
+            }
         }
 
-        if (stations.get(1) != null) {
-            mDestination.setText(stations.get(1).toString());
-            mDestinationChip.setVisibility(View.VISIBLE);
-            if (stations.get(1).isStation()) {
-                mDestinationChip.setStation(stations.get(1).getStation());
-            } else {
-                mDestinationChip.setVisibility(View.GONE);
-            }
-            setPinColor(stations.get(1));
-        } else {
-            mDestination.setText(getString(R.string.select_destination_station));
-            mDestinationChip.setVisibility(View.GONE);
-        }
+        setCalculate();
+    }
 
+    private void setCalculate() {
         if (stations.get(0) != null && stations.get(1) != null) {
             if (!stations.get(0).equals(stations.get(1))) {
                 mCalculate.setVisibility(View.VISIBLE);
