@@ -52,7 +52,11 @@ public class StationChip extends TextView {
                     setBackgroundResource(R.drawable.arl_chip);
                     break;
                 case 'B':
-                    setBackgroundResource(R.drawable.bts_chip);
+                    if (station.getKey().charAt(1) == 'W' || station.getKey().charAt(1) == 'S') {
+                        setBackgroundResource(R.drawable.bts_silom_chip);
+                    } else {
+                        setBackgroundResource(R.drawable.bts_sukhumvit_chip);
+                    }
                     break;
                 case 'M':
                     setBackgroundResource(R.drawable.mrt_chip);
