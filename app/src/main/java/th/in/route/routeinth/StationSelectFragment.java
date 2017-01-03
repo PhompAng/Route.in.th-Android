@@ -100,6 +100,8 @@ public class StationSelectFragment extends Fragment implements
         View v = inflater.inflate(R.layout.fragment_station_select, container, false);
         unbinder = ButterKnife.bind(this, v);
 
+        ((MainActivity) getActivity()).hideFab();
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mStationAdapter = new StationAdapter(getContext(), new ArrayList<RailSystem>(), this);
         mRecyclerView.setLayoutManager(layoutManager);

@@ -129,6 +129,7 @@ public class ResultFragment extends Fragment {
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((MainActivity) getActivity()).hideFab();
 
 //        resultOrigin.setText(this.result.origin.th);
 //        resultDestination.setText(this.result.destination.th);

@@ -2,9 +2,14 @@ package th.in.route.routeinth;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -22,9 +27,11 @@ import th.in.route.routeinth.model.result.Result;
 
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener,
+        BottomNavigationView.OnNavigationItemSelectedListener,
         ResultFragment.OnTest, OnCalculate {
     @BindView(R.id.toolbar) Toolbar toolbar;
-
+    @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
+    @BindView(R.id.fab) FloatingActionButton fab;
     private GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -44,12 +51,23 @@ public class MainActivity extends AppCompatActivity
                     .build();
         }
 
+        fab.setVisibility(View.GONE);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
         if (savedInstanceState == null) {
             DirectionFragment directionFragment = DirectionFragment.newInstance("test", "test");
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, directionFragment).commit();
         }
+    }
+
+    public void showFab() {
+        fab.setVisibility(View.VISIBLE);
+    }
+
+    public void hideFab() {
+        fab.setVisibility(View.GONE);
     }
 
     @Override
@@ -83,5 +101,23 @@ public class MainActivity extends AppCompatActivity
         resultFragment.setStations(stationEvents);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, resultFragment).addToBackStack(null).commit();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        switch (item.getItemId()) {
+            case R.id.action_direction:
+                fragmentTransaction.replace(R.id.flContent, DirectionFragment.newInstance("test", "test")).addToBackStack(null).commit();
+                return true;
+            case R.id.action_card:
+                fragmentTransaction.replace(R.id.flContent, new CardFragment()).addToBackStack(null).commit();
+                return true;
+            case R.id.action_info:
+                return true;
+            case R.id.action_announce:
+                return true;
+        }
+        return false;
     }
 }

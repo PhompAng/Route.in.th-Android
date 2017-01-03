@@ -130,6 +130,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        ((MainActivity) getActivity()).hideFab();
         setStation();
 
         Glide.with(this).load(R.drawable.map).into(map_img);
