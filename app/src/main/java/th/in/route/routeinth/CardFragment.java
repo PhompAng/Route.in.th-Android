@@ -2,14 +2,23 @@ package th.in.route.routeinth;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import th.in.route.routeinth.adapter.CardAdapter;
+import th.in.route.routeinth.model.view.Card;
 
 
 /**
@@ -22,6 +31,24 @@ public class CardFragment extends Fragment {
     }
 
     private Unbinder unbinder;
+    private List<Card> cards;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setCards();
+    }
+
+    private void setCards() {
+        cards = new ArrayList<>();
+        cards.add(new Card());
+        cards.add(new Card());
+        cards.add(new Card());
+    }
+
+    @BindView(R.id.list)
+    RecyclerView list;
+    private CardAdapter cardAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,6 +60,12 @@ public class CardFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).showFab();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        cardAdapter = new CardAdapter(getContext(), cards);
+        list.setHasFixedSize(true);
+        list.setLayoutManager(layoutManager);
+        list.setAdapter(cardAdapter);
 
         return v;
     }

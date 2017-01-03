@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void hideFab() {
-        fab.setVisibility(View.GONE);
+        fab.setVisibility(View.INVISIBLE);
     }
 
     @Override
