@@ -1,31 +1,21 @@
 package th.in.route.routeinth.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
-import butterknife.BindView;
-import th.in.route.routeinth.MainActivity;
 import th.in.route.routeinth.R;
 import th.in.route.routeinth.ResultFragment;
-import th.in.route.routeinth.model.result.Result;
-import th.in.route.routeinth.model.result.Route;
 import th.in.route.routeinth.model.view.RouteItem;
 
 /**
@@ -34,9 +24,9 @@ import th.in.route.routeinth.model.view.RouteItem;
 
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> {
 
-    Context mContext;
-    List<RouteItem> routeItems;
-    ResultFragment fragment;
+    private Context mContext;
+    private List<RouteItem> routeItems;
+    private ResultFragment fragment;
 
     public RouteAdapter(List<RouteItem> routeItems, Context mContext, ResultFragment resultFragment) {
         this.routeItems = routeItems;
@@ -44,14 +34,14 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         this.fragment = resultFragment;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView stationNameLabel;
         private ImageView resourceStationImage;
         private TextView viewAllStationLabel;
         private TextView viewHeadingLabel;
         private TextView viewCodeLabel;
         private LinearLayout routeItem;
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             stationNameLabel = (TextView) itemView.findViewById(R.id.resultStationName);
             resourceStationImage = (ImageView) itemView.findViewById(R.id.resultStationImage);
@@ -65,115 +55,125 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     @Override
     public RouteAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.route_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(v);
-        return  viewHolder;
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final RouteAdapter.ViewHolder holder, final int position) {
-
+    public void onBindViewHolder(final RouteAdapter.ViewHolder holder, int position) {
+        final RouteItem routeItem = routeItems.get(position);
         //set up color of each system
         int color;
-        if(routeItems.get(position).getStationOf().equals("A")){
+        if (routeItem.getStationOf().equals("A")) {
             color = R.color.colorArl;
-        }else if(routeItems.get(position).getRoute().line.en.equals("Sukhumvit")){
+        } else if (routeItem.getRoute().line.en.equals("Sukhumvit")) {
             color = R.color.colorBtsSukhumvit;
-        }else if(routeItems.get(position).getRoute().line.en.equals("Silom")){
+        } else if (routeItem.getRoute().line.en.equals("Silom")) {
             color = R.color.colorBtsSilom;
-        }else {
+        } else {
             color = R.color.colorMrt;
         }
 
-        GradientDrawable viewAllStationbg = (GradientDrawable) holder.viewAllStationLabel.getBackground();
+        GradientDrawable viewAllStationBg = (GradientDrawable) holder.viewAllStationLabel.getBackground();
 
         //set code label and heading label
-        if (routeItems.get(position).getType() != "between"){
-            holder.viewCodeLabel.setText(routeItems.get(position).getRoute().name.code);
+        if (!routeItem.getType().equals("between")) {
+            holder.viewCodeLabel.setText(routeItem.getRoute().name.code);
             GradientDrawable labelBg = (GradientDrawable) holder.viewCodeLabel.getBackground();
             labelBg.setColorFilter(ContextCompat.getColor(mContext, color), PorterDuff.Mode.ADD);
             holder.viewCodeLabel.setVisibility(View.VISIBLE);
-            holder.viewHeadingLabel.setText("ปลายทาง " + routeItems.get(position).getRoute().heading.th);
+            holder.viewHeadingLabel.setText("Heading " + routeItem.getRoute().heading.en);
             holder.viewHeadingLabel.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.viewCodeLabel.setVisibility(View.GONE);
             holder.viewHeadingLabel.setVisibility(View.GONE);
         }
 
         //each listview
-        if(routeItems.get(position).getType().equals("siam")){
-            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
-            holder.resourceStationImage.setImageResource(R.drawable.route_one_between);
-            holder.viewAllStationLabel.setVisibility(View.GONE);
-            holder.stationNameLabel.setTextSize(14);
-            if(fragment.getIsShow(routeItems.get(position).getSystem())){
-                holder.viewAllStationLabel.setText("HIDE");
-                viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
-                holder.viewAllStationLabel.setVisibility(View.VISIBLE);
+        switch (routeItem.getType()) {
+            case "siam":
+                holder.stationNameLabel.setText(routeItem.getRoute().name.en);
+                holder.resourceStationImage.setImageResource(R.drawable.route_one_between);
+                holder.viewAllStationLabel.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
-                holder.routeItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        fragment.setIsShow(routeItems.get(position).getSystem(), false);
-                    }
-                });
-            }
-        } else if(routeItems.get(position).getType().equals("ori_one")){
-            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
-            holder.resourceStationImage.setImageResource(R.drawable.route_one_ori);
-            holder.stationNameLabel.setTextSize(14);
-            holder.viewAllStationLabel.setVisibility(View.GONE);
-        }else if(routeItems.get(position).getType().equals("des_one")){
-            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
-            holder.resourceStationImage.setImageResource(R.drawable.route_one_des);
-            holder.viewAllStationLabel.setVisibility(View.GONE);
-            holder.stationNameLabel.setTextSize(14);
-        } else if(routeItems.get(position).getType() == "ori" || routeItems.get(position).getType() == "start"){
-            if(routeItems.get(position).getType() == "ori"){
-                holder.resourceStationImage.setImageResource(R.drawable.route_ori);
-            }else {
-                holder.resourceStationImage.setImageResource(R.drawable.route_start);
-            }
-            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
-            holder.viewAllStationLabel.setVisibility(View.GONE);
-            holder.stationNameLabel.setTextSize(14);
-            if(fragment.getIsShow(routeItems.get(position).getSystem())){
-                viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
-                holder.viewAllStationLabel.setText("HIDE");
-                holder.viewAllStationLabel.setVisibility(View.VISIBLE);
-                holder.stationNameLabel.setTextSize(14);
-                holder.routeItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        fragment.setIsShow(routeItems.get(position).getSystem(), false);
-                    }
-                });
-            }
-        }
-        else if(routeItems.get(position).getType().equals("between")){
-            holder.stationNameLabel.setText(routeItems.get(position).getRoute().station_cnt + " สถานี");
-            holder.stationNameLabel.setTextSize(10);
-            holder.viewAllStationLabel.setVisibility(View.VISIBLE);
-            holder.viewAllStationLabel.setText("VIEW");
-            viewAllStationbg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
-            holder.viewCodeLabel.setVisibility(View.GONE);
-            holder.resourceStationImage.setImageResource(R.drawable.route_between);
-            holder.routeItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    fragment.setIsShow(routeItems.get(position).getSystem(), true);
+                if (fragment.getIsShow(routeItem.getSystem())) {
+                    holder.viewAllStationLabel.setText("HIDE");
+                    viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
+                    holder.viewAllStationLabel.setVisibility(View.VISIBLE);
+                    holder.stationNameLabel.setTextSize(14);
+                    holder.routeItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            fragment.setIsShow(routeItem.getSystem(), false);
+                        }
+                    });
                 }
-            });
-        }else {
-            if(routeItems.get(position).getType() == "des"){
-                holder.resourceStationImage.setImageResource(R.drawable.route_des);
-            }else if(routeItems.get(position).getType() == "end"){
-                holder.resourceStationImage.setImageResource(R.drawable.route_end);
-            }else if (routeItems.get(position).getType() == "station"){
-                holder.resourceStationImage.setImageResource(R.drawable.route_station);
-            }
-            holder.stationNameLabel.setText(routeItems.get(position).getRoute().name.th);
-            holder.viewAllStationLabel.setVisibility(View.GONE);
-            holder.stationNameLabel.setTextSize(14);
+                break;
+            case "ori_one":
+                holder.stationNameLabel.setText(routeItem.getRoute().name.en);
+                holder.resourceStationImage.setImageResource(R.drawable.route_one_ori);
+                holder.stationNameLabel.setTextSize(14);
+                holder.viewAllStationLabel.setVisibility(View.GONE);
+                break;
+            case "des_one":
+                holder.stationNameLabel.setText(routeItem.getRoute().name.en);
+                holder.resourceStationImage.setImageResource(R.drawable.route_one_des);
+                holder.viewAllStationLabel.setVisibility(View.GONE);
+                holder.stationNameLabel.setTextSize(14);
+                break;
+            case "ori":
+            case "start":
+                if (routeItem.getType().equals("ori")) {
+                    holder.resourceStationImage.setImageResource(R.drawable.route_ori);
+                } else {
+                    holder.resourceStationImage.setImageResource(R.drawable.route_start);
+                }
+                holder.stationNameLabel.setText(routeItem.getRoute().name.en);
+                holder.viewAllStationLabel.setVisibility(View.GONE);
+                holder.stationNameLabel.setTextSize(14);
+                if (fragment.getIsShow(routeItem.getSystem())) {
+                    viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
+                    holder.viewAllStationLabel.setText("HIDE");
+                    holder.viewAllStationLabel.setVisibility(View.VISIBLE);
+                    holder.stationNameLabel.setTextSize(14);
+                    holder.routeItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            fragment.setIsShow(routeItem.getSystem(), false);
+                        }
+                    });
+                }
+                break;
+            case "between":
+                holder.stationNameLabel.setText(routeItem.getRoute().station_cnt + " Stations");
+                holder.stationNameLabel.setTextSize(10);
+                holder.viewAllStationLabel.setVisibility(View.VISIBLE);
+                holder.viewAllStationLabel.setText("VIEW");
+                viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
+                holder.viewCodeLabel.setVisibility(View.GONE);
+                holder.resourceStationImage.setImageResource(R.drawable.route_between);
+                holder.routeItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        fragment.setIsShow(routeItem.getSystem(), true);
+                    }
+                });
+                break;
+            default:
+                switch (routeItem.getType()) {
+                    case "des":
+                        holder.resourceStationImage.setImageResource(R.drawable.route_des);
+                        break;
+                    case "end":
+                        holder.resourceStationImage.setImageResource(R.drawable.route_end);
+                        break;
+                    case "station":
+                        holder.resourceStationImage.setImageResource(R.drawable.route_station);
+                        break;
+                }
+                holder.stationNameLabel.setText(routeItem.getRoute().name.en);
+                holder.viewAllStationLabel.setVisibility(View.GONE);
+                holder.stationNameLabel.setTextSize(14);
+                break;
         }
         holder.resourceStationImage.setColorFilter(ContextCompat.getColor(mContext, color));
     }
