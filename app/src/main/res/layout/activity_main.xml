@@ -43,7 +43,7 @@
         app:srcCompat="@drawable/ic_add_black_24dp"
         app:fabSize="normal" />
 
-    <th.in.route.routeinth.app.RichBottomNavigationView
+    <th.in.route.routeinth.view.RichBottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -52,7 +52,7 @@
         android:elevation="8dp"
         android:outlineProvider="bounds"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:layout_behavior=".app.BottomNavigationBehavior"
+        app:layout_behavior="th.in.route.routeinth.view.BottomNavigationBehavior"
         app:itemBackground="@android:color/white"
         app:itemIconTint="@drawable/nav_color_list"
         app:itemTextColor="@drawable/nav_color_list"

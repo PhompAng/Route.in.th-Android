@@ -1,4 +1,4 @@
-package th.in.route.routeinth.app;
+package th.in.route.routeinth.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
