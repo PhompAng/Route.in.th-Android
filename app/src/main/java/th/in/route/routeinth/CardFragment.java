@@ -41,9 +41,22 @@ public class CardFragment extends Fragment {
 
     private void setCards() {
         cards = new ArrayList<>();
-        cards.add(new Card());
-        cards.add(new Card());
-        cards.add(new Card());
+        Card c1 = new Card();
+        c1.setName("BTS Student Card");
+        c1.setNumber("1234567890");
+        c1.setBalance(500);
+        Card c2 = new Card();
+        c2.setName("BTS Student Card 2");
+        c2.setNumber("487923874");
+        c2.setBalance(222);
+        Card c3 = new Card();
+        c3.setName("BTS Student Card 3");
+        c3.setNumber("1298378912");
+        c3.setBalance(12);
+        cards.add(c1);
+        cards.add(c2);
+        cards.add(c3);
+
     }
 
     @BindView(R.id.list)
