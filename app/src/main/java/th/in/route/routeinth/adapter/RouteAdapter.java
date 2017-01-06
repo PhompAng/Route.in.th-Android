@@ -38,17 +38,17 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView stationNameLabel;
         private ImageView resourceStationImage;
-        private TextView viewAllStationLabel;
         private TextView viewHeadingLabel;
         private TextView viewCodeLabel;
+        private ImageView showIcon;
         private LinearLayout routeItem;
         ViewHolder(View itemView) {
             super(itemView);
             stationNameLabel = (TextView) itemView.findViewById(R.id.resultStationName);
             resourceStationImage = (ImageView) itemView.findViewById(R.id.resultStationImage);
-            viewAllStationLabel = (TextView) itemView.findViewById(R.id.viewAllStationLabel);
             viewCodeLabel = (TextView) itemView.findViewById(R.id.viewCodeLabel);
             viewHeadingLabel = (TextView) itemView.findViewById(R.id.resultHeadingLabel);
+            showIcon = (ImageView) itemView.findViewById(R.id.showIcon);
             routeItem = (LinearLayout) itemView.findViewById(R.id.routeItem);
         }
     }
@@ -74,7 +74,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             color = R.color.colorMrt;
         }
 
-        GradientDrawable viewAllStationBg = (GradientDrawable) holder.viewAllStationLabel.getBackground();
+//        GradientDrawable viewAllStationBg = (GradientDrawable) holder.viewAllStationLabel.getBackground();
 
         //set code label and heading label
         if (!routeItem.getType().equals("between")) {
@@ -94,7 +94,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             case "siam":
                 holder.stationNameLabel.setText(routeItem.getRoute().name.en);
                 holder.resourceStationImage.setImageResource(R.drawable.route_one_between);
-                holder.viewAllStationLabel.setVisibility(View.GONE);
+                holder.showIcon.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
 //                if (fragment.getIsShow(routeItem.getSystem())) {
 //                    holder.viewAllStationLabel.setText("HIDE");
@@ -113,12 +113,12 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                 holder.stationNameLabel.setText(routeItem.getRoute().name.en);
                 holder.resourceStationImage.setImageResource(R.drawable.route_one_ori);
                 holder.stationNameLabel.setTextSize(14);
-                holder.viewAllStationLabel.setVisibility(View.GONE);
+                holder.showIcon.setVisibility(View.GONE);
                 break;
             case "des_one":
                 holder.stationNameLabel.setText(routeItem.getRoute().name.en);
                 holder.resourceStationImage.setImageResource(R.drawable.route_one_des);
-                holder.viewAllStationLabel.setVisibility(View.GONE);
+                holder.showIcon.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
                 break;
             case "ori":
@@ -129,7 +129,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                     holder.resourceStationImage.setImageResource(R.drawable.route_start);
                 }
                 holder.stationNameLabel.setText(routeItem.getRoute().name.en);
-                holder.viewAllStationLabel.setVisibility(View.GONE);
+                holder.showIcon.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
 //                if (fragment.getIsShow(routeItem.getSystem())) {
 //                    viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
@@ -147,14 +147,11 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             case "between":
                 holder.stationNameLabel.setText(routeItem.getRoute().station_cnt + " Stations");
                 holder.stationNameLabel.setTextSize(12);
-                holder.viewAllStationLabel.setVisibility(View.VISIBLE);
-                holder.viewAllStationLabel.setText("VIEW");
-                viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
+                holder.showIcon.setVisibility(View.VISIBLE);
+                holder.showIcon.setVisibility(View.VISIBLE);
+//                viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
                 holder.viewCodeLabel.setVisibility(View.GONE);
                 holder.resourceStationImage.setImageResource(R.drawable.route_between);
-                if(fragment.getIsShow(routeItems.get(position).getSystem()) == true){
-
-                }
                 holder.routeItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -173,9 +170,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                     case "station":
                         holder.resourceStationImage.setImageResource(R.drawable.route_station);
                         if (fragment.getIsShow(routeItem.getSystem())) {
-                            viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
-                            holder.viewAllStationLabel.setText("HIDE");
-                            holder.viewAllStationLabel.setVisibility(View.VISIBLE);
+//                            viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
+                            holder.showIcon.setVisibility(View.VISIBLE);
                             holder.stationNameLabel.setTextSize(14);
                             holder.routeItem.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -187,7 +183,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                         break;
                 }
                 holder.stationNameLabel.setText(routeItem.getRoute().name.en);
-                holder.viewAllStationLabel.setVisibility(View.GONE);
+                holder.showIcon.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
                 break;
         }
