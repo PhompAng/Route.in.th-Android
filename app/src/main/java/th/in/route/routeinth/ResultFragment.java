@@ -287,12 +287,13 @@ public class ResultFragment extends Fragment {
                 }
                 if(flag == 0){
                     isShow.add(false);
+                    Log.wtf("isshow add false>>>>>", routeItem.getRoute().name.en);
                 }
                 Log.wtf("isshow", isShow.toString());
                 now = routes.get(i).code.charAt(0);
                 routeItems.add(routeItem);
                 if (!isShow.isEmpty() && !isShow.get(system)){
-                    if(result.BTS_same_line == 0 && routes.get(i+1).code.equals("BCEN")){
+                    if(result.BTS_same_line == 0 && routes.get(i+1).code.equals("BCEN") && routes.get(i).station_cnt > 1){
                         RouteItem routeBetween = new RouteItem();
                         routeBetween.setRoute(routes.get(i));
                         routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
@@ -300,7 +301,7 @@ public class ResultFragment extends Fragment {
                         routeBetween.setSystem(system);
                         i+=routes.get(i).station_cnt-2;
                         routeItems.add(routeBetween);
-                    }else {
+                    }else if(routes.get(i).station_cnt > 1) {
                         Log.wtf("BCEN", "BCEN3");
                         RouteItem routeBetween = new RouteItem();
                         routeBetween.setRoute(routes.get(i));
@@ -322,7 +323,7 @@ public class ResultFragment extends Fragment {
             }else if(routes.get(i).code.charAt(0) == now && isShow.get(system)){
                 routeItem.setType("station");
                 routeItems.add(routeItem);
-            } else {
+            } else if(routes.get(i).station_cnt > 1){
                 RouteItem routeBetween = new RouteItem();
                 routeBetween.setRoute(routes.get(i));
                 routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
