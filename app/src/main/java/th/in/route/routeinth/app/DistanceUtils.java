@@ -4,7 +4,6 @@ import android.location.Location;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -24,7 +23,7 @@ public class DistanceUtils {
 //        systems = StationUtils.getInstance().getSystems();
 
         locationMap = new HashMap<>();
-        FirebaseDatabase.getInstance().getReference().child("station_location").addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseUtils.getDatabase().getReference().child("station_location").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
