@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import th.in.route.routeinth.DirectionFragment.OnCalculate;
 import th.in.route.routeinth.app.DistanceUtils;
+import th.in.route.routeinth.app.FirebaseUtils;
 import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.result.Result;
 
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
+        FirebaseUtils.regisUser(getApplicationContext());
         DistanceUtils.getInstance();
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient

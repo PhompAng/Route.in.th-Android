@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddCardActivity"></activity>
+        <activity android:name=".AddCardActivity" />
     </application>
 
 </manifest>
