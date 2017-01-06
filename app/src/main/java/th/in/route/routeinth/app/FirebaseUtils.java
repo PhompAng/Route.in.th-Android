@@ -5,6 +5,8 @@ import android.text.TextUtils;
 
 import com.google.firebase.database.DatabaseReference;
 
+import th.in.route.routeinth.model.view.Card;
+
 /**
  * Created by phompang on 1/6/2017 AD.
  */
@@ -17,5 +19,11 @@ public class FirebaseUtils {
             DatabaseReference uid = reference.child("users").push();
             uidUtils.putUID(uid.getKey());
         }
+    }
+
+    public static void addCard(Context context, Card c) {
+        DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
+        UIDUtils uidUtils = new UIDUtils(context);
+        reference.child("users").child(uidUtils.getUID()).child("cardMap").child(c.getSystem()).setValue(c);
     }
 }

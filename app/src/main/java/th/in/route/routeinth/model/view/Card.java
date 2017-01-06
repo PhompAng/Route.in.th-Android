@@ -9,6 +9,7 @@ public class Card {
     private String number;
     private double balance;
     private int trip_balance;
+    private String system;
     private String type;
 
     public Card() {
@@ -52,5 +53,13 @@ public class Card {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSystem() {
+        return system;
+    }
+
+    public void setSystem(String system) {
+        this.system = system;
     }
 }

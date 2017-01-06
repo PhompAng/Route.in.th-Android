@@ -11,6 +11,8 @@ import android.widget.Spinner;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import th.in.route.routeinth.app.FirebaseUtils;
+import th.in.route.routeinth.model.view.Card;
 
 public class AddCardActivity extends AppCompatActivity {
 
@@ -53,6 +55,25 @@ public class AddCardActivity extends AppCompatActivity {
 
     @OnClick(R.id.submit)
     public void validate() {
+        //TODO validate
 
+        addCard();
+    }
+
+    private void addCard() {
+        String cardNumber = number.getText().toString();
+        String cardSystem = (String) systemSpinner.getSelectedItem();
+        String cardType = (String) typeSpinner.getSelectedItem();
+        double cardBalance = Double.parseDouble(balance.getText().toString());
+
+        Card c = new Card();
+        c.setNumber(cardNumber);
+        c.setSystem(cardSystem);
+        c.setType(cardType);
+        c.setBalance(cardBalance);
+        c.setName(cardSystem + " " + cardType + " Card");
+
+        FirebaseUtils.addCard(getApplicationContext(), c);
+        finish();
     }
 }
