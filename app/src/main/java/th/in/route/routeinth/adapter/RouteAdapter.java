@@ -96,18 +96,6 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                 holder.resourceStationImage.setImageResource(R.drawable.route_one_between);
                 holder.showIcon.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
-//                if (fragment.getIsShow(routeItem.getSystem())) {
-//                    holder.viewAllStationLabel.setText("HIDE");
-//                    viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
-//                    holder.viewAllStationLabel.setVisibility(View.VISIBLE);
-//                    holder.stationNameLabel.setTextSize(14);
-//                    holder.routeItem.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            fragment.setIsShow(routeItem.getSystem(), false);
-//                        }
-//                    });
-//                }
                 break;
             case "ori_one":
                 holder.stationNameLabel.setText(routeItem.getRoute().name.en);
@@ -131,18 +119,6 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                 holder.stationNameLabel.setText(routeItem.getRoute().name.en);
                 holder.showIcon.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
-//                if (fragment.getIsShow(routeItem.getSystem())) {
-//                    viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);
-//                    holder.viewAllStationLabel.setText("HIDE");
-//                    holder.viewAllStationLabel.setVisibility(View.VISIBLE);
-//                    holder.stationNameLabel.setTextSize(14);
-//                    holder.routeItem.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            fragment.setIsShow(routeItem.getSystem(), false);
-//                        }
-//                    });
-//                }
                 break;
             case "between":
                 holder.stationNameLabel.setText(routeItem.getRoute().station_cnt + " Stations");
