@@ -13,4 +13,5 @@
     <string name="select_origin_station">Select Origin Station</string>
     <string name="landmark">Landmark</string>
     <string name="calculate">Calculate</string>
+    <string name="action_add">Add</string>
 </resources>
