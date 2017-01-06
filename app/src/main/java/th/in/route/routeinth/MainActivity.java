@@ -1,5 +1,6 @@
 package th.in.route.routeinth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import th.in.route.routeinth.DirectionFragment.OnCalculate;
 import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.model.StationEvent;
@@ -68,6 +70,11 @@ public class MainActivity extends AppCompatActivity
 
     public void hideFab() {
         fab.setVisibility(View.INVISIBLE);
+    }
+
+    @OnClick(R.id.fab)
+    public void addCard() {
+        startActivity(new Intent(MainActivity.this, AddCardActivity.class));
     }
 
     @Override
