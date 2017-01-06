@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void hideFab() {
-        fab.setVisibility(View.INVISIBLE);
+        fab.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.fab)
