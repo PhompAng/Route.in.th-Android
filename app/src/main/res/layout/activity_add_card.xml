@@ -7,110 +7,102 @@
     android:layout_height="match_parent"
     tools:context="th.in.route.routeinth.AddCardActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:layout_collapseMode="pin"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
-    </android.support.design.widget.AppBarLayout>
+    <include layout="@layout/appbar" />
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_vertical_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/number_holder"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/number_holder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/number"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Card Number"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Card Number"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:id="@+id/spinner_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="System and Type of Card"
-            android:textSize="12sp"
-            android:textColor="@color/textSecondary"
-            app:layout_constraintTop_toBottomOf="@+id/number_holder"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="8dp"/>
+            <TextView
+                android:id="@+id/spinner_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="System and Type of Card"
+                android:textSize="12sp"
+                android:textColor="@color/textSecondary"
+                app:layout_constraintTop_toBottomOf="@+id/number_holder"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginTop="8dp"/>
 
-        <Spinner
-            android:id="@+id/system_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_text"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            <Spinner
+                android:id="@+id/system_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_text"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
-        <Spinner
-            android:id="@+id/type_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            app:layout_constraintTop_toTopOf="@+id/system_spinner"
-            app:layout_constraintLeft_toRightOf="@+id/system_spinner"
-            android:layout_marginStart="16dp" />
+            <Spinner
+                android:id="@+id/type_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                app:layout_constraintTop_toTopOf="@+id/system_spinner"
+                app:layout_constraintLeft_toRightOf="@+id/system_spinner"
+                android:layout_marginStart="16dp" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/balance_holder"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/system_spinner"
-            app:layout_constraintLeft_toLeftOf="@+id/system_spinner">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/balance"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="number"
-                android:hint="Card Balance"/>
-        </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/balance_holder"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/system_spinner"
+                app:layout_constraintLeft_toLeftOf="@+id/system_spinner">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/balance"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    android:hint="Card Balance"/>
+            </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/trip_balance_holder"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@+id/balance_holder"
-            app:layout_constraintLeft_toRightOf="@+id/balance_holder"
-            android:visibility="gone">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/trip_balance"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="number"
-                android:hint="Trip Balance"/>
-        </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/trip_balance_holder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/balance_holder"
+                app:layout_constraintLeft_toRightOf="@+id/balance_holder"
+                android:visibility="gone">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/trip_balance"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    android:hint="Trip Balance"/>
+            </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/submit"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/balance_holder"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:text="Submit"
-            android:layout_marginTop="16dp" />
-    </android.support.constraint.ConstraintLayout>
+            <Button
+                android:id="@+id/submit"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintTop_toBottomOf="@+id/balance_holder"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="Submit"
+                android:layout_marginTop="16dp" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

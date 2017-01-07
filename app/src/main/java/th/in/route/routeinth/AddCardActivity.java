@@ -5,6 +5,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -15,6 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -26,6 +28,8 @@ import th.in.route.routeinth.app.FirebaseUtils;
 import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.User;
 import th.in.route.routeinth.model.view.Card;
+import th.in.route.routeinth.view.validator.EditTextValidate;
+import th.in.route.routeinth.view.validator.EmptyRule;
 
 public class AddCardActivity extends AppCompatActivity {
 
@@ -95,9 +99,29 @@ public class AddCardActivity extends AppCompatActivity {
 
     @OnClick(R.id.submit)
     public void validate() {
-        //TODO validate
+        List<TextInputEditText> editTexts = new ArrayList<>();
+        editTexts.add(balance);
+        editTexts.add(number);
 
-        addCard();
+        boolean cancel = false;
+        View focusView = null;
+
+        EditTextValidate validator = new EmptyRule();
+
+        for (TextInputEditText editText: editTexts) {
+            editText.setError(null);
+            if (validator.validate(editText) != null) {
+                editText.setError(getString(R.string.required));
+                cancel = true;
+                focusView = editText;
+            }
+        }
+
+        if (cancel) {
+            focusView.requestFocus();
+        } else {
+            addCard();
+        }
     }
 
     private void addCard() {
