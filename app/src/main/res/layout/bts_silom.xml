@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/BW1"
+        android:tag="BW1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="147.5dp"
+        android:layout_marginTop="158dp"/>
+
+    <View
+        android:id="@+id/BS1"
+        android:tag="BS1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="177dp"
+        android:layout_marginTop="163.5dp"/>
+
+    <View
+        android:id="@+id/BS2"
+        android:tag="BS2"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="177.5dp"/>
+
+    <View
+        android:id="@+id/BS3"
+        android:tag="BS3"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="174dp"
+        android:layout_marginTop="190dp"/>
+
+    <View
+        android:id="@+id/BS5"
+        android:tag="BS5"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="211dp"/>
+
+    <View
+        android:id="@+id/BS6"
+        android:tag="BS6"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="133dp"
+        android:layout_marginTop="214dp"/>
+
+    <View
+        android:id="@+id/BS7"
+        android:tag="BS7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="113dp"
+        android:layout_marginTop="214dp"/>
+
+    <View
+        android:id="@+id/BS8"
+        android:tag="BS8"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="214dp"/>
+
+    <View
+        android:id="@+id/BS9"
+        android:tag="BS9"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="214dp"/>
+
+    <View
+        android:id="@+id/BS10"
+        android:tag="BS10"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="54dp"
+        android:layout_marginTop="214dp"/>
+
+    <View
+        android:id="@+id/BS11"
+        android:tag="BS11"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="214dp"/>
+
+    <View
+        android:id="@+id/BS12"
+        android:tag="BS12"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="195dp"/>
+
+</merge>

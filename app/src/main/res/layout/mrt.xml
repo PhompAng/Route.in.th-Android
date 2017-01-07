@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/M1"
+        android:tag="M1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="131.5dp"
+        android:layout_marginTop="38.5dp" />
+
+    <View
+        android:id="@+id/M2"
+        android:tag="M2"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="@+id/M1"
+        app:layout_constraintLeft_toRightOf="@+id/M1"
+        android:layout_marginStart="3.5dp" />
+
+    <View
+        android:id="@+id/M3"
+        android:tag="M3"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/M2"
+        android:layout_marginStart="2.5dp"
+        android:layout_marginTop="28dp"/>
+
+    <View
+        android:id="@+id/M4"
+        android:tag="M4"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/M3"
+        android:layout_marginStart="13.5dp"
+        android:layout_marginTop="11dp"/>
+
+    <View
+        android:id="@+id/M5"
+        android:tag="M5"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/M4"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="11dp"/>
+
+    <View
+        android:id="@+id/M6"
+        android:tag="M6"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/M5"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="25dp"/>
+
+    <View
+        android:id="@+id/M7"
+        android:tag="M7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/M6"
+        android:layout_marginTop="44dp"/>
+
+    <View
+        android:id="@+id/M8"
+        android:tag="M8"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/M6"
+        android:layout_marginTop="64dp"/>
+
+    <View
+        android:id="@+id/M9"
+        android:tag="M9"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/M6"
+        android:layout_marginTop="79dp"/>
+
+    <View
+        android:id="@+id/M10"
+        android:tag="M10"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/M6"
+        android:layout_marginTop="97.5dp"/>
+
+    <View
+        android:id="@+id/M11"
+        android:tag="M11"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/M6"
+        android:layout_marginTop="125dp"/>
+
+    <View
+        android:id="@+id/M12"
+        android:tag="M12"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/M6"
+        android:layout_marginTop="160dp"/>
+
+    <View
+        android:id="@+id/M13"
+        android:tag="M13"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="226.5dp"
+        android:layout_marginTop="173dp"/>
+
+    <View
+        android:id="@+id/M14"
+        android:tag="M14"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="216.5dp"
+        android:layout_marginTop="180.5dp"/>
+
+    <View
+        android:id="@+id/M15"
+        android:tag="M15"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="180.5dp"/>
+
+    <View
+        android:id="@+id/M16"
+        android:tag="M16"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="181dp"
+        android:layout_marginTop="182dp"/>
+
+    <View
+        android:id="@+id/M17"
+        android:tag="M17"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="157dp"
+        android:layout_marginTop="180.5dp"/>
+
+    <View
+        android:id="@+id/M18"
+        android:tag="M18"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="132.5dp"
+        android:layout_marginTop="180.5dp"/>
+
+</merge>
