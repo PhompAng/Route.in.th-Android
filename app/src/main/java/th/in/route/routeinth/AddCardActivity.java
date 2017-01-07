@@ -35,6 +35,7 @@ public class AddCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_card);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        setTitle("Add Card");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ArrayAdapter<String> systemAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"ARL", "BTS", "MRT"});
