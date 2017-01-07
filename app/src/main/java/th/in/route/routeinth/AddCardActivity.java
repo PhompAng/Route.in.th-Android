@@ -60,7 +60,7 @@ public class AddCardActivity extends AppCompatActivity {
         systemSet = new HashSet<>();
         systemAdapter = new MyArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new ArrayList<>(systemSet));
         systemAdapter.setNotifyOnChange(true);
-        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"Normal", "Adult", "Student", "Senior"});
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"Adult", "Student", "Senior"});
         systemSpinner.setAdapter(systemAdapter);
         typeSpinner.setAdapter(typeAdapter);
 
