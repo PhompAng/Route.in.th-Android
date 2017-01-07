@@ -26,4 +26,10 @@ public class FirebaseUtils {
         UIDUtils uidUtils = new UIDUtils(context);
         reference.child("users").child(uidUtils.getUID()).child("cardMap").child(c.getSystem()).setValue(c);
     }
+
+    public static void addValue(Context context, Card c, double value) {
+        DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
+        UIDUtils uidUtils = new UIDUtils(context);
+        reference.child("users").child(uidUtils.getUID()).child("cardMap").child(c.getSystem()).child("balance").setValue(c.getBalance() + value);
+    }
 }

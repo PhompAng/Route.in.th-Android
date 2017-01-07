@@ -1,16 +1,19 @@
 package th.in.route.routeinth.model.view;
 
+import org.parceler.Parcel;
+
 /**
  * Created by phompang on 1/3/2017 AD.
  */
 
+@Parcel
 public class Card {
-    private String name;
-    private String number;
-    private double balance;
-    private int trip_balance;
-    private String system;
-    private String type;
+    String name;
+    String number;
+    double balance;
+    int trip_balance;
+    String system;
+    String type;
 
     public Card() {
     }

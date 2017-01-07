@@ -27,16 +27,18 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private Context context;
     private List<Card> cards;
+    private ViewHolder.OnAddValue listener;
 
-    public CardAdapter(Context context, List<Card> cards) {
+    public CardAdapter(Context context, List<Card> cards, ViewHolder.OnAddValue listener) {
         this.context = context;
         this.cards = cards;
+        this.listener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.layout_card, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(v, listener);
     }
 
     @Override
@@ -53,7 +55,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         return cards.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        OnAddValue listener;
+
         @BindView(R.id.img)
         ImageView img;
         @BindView(R.id.name)
@@ -64,9 +68,23 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         TextView balance;
         @BindView(R.id.add_balance)
         Button addBalance;
-        ViewHolder(View itemView) {
+        ViewHolder(View itemView, OnAddValue listener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            this.listener = listener;
+
+            addBalance.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.addBalance(getAdapterPosition());
+            }
+        }
+
+        public interface OnAddValue {
+            void addBalance(int position);
         }
     }
 }
