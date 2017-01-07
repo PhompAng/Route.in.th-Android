@@ -1,6 +1,8 @@
 package th.in.route.routeinth.model;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import th.in.route.routeinth.model.view.Card;
 
@@ -26,5 +28,15 @@ public class User {
 
     public void setCardMap(Map<String, Card> cardMap) {
         this.cardMap = cardMap;
+    }
+
+    public Set<String> getUnAddedCard() {
+        Set<String> allCard = new HashSet<>();
+        allCard.add("BTS");
+        allCard.add("MTR");
+        allCard.add("ARL");
+        Set<String> addedCard = cardMap.keySet();
+        allCard.removeAll(addedCard);
+        return allCard;
     }
 }
