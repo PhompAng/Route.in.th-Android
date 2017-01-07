@@ -7,9 +7,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import th.in.route.routeinth.adapter.CardAdapter;
+import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.view.Card;
 
 
@@ -25,6 +34,9 @@ import th.in.route.routeinth.model.view.Card;
  * A simple {@link Fragment} subclass.
  */
 public class CardFragment extends Fragment {
+
+    Query query;
+    ValueEventListener listener;
 
     public CardFragment() {
         // Required empty public constructor
@@ -36,27 +48,8 @@ public class CardFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setCards();
-    }
-
-    private void setCards() {
         cards = new ArrayList<>();
-        Card c1 = new Card();
-        c1.setName("BTS Student Card");
-        c1.setNumber("1234567890");
-        c1.setBalance(500);
-        Card c2 = new Card();
-        c2.setName("BTS Student Card 2");
-        c2.setNumber("487923874");
-        c2.setBalance(222);
-        Card c3 = new Card();
-        c3.setName("BTS Student Card 3");
-        c3.setNumber("1298378912");
-        c3.setBalance(12);
-        cards.add(c1);
-        cards.add(c2);
-        cards.add(c3);
-
+        getCardFromFirebase();
     }
 
     @BindView(R.id.list)
@@ -81,6 +74,30 @@ public class CardFragment extends Fragment {
         list.setAdapter(cardAdapter);
 
         return v;
+    }
+
+    private void getCardFromFirebase(){
+        UIDUtils uidUtils = new UIDUtils(getContext());
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference();
+        query = databaseReference.child("users").child(uidUtils.getUID()).child("cardMap");
+        listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                cards.clear();
+                for(DataSnapshot cardData: dataSnapshot.getChildren()){
+                    Card card = cardData.getValue(Card.class);
+                    cards.add(card);
+                }
+                cardAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        query.addValueEventListener(listener);
     }
 
     @Override
