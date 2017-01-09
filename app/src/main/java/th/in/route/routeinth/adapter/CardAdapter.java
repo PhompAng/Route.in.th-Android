@@ -51,7 +51,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         Glide.with(context).load(resourceId).fitCenter().centerCrop().into(holder.img);
         holder.name.setText(card.getName());
         holder.number.setText(card.getNumber());
-        holder.balance.setText(String.format(Locale.getDefault(), "%.0f Baht", card.getBalance()));
+        holder.balance.setText(String.format(Locale.getDefault(), "%d Baht", card.getBalance()));
     }
 
     @Override

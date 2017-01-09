@@ -127,7 +127,7 @@ public class AddCardActivity extends AppCompatActivity {
         String cardNumber = number.getText().toString();
         String cardSystem = (String) systemSpinner.getSelectedItem();
         String cardType = (String) typeSpinner.getSelectedItem();
-        double cardBalance = Double.parseDouble(balance.getText().toString());
+        int cardBalance = Integer.parseInt(balance.getText().toString());
 
         Card c = new Card();
         c.setNumber(cardNumber);

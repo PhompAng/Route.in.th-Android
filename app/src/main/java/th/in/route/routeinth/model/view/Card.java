@@ -10,7 +10,7 @@ import org.parceler.Parcel;
 public class Card {
     String name;
     String number;
-    double balance;
+    int balance;
     int trip_balance;
     String system;
     String type;
@@ -34,11 +34,11 @@ public class Card {
         this.number = number;
     }
 
-    public double getBalance() {
+    public int getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(int balance) {
         this.balance = balance;
     }
 

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -58,13 +59,33 @@ public class AddValueDialog extends DialogFragment {
         ButterKnife.bind(this, v);
 
         //TODO set min-max
-        int minValue = 100;
-        int maxValue = 3000;
-        int step = 100;
+        int minValue = 0;
+        int maxValue= 0;
+        int step = 0;
+        switch (card.getSystem()){
+            case "BTS":
+                minValue = 100;
+                maxValue = 4000 - card.getBalance();
+                step = 100;
+                break;
+            case "MRT":
+                minValue = 100;
+                maxValue = 2000 - card.getBalance();
+                step = 100;
+                break;
+            case "ARL":
+                minValue = 20;
+                maxValue = 3000 - card.getBalance();
+                step = 10;
+                break;
 
-        final String[] valueSet = new String[maxValue/minValue];
-        for (int i = minValue; i <= maxValue; i += step) {
-            valueSet[(i/step)-1] = String.valueOf(i);
+        }
+
+        final String[] valueSet = new String[(maxValue-minValue)/step +1];
+        int tmp = minValue;
+        for (int i = 0; i < valueSet.length; i++) {
+            valueSet[i] = String.valueOf(tmp);
+            tmp += step;
         }
 
         numberPicker.setMinValue(0);
@@ -86,7 +107,7 @@ public class AddValueDialog extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent();
                         intent.putExtra(ARG_CARD, Parcels.wrap(card));
-                        intent.putExtra("value", Double.parseDouble(valueSet[numberPicker.getValue()]));
+                        intent.putExtra("value", Integer.parseInt(valueSet[numberPicker.getValue()]));
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
                     }
                 });
