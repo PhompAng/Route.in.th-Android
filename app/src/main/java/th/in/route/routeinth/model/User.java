@@ -33,7 +33,7 @@ public class User {
     public Set<String> getUnAddedCard() {
         Set<String> allCard = new HashSet<>();
         allCard.add("BTS");
-        allCard.add("MTR");
+        allCard.add("MRT");
         allCard.add("ARL");
         if (cardMap == null) {
             return allCard;

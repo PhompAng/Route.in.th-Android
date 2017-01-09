@@ -1,7 +1,9 @@
 package th.in.route.routeinth.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +46,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Card card = cards.get(position);
-        Glide.with(context).load(R.drawable.bts_student).into(holder.img);
+        Resources resources = context.getResources();
+        final int resourceId = resources.getIdentifier(card.getSystem().toLowerCase() + "_" + unCapitalize(card.getType()), "drawable", context.getPackageName());
+        Glide.with(context).load(resourceId).into(holder.img);
         holder.name.setText(card.getName());
         holder.number.setText(card.getNumber());
         holder.balance.setText(String.format(Locale.getDefault(), "%.0f Baht", card.getBalance()));
@@ -86,5 +90,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         public interface OnAddValue {
             void addBalance(int position);
         }
+    }
+
+    private String unCapitalize(final String line) {
+        return Character.toLowerCase(line.charAt(0)) + line.substring(1);
     }
 }
