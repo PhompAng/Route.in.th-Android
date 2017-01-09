@@ -117,10 +117,10 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
             case R.id.action_direction:
-                fragmentTransaction.replace(R.id.flContent, DirectionFragment.newInstance("test", "test")).addToBackStack(null).commit();
+                fragmentTransaction.replace(R.id.flContent, DirectionFragment.newInstance("test", "test")).commit();
                 return true;
             case R.id.action_card:
-                fragmentTransaction.replace(R.id.flContent, new CardFragment()).addToBackStack(null).commit();
+                fragmentTransaction.replace(R.id.flContent, new CardFragment()).commit();
                 return true;
             case R.id.action_info:
                 return true;
