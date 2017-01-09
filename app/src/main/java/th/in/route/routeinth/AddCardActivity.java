@@ -74,7 +74,6 @@ public class AddCardActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user =  dataSnapshot.getValue(User.class);
-                user.setUid(dataSnapshot.getKey());
                 systemAdapter.clear();
                 systemAdapter.addAll(new ArrayList<>(user.getUnAddedCard()));
                 systemAdapter.notifyDataSetChanged();

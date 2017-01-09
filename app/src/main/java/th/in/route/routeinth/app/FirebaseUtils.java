@@ -2,6 +2,7 @@ package th.in.route.routeinth.app;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,9 +19,11 @@ public class FirebaseUtils {
     public static void regisUser(Context context) {
         DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
         UIDUtils uidUtils = new UIDUtils(context);
+        Log.d("uid", uidUtils.getUID());
         if (TextUtils.isEmpty(uidUtils.getUID())) {
             DatabaseReference uid = reference.child("users").push();
             uidUtils.putUID(uid.getKey());
+            uid.child("uid").setValue(uid.getKey());
         }
         UserUtils.getInstance(context);
     }
