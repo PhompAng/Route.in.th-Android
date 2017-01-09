@@ -18,6 +18,7 @@ public class FirebaseUtils {
         if (TextUtils.isEmpty(uidUtils.getUID())) {
             DatabaseReference uid = reference.child("users").push();
             uidUtils.putUID(uid.getKey());
+            uid.child("uid").setValue(uid.getKey());
         }
     }
 

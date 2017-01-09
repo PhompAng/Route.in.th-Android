@@ -35,6 +35,9 @@ public class User {
         allCard.add("BTS");
         allCard.add("MTR");
         allCard.add("ARL");
+        if (cardMap == null) {
+            return allCard;
+        }
         Set<String> addedCard = cardMap.keySet();
         allCard.removeAll(addedCard);
         return allCard;
