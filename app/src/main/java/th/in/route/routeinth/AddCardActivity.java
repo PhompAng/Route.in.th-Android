@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +21,7 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 import th.in.route.routeinth.adapter.MyArrayAdapter;
 import th.in.route.routeinth.app.DatabaseUtils;
 import th.in.route.routeinth.app.FirebaseUtils;
@@ -37,7 +37,9 @@ public class AddCardActivity extends AppCompatActivity {
     private UIDUtils uidUtils;
 
     private MyArrayAdapter<String> systemAdapter;
+    private MyArrayAdapter<String> typeAdapter;
     private Set<String> systemSet;
+    private List<String> typeList;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -62,9 +64,13 @@ public class AddCardActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         systemSet = new HashSet<>();
+        typeList = new ArrayList<>();
+        typeList.add("Adult");
+        typeList.add("Student");
+        typeList.add("Senior");
         systemAdapter = new MyArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new ArrayList<>(systemSet));
         systemAdapter.setNotifyOnChange(true);
-        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"Adult", "Student", "Senior"});
+        typeAdapter = new MyArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, typeList);
         systemSpinner.setAdapter(systemAdapter);
         typeSpinner.setAdapter(typeAdapter);
 
@@ -96,6 +102,20 @@ public class AddCardActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @OnItemSelected(R.id.system_spinner)
+    public void systemChange() {
+        typeAdapter.clear();
+        typeList.clear();
+        typeList.add("Adult");
+        typeList.add("Student");
+        if (systemSpinner.getSelectedItem().equals("MRT")) {
+            typeList.add("Elder");
+            typeList.add("Child");
+        } else {
+            typeList.add("Senior");
+        }
+        typeAdapter.notifyDataSetChanged();
+    }
     @OnClick(R.id.submit)
     public void validate() {
         List<TextInputEditText> editTexts = new ArrayList<>();

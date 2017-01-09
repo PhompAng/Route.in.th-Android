@@ -48,7 +48,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         Card card = cards.get(position);
         Resources resources = context.getResources();
         final int resourceId = resources.getIdentifier(card.getSystem().toLowerCase() + "_" + unCapitalize(card.getType()), "drawable", context.getPackageName());
-        Glide.with(context).load(resourceId).into(holder.img);
+        Glide.with(context).load(resourceId).fitCenter().centerCrop().into(holder.img);
         holder.name.setText(card.getName());
         holder.number.setText(card.getNumber());
         holder.balance.setText(String.format(Locale.getDefault(), "%.0f Baht", card.getBalance()));
