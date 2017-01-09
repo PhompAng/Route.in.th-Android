@@ -80,20 +80,25 @@ public class AddValueDialog extends DialogFragment {
                 break;
 
         }
-
-        final String[] valueSet = new String[(maxValue-minValue)/step +1];
-        int tmp = minValue;
-        for (int i = 0; i < valueSet.length; i++) {
-            valueSet[i] = String.valueOf(tmp);
-            tmp += step;
+        
+        final String[] valueSet;
+        if (maxValue < minValue) {
+            valueSet = new String[1];
+            valueSet[0] = "0";
+        } else {
+            valueSet = new String[(maxValue-minValue)/step +1];
+            int tmp = minValue;
+            for (int i = 0; i < valueSet.length; i++) {
+                valueSet[i] = String.valueOf(tmp);
+                tmp += step;
+            }
         }
 
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(valueSet.length-1);
-        numberPicker.setWrapSelectorWheel(true);
-
         numberPicker.setDisplayedValues(valueSet);
 
+        numberPicker.setWrapSelectorWheel(true);
         builder.setTitle("Select Value")
                 .setView(v)
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
