@@ -22,24 +22,22 @@ public class FirebaseUtils {
             DatabaseReference uid = reference.child("users").push();
             uidUtils.putUID(uid.getKey());
         }
+        UserUtils.getInstance(context);
     }
 
-    public static void addCard(Context context, Card c) {
+    public static void addCard(Card c) {
         DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
-        UIDUtils uidUtils = new UIDUtils(context);
-        reference.child("users").child(uidUtils.getUID()).child("cardMap").child(c.getSystem()).setValue(c);
+        reference.child("users").child(UserUtils.getInstance().getUser().getUid()).child("cardMap").child(c.getSystem()).setValue(c);
     }
 
-    public static void addValue(Context context, Card c, double value) {
+    public static void addValue(Card c, double value) {
         DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
-        UIDUtils uidUtils = new UIDUtils(context);
-        reference.child("users").child(uidUtils.getUID()).child("cardMap").child(c.getSystem()).child("balance").setValue(c.getBalance() + value);
+        reference.child("users").child(UserUtils.getInstance().getUser().getUid()).child("cardMap").child(c.getSystem()).child("balance").setValue(c.getBalance() + value);
     }
 
-    public static void pay(Context context, final int bts, final int mrt, final int arl) {
+    public static void pay(final int bts, final int mrt, final int arl) {
         DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
-        UIDUtils uidUtils = new UIDUtils(context);
-        reference.child("users").child(uidUtils.getUID()).child("cardMap").addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child("users").child(UserUtils.getInstance().getUser().getUid()).child("cardMap").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {

@@ -186,7 +186,7 @@ public class ResultFragment extends Fragment {
         int mrtFare = result.fare.MRT;
         int arlFare = result.fare.ARL;
 
-        FirebaseUtils.pay(getContext(), btsFare, mrtFare, arlFare);
+        FirebaseUtils.pay(btsFare, mrtFare, arlFare);
 
         Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
         pay.setText("Payed");
@@ -196,7 +196,6 @@ public class ResultFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Log.d("aaa", "aaaaa");
                 getFragmentManager().popBackStack();
                 return true;
         }
