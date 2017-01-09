@@ -3,7 +3,10 @@ package th.in.route.routeinth.app;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import th.in.route.routeinth.model.view.Card;
 
@@ -31,5 +34,34 @@ public class FirebaseUtils {
         DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
         UIDUtils uidUtils = new UIDUtils(context);
         reference.child("users").child(uidUtils.getUID()).child("cardMap").child(c.getSystem()).child("balance").setValue(c.getBalance() + value);
+    }
+
+    public static void pay(Context context, final int bts, final int mrt, final int arl) {
+        DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
+        UIDUtils uidUtils = new UIDUtils(context);
+        reference.child("users").child(uidUtils.getUID()).child("cardMap").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    long current = (long) snapshot.child("balance").getValue();
+                    switch (snapshot.getKey()) {
+                        case "BTS":
+                            snapshot.child("balance").getRef().setValue(current-bts);
+                            break;
+                        case "MRT":
+                            snapshot.child("balance").getRef().setValue(current-mrt);
+                            break;
+                        case "ARL":
+                            snapshot.child("balance").getRef().setValue(current-arl);
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
