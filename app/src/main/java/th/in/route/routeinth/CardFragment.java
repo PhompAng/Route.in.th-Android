@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +76,6 @@ public class CardFragment extends Fragment implements
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-        ((MainActivity) getActivity()).showFab();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         cardAdapter = new CardAdapter(getContext(), cards, this);
@@ -99,7 +99,9 @@ public class CardFragment extends Fragment implements
                     Card card = cardData.getValue(Card.class);
                     cards.add(card);
                 }
+                checkNummberofCard();
                 cardAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -108,6 +110,15 @@ public class CardFragment extends Fragment implements
             }
         };
         query.addValueEventListener(listener);
+    }
+
+    public void checkNummberofCard(){
+        if (cards.size() == 3){
+            Log.d("card size", cards.size()+"");
+            ((MainActivity) getActivity()).hideFab();
+        }else {
+            ((MainActivity) getActivity()).showFab();
+        }
     }
 
     @Override
