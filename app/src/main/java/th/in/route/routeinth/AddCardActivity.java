@@ -16,6 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -28,6 +29,7 @@ import th.in.route.routeinth.app.FirebaseUtils;
 import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.User;
 import th.in.route.routeinth.model.view.Card;
+import th.in.route.routeinth.view.validator.BalanceRule;
 import th.in.route.routeinth.view.validator.EditTextValidate;
 import th.in.route.routeinth.view.validator.EmptyRule;
 
@@ -133,6 +135,15 @@ public class AddCardActivity extends AppCompatActivity {
                 editText.setError(getString(R.string.required));
                 cancel = true;
                 focusView = editText;
+            }
+        }
+
+        if (validator.validate(balance) == null) {
+            Integer balanceValidate = (new BalanceRule()).validate(balance, (String) systemSpinner.getSelectedItem());
+            if (balanceValidate != null) {
+                balance.setError(String.format(Locale.getDefault(), "Balance should not exceed %d", balanceValidate));
+                cancel = true;
+                focusView = balance;
             }
         }
 
