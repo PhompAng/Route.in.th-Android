@@ -50,6 +50,22 @@ public class Card {
         this.trip_balance = trip_balance;
     }
 
+    public String getIntType() {
+        switch (type) {
+            case "Adult":
+                return "1";
+            case "Student":
+                return "2";
+            case "Elder":
+            case "Senior":
+                return "3";
+            case "Child":
+                return "4";
+            default:
+                return "0";
+        }
+    }
+
     public String getType() {
         return type;
     }

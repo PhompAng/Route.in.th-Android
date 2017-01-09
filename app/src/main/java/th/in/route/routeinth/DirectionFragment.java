@@ -28,6 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,10 +41,12 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.app.StationUtils;
+import th.in.route.routeinth.app.UserUtils;
 import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.result.Input;
 import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.system.Station;
+import th.in.route.routeinth.model.view.Card;
 import th.in.route.routeinth.services.APIServices;
 import th.in.route.routeinth.view.StationChip;
 
@@ -214,9 +217,23 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         Input input = new Input();
         input.origin = departKey;
         input.destination = arriveKey;
+        Map<String, Card> cardMap = UserUtils.getInstance().getUser().getCardMap();
         input.card_type_bts = "0";
         input.card_type_mrt = "0";
         input.card_type_arl = "0";
+        if (cardMap != null) {
+            for (Map.Entry<String, Card> entry: cardMap.entrySet()) {
+                switch (entry.getKey()) {
+                    case "BTS":
+                        input.card_type_bts = entry.getValue().getIntType();
+                        break;
+                    case "MRT":
+                        input.card_type_mrt = entry.getValue().getIntType();
+                    case "ARL":
+                        input.card_type_arl = entry.getValue().getIntType();
+                }
+            }
+        }
         Retrofit retrofit = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
