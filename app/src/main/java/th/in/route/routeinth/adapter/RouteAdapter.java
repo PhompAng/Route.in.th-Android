@@ -82,7 +82,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             GradientDrawable labelBg = (GradientDrawable) holder.viewCodeLabel.getBackground();
             labelBg.setColorFilter(ContextCompat.getColor(mContext, color), PorterDuff.Mode.ADD);
             holder.viewCodeLabel.setVisibility(View.VISIBLE);
-            holder.viewHeadingLabel.setText("Heading " + routeItem.getRoute().heading.en);
+            holder.viewHeadingLabel.setText("Heading :  " + routeItem.getRoute().heading.en);
             holder.viewHeadingLabel.setVisibility(View.VISIBLE);
         } else {
             holder.viewCodeLabel.setVisibility(View.GONE);
@@ -121,7 +121,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                 holder.stationNameLabel.setTextSize(14);
                 break;
             case "between":
-                holder.stationNameLabel.setText(routeItem.getRoute().station_cnt + " Stations");
+                holder.stationNameLabel.setText(routeItem.getRoute().station_cnt + " stations");
                 holder.stationNameLabel.setTextSize(12);
                 holder.showIcon.setVisibility(View.VISIBLE);
                 holder.showIcon.setVisibility(View.VISIBLE);
