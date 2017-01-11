@@ -2,24 +2,35 @@ package th.in.route.routeinth;
 
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,12 +48,15 @@ import butterknife.Unbinder;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Subscriber;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import th.in.route.routeinth.app.DatabaseUtils;
 import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.app.StationUtils;
-import th.in.route.routeinth.app.UserUtils;
+import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.StationEvent;
+import th.in.route.routeinth.model.User;
 import th.in.route.routeinth.model.result.Input;
 import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.system.Station;
@@ -56,7 +70,7 @@ import th.in.route.routeinth.view.StationChip;
  * Use the {@link DirectionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DirectionFragment extends Fragment implements View.OnClickListener {
+public class DirectionFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, th.in.route.routeinth.view.RadioGroup.OnCheckedChangeListener {
     private OnCalculate mListener;
     
     // TODO: Rename parameter arguments, choose names that match
@@ -70,6 +84,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
 
     private List<StationEvent> stations;
     private StationUtils stationUtils;
+    private Map<String, Card> cardMap;
 
     public DirectionFragment() {
         // Required empty public constructor
@@ -101,13 +116,37 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         setRetainInstance(true);
+        setHasOptionsMenu(true);
+        showProgressDialog();
         stationUtils = StationUtils.getInstance();
+        UIDUtils uidUtils = new UIDUtils(getContext());
+        DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
+        RxFirebaseDatabase.getInstance().observeSingleValue(reference.child("users").child(uidUtils.getUID()))
+                .subscribe(new Subscriber<DataSnapshot>() {
+                    @Override
+                    public void onCompleted() {
+                        DirectionFragment.this.hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("DirectionFragment", e.getMessage());
+                        DirectionFragment.this.hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(DataSnapshot dataSnapshot) {
+                        cardMap = dataSnapshot.getValue(User.class).getCardMap();
+                    }
+                });
+//        cardMap = UserUtils.getInstance().getUser().getCardMap();
         stations = new ArrayList<>();
         stations.add(null);
         stations.add(null);
     }
 
     private Unbinder unbinder;
+    private ProgressDialog progressDialog;
 
     @BindView(R.id.origin)
     TextView mOrigin;
@@ -143,6 +182,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         for (int i=1; i<map.getChildCount();i++) {
             map.getChildAt(i).setOnClickListener(this);
         }
+
         return v;
     }
 
@@ -164,7 +204,20 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         setStation();
     }
 
+    private void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Loading User Data");
+            progressDialog.setIndeterminate(true);
+        }
+        progressDialog.show();
+    }
 
+    private void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void retrieveStation(StationEvent station) {
@@ -176,6 +229,49 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         }
         stations.set(station.getType(), station);
         setStation();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.direction_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_setting:
+                showFareSetting();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showFareSetting() {
+        View v = LayoutInflater.from(getContext()).inflate(R.layout.bottom_card_setting, null);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+        bottomSheetDialog.setContentView(v);
+
+        RadioGroup btsGroup = (RadioGroup) v.findViewById(R.id.bts_group);
+        th.in.route.routeinth.view.RadioGroup mrtGroup = (th.in.route.routeinth.view.RadioGroup) v.findViewById(R.id.mrt_group);
+        RadioGroup arlGroup = (RadioGroup) v.findViewById(R.id.arl_group);
+        btsGroup.setOnCheckedChangeListener(this);
+        mrtGroup.setOnCheckedChangeListener(this);
+        arlGroup.setOnCheckedChangeListener(this);
+
+        ((RadioButton) btsGroup.findViewWithTag(Integer.toString(getOrDefault(cardMap, "BTS").getIntType()))).setChecked(true);
+        ((RadioButton) mrtGroup.findViewWithTag(Integer.toString(getOrDefault(cardMap, "MRT").getIntType()))).setChecked(true);
+        ((RadioButton) arlGroup.findViewWithTag(Integer.toString(getOrDefault(cardMap, "ARL").getIntType()))).setChecked(true);
+
+        bottomSheetDialog.show();
+    }
+
+    private Card getOrDefault(Map<String, Card> map, String key) {
+        if (map.containsKey(key)) {
+            return map.get(key);
+        } else {
+            return new Card(key, 0);
+        }
     }
 
     private void setStation() {
@@ -214,10 +310,9 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
     void onCalculateClicked(View v) {
         String departKey = stations.get(0).getStation().getKey();
         String arriveKey = stations.get(1).getStation().getKey();
-        Input input = new Input();
+        final Input input = new Input();
         input.origin = departKey;
         input.destination = arriveKey;
-        Map<String, Card> cardMap = UserUtils.getInstance().getUser().getCardMap();
         input.card_type_bts = "0";
         input.card_type_mrt = "0";
         input.card_type_arl = "0";
@@ -225,12 +320,14 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
             for (Map.Entry<String, Card> entry: cardMap.entrySet()) {
                 switch (entry.getKey()) {
                     case "BTS":
-                        input.card_type_bts = entry.getValue().getIntType();
+                        input.card_type_bts = Integer.toString(entry.getValue().getIntType());
                         break;
                     case "MRT":
-                        input.card_type_mrt = entry.getValue().getIntType();
+                        input.card_type_mrt = Integer.toString(entry.getValue().getIntType());
+                        break;
                     case "ARL":
-                        input.card_type_arl = entry.getValue().getIntType();
+                        input.card_type_arl = Integer.toString(entry.getValue().getIntType());
+                        break;
                 }
             }
         }
@@ -250,21 +347,11 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
         }).doOnError(new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
+                Log.e("calculate", input.toString());
                 Log.e("calculate", throwable.getMessage());
             }
         })
         .subscribe();
-//        resultCall.enqueue(new Callback<Result>() {
-//            @Override
-//            public void onResponse(Call<Result> call, Response<Result> response) {
-//                Result result = response.body();
-//                calculate(result);
-//            }
-//            @Override
-//            public void onFailure(Call<Result> call, Throwable t) {
-//                Log.e("error", t.getMessage());
-//            }
-//        });
     }
 
     private void calculate(Result result) {
@@ -317,6 +404,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        hideProgressDialog();
         unbinder.unbind();
     }
 
@@ -374,6 +462,20 @@ public class DirectionFragment extends Fragment implements View.OnClickListener 
                 }
             }
         }
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        String system = (String) group.getTag();
+        int type = Integer.parseInt((String) group.findViewById(checkedId).getTag());
+        cardMap.put(system, new Card(system, type));
+    }
+
+    @Override
+    public void onCheckedChanged(th.in.route.routeinth.view.RadioGroup group, @IdRes int checkedId) {
+        String system = (String) group.getTag();
+        int type = Integer.parseInt((String) group.findViewById(checkedId).getTag());
+        cardMap.put(system, new Card(system, type));
     }
 
     public interface OnCalculate {

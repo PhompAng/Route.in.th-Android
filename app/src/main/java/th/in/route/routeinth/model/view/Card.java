@@ -18,6 +18,31 @@ public class Card {
     public Card() {
     }
 
+    public Card(String system, int type) {
+        this.system = system;
+        switch (type) {
+            case 1:
+                this.type = "Adult";
+                break;
+            case 2:
+                this.type = "Student";
+                break;
+            case 3:
+                if (system.equals("MRT")) {
+                    this.type = "Elder";
+                } else {
+                    this.type = "Senior";
+                }
+                break;
+            case 4:
+                this.type = "Child";
+                break;
+            default:
+                this.type = "Normal";
+                break;
+        }
+    }
+
     public String getName() {
         return name;
     }
@@ -50,19 +75,19 @@ public class Card {
         this.trip_balance = trip_balance;
     }
 
-    public String getIntType() {
+    public int getIntType() {
         switch (type) {
             case "Adult":
-                return "1";
+                return 1;
             case "Student":
-                return "2";
+                return 2;
             case "Elder":
             case "Senior":
-                return "3";
+                return 3;
             case "Child":
-                return "4";
+                return 4;
             default:
-                return "0";
+                return 0;
         }
     }
 

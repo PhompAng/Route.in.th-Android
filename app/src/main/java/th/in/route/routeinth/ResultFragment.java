@@ -27,6 +27,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import th.in.route.routeinth.adapter.RouteAdapter;
 import th.in.route.routeinth.app.FirebaseUtils;
+import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.result.Route;
@@ -186,7 +187,9 @@ public class ResultFragment extends Fragment {
         int mrtFare = result.fare.MRT;
         int arlFare = result.fare.ARL;
 
-        FirebaseUtils.pay(btsFare, mrtFare, arlFare);
+        UIDUtils uidUtils = new UIDUtils(getContext());
+
+        FirebaseUtils.pay(uidUtils.getUID(), btsFare, mrtFare, arlFare);
 
         Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
         pay.setText("Payed");

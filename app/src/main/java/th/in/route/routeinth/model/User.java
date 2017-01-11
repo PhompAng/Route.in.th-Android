@@ -1,5 +1,6 @@
 package th.in.route.routeinth.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class User {
     }
 
     public Map<String, Card> getCardMap() {
-        return cardMap;
+        return cardMap == null ? new HashMap<String, Card>():cardMap;
     }
 
     public void setCardMap(Map<String, Card> cardMap) {
