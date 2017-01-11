@@ -15,4 +15,10 @@
     <string name="calculate">Calculate</string>
     <string name="action_add">Add</string>
     <string name="required">Required</string>
+    <string name="normal">Normal</string>
+    <string name="adult">Adult</string>
+    <string name="student">Student</string>
+    <string name="senior">Senior</string>
+    <string name="elder">Elder</string>
+    <string name="child">Child</string>
 </resources>

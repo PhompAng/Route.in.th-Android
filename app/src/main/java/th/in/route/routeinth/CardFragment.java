@@ -154,7 +154,8 @@ public class CardFragment extends Fragment implements
         switch (requestCode) {
             case ADD_VALUE_DIALOG:
                 if (resultCode == Activity.RESULT_OK) {
-                    FirebaseUtils.addValue(getContext(), (Card) Parcels.unwrap(data.getParcelableExtra(AddValueDialog.ARG_CARD)), data.getIntExtra("value", 0));
+                    UIDUtils uidUtils = new UIDUtils(getContext());
+                    FirebaseUtils.addValue(uidUtils.getUID(), (Card) Parcels.unwrap(data.getParcelableExtra(AddValueDialog.ARG_CARD)), data.getDoubleExtra("value", 0));
                     Toast.makeText(getContext(), "Value added, Have a nice day", Toast.LENGTH_SHORT).show();
                 }
         }

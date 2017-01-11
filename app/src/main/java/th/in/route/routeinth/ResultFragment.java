@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +23,11 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import th.in.route.routeinth.adapter.RouteAdapter;
+import th.in.route.routeinth.app.FirebaseUtils;
+import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.result.Route;
@@ -59,6 +64,8 @@ public class ResultFragment extends Fragment {
     @BindView(R.id.arl_station_cnt) TextView arlStationCnt;
     @BindView(R.id.resultARLFare) TextView resultARLFare;
     @BindView(R.id.routeRecycler) RecyclerView routeRecycler;
+    @BindView(R.id.calculate)
+    Button pay;
     RouteAdapter routeAdapter;
     LinearLayoutManager linearLayoutManager;
     private Result result;
@@ -134,6 +141,8 @@ public class ResultFragment extends Fragment {
 //        resultOrigin.setText(this.result.origin.th);
 //        resultDestination.setText(this.result.destination.th);
         v.findViewById(R.id.swap).setVisibility(View.INVISIBLE);
+        pay.setVisibility(View.VISIBLE);
+        pay.setText("Pay");
         setStation();
         resultTripFareTotal.setText(String.format(Locale.getDefault(), "%d", this.result.fare.total));
         if(this.result.fare.BTS != 0){
@@ -172,11 +181,24 @@ public class ResultFragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.calculate)
+    public void pay() {
+        int btsFare = result.fare.BTS;
+        int mrtFare = result.fare.MRT;
+        int arlFare = result.fare.ARL;
+
+        UIDUtils uidUtils = new UIDUtils(getContext());
+
+        FirebaseUtils.pay(uidUtils.getUID(), btsFare, mrtFare, arlFare);
+
+        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+        pay.setText("Payed");
+        pay.setEnabled(false);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Log.d("aaa", "aaaaa");
                 getFragmentManager().popBackStack();
                 return true;
         }

@@ -167,7 +167,7 @@ public class AddCardActivity extends AppCompatActivity {
         c.setBalance(cardBalance);
         c.setName(cardSystem + " " + cardType + " Card");
 
-        FirebaseUtils.addCard(getApplicationContext(), c);
+        FirebaseUtils.addCard(uidUtils.getUID(), c);
         finish();
     }
 }

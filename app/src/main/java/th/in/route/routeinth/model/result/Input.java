@@ -9,4 +9,12 @@ public class Input {
     public String card_type_bts;
     public String card_type_mrt;
     public String card_type_arl;
+
+    @Override
+    public String toString() {
+        return "origin: " + origin + " destination: " + destination + "\n" +
+                "bts: " + card_type_bts + "\n" +
+                "mrt: " + card_type_mrt + "\n" +
+                "arl: " + card_type_arl;
+    }
 }
