@@ -64,4 +64,14 @@ public class FirebaseUtils {
             }
         });
     }
+
+    public static void updateCard(String uid, Card card){
+        DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
+        reference.child("users").child(uid).child("cardMap").child(card.getSystem()).setValue(card);
+    }
+
+    public static void deleteCard(String uid, Card card){
+        DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
+        reference.child("users").child(uid).child("cardMap").child(card.getSystem()).removeValue();
+    }
 }

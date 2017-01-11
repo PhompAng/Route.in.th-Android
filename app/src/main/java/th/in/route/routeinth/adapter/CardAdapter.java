@@ -1,7 +1,11 @@
 package th.in.route.routeinth.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +23,11 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import th.in.route.routeinth.R;
+import th.in.route.routeinth.app.FirebaseUtils;
+import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.view.Card;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by phompang on 1/3/2017 AD.
@@ -45,7 +53,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Card card = cards.get(position);
+        final Card card = cards.get(position);
         Resources resources = context.getResources();
         final int resourceId = resources.getIdentifier(card.getSystem().toLowerCase() + "_" + unCapitalize(card.getType()), "drawable", context.getPackageName());
         Glide.with(context).load(resourceId).fitCenter().centerCrop().into(holder.img);
@@ -59,7 +67,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         return cards.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         OnAddValue listener;
 
         @BindView(R.id.img)
@@ -77,18 +85,34 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             ButterKnife.bind(this, itemView);
             this.listener = listener;
 
+            itemView.setOnLongClickListener(this);
+            itemView.setOnClickListener(this);
             addBalance.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             if (listener != null) {
-                listener.addBalance(getAdapterPosition());
+                switch (v.getId()) {
+                    case R.id.add_balance:
+                        listener.addBalance(getAdapterPosition());
+                        break;
+                    default:
+                        listener.editCard(getAdapterPosition());
+                }
+
             }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return listener != null && listener.deleteCard(getAdapterPosition());
         }
 
         public interface OnAddValue {
             void addBalance(int position);
+            boolean deleteCard(int position);
+            void editCard(int position);
         }
     }
 

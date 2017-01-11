@@ -2,11 +2,13 @@ package th.in.route.routeinth;
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +49,7 @@ public class CardFragment extends Fragment implements
     Query query;
     ValueEventListener listener;
 
+    private UIDUtils uidUtils;
     public static final int ADD_VALUE_DIALOG = 1;
 
     public CardFragment() {
@@ -61,6 +64,8 @@ public class CardFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         cards = new ArrayList<>();
         getCardFromFirebase();
+
+        uidUtils = new UIDUtils(getContext());
     }
 
     @BindView(R.id.list)
@@ -149,13 +154,44 @@ public class CardFragment extends Fragment implements
     }
 
     @Override
+    public boolean deleteCard(int position) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final Card card = cards.get(position);
+        builder.setTitle("Delete card");
+        builder.setMessage("Do you want to delete your's " + card.getSystem() + " card?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                FirebaseUtils.deleteCard(uidUtils.getUID(), card);
+                Toast.makeText(getContext(), "card successfully deleted.", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+        return true;
+    }
+
+    @Override
+    public void editCard(int position) {
+        Intent intent = new Intent(getContext(), EditCardActivity.class);
+        intent.putExtra("card", Parcels.wrap(cards.get(position)));
+        startActivity(intent);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case ADD_VALUE_DIALOG:
                 if (resultCode == Activity.RESULT_OK) {
-                    UIDUtils uidUtils = new UIDUtils(getContext());
-                    FirebaseUtils.addValue(uidUtils.getUID(), (Card) Parcels.unwrap(data.getParcelableExtra(AddValueDialog.ARG_CARD)), data.getDoubleExtra("value", 0));
+                    Log.d("asd", data.toString());
+                    FirebaseUtils.addValue(uidUtils.getUID(), (Card) Parcels.unwrap(data.getParcelableExtra(AddValueDialog.ARG_CARD)), data.getIntExtra("value", 0));
                     Toast.makeText(getContext(), "Value added, Have a nice day", Toast.LENGTH_SHORT).show();
                 }
         }
