@@ -73,7 +73,7 @@
             android:id="@+id/add_balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Money"
+            android:text="@string/top_up"
             style="@style/Widget.AppCompat.Button.Borderless"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>

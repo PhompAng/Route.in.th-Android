@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,11 +98,9 @@ public class CardFragment extends Fragment implements
                     Card card = cardData.getValue(Card.class);
                     cards.add(card);
                 }
-                checkNummberofCard();
+                checkNumberOfCard();
                 cardAdapter.notifyDataSetChanged();
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -112,11 +109,10 @@ public class CardFragment extends Fragment implements
         query.addValueEventListener(listener);
     }
 
-    public void checkNummberofCard(){
-        if (cards.size() == 3){
-            Log.d("card size", cards.size()+"");
+    public void checkNumberOfCard(){
+        if (cards.size() == 3) {
             ((MainActivity) getActivity()).hideFab();
-        }else {
+        } else {
             ((MainActivity) getActivity()).showFab();
         }
     }
