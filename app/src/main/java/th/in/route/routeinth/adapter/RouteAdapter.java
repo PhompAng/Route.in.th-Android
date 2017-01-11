@@ -82,7 +82,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             GradientDrawable labelBg = (GradientDrawable) holder.viewCodeLabel.getBackground();
             labelBg.setColorFilter(ContextCompat.getColor(mContext, color), PorterDuff.Mode.ADD);
             holder.viewCodeLabel.setVisibility(View.VISIBLE);
-            holder.viewHeadingLabel.setText("Heading :  " + routeItem.getRoute().heading.en);
+            holder.viewHeadingLabel.setText("Heading:  " + routeItem.getRoute().heading.en);
             holder.viewHeadingLabel.setVisibility(View.VISIBLE);
         } else {
             holder.viewCodeLabel.setVisibility(View.GONE);
