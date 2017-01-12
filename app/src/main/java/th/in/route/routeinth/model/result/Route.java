@@ -7,7 +7,6 @@ import th.in.route.routeinth.model.system.Detail;
  */
 public class Route {
     public String code;
-    public String key;
     public Detail name;
     public Line line;
     public Detail heading;

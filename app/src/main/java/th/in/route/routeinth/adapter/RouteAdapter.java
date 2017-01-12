@@ -3,6 +3,7 @@ package th.in.route.routeinth.adapter;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
+import android.location.Location;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import th.in.route.routeinth.R;
 import th.in.route.routeinth.ResultFragment;
+import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.model.view.RouteItem;
 
 /**
@@ -28,11 +30,16 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     private Context mContext;
     private List<RouteItem> routeItems;
     private ResultFragment fragment;
+    private Location location;
 
     public RouteAdapter(List<RouteItem> routeItems, Context mContext, ResultFragment resultFragment) {
         this.routeItems = routeItems;
         this.mContext = mContext;
         this.fragment = resultFragment;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,6 +79,18 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             color = R.color.colorBtsSilom;
         } else {
             color = R.color.colorMrt;
+        }
+
+        if (location != null) {
+            String nearestKey = DistanceUtils.getInstance().getNearestStation(location.getLatitude(), location.getLongitude());
+            Log.d("nearest", nearestKey + " " + location.getLatitude() + " " + location.getLongitude());
+            if (routeItem.getRoute().name.key.equals(nearestKey)) {
+                holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                holder.viewHeadingLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+            } else {
+                holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.textSecondary));
+                holder.viewHeadingLabel.setTextColor(ContextCompat.getColor(mContext, R.color.textSecondary));
+            }
         }
 
 //        GradientDrawable viewAllStationBg = (GradientDrawable) holder.viewAllStationLabel.getBackground();
