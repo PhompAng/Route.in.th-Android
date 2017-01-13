@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -116,10 +117,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+        setLocationRequest();
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -142,6 +140,13 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         if (savedInstanceState != null) {
             isShow = toList(savedInstanceState.getBooleanArray("isShow"));
         }
+    }
+
+    private void setLocationRequest() {
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
     }
 
     private void calculateStationCnt() {
@@ -285,6 +290,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     public void onStop() {
         super.onStop();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
     }
@@ -481,6 +487,11 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
             ActivityCompat.requestPermissions(getActivity(), new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_ASK_PERMISSIONS);
             return;
         }
+        LocationAvailability locationAvailability = LocationServices.FusedLocationApi.getLocationAvailability(mGoogleApiClient);
+        if (!locationAvailability.isLocationAvailable()) {
+            setLocationRequest();
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation == null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -491,12 +502,12 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.w("onConnectionSuspended", i + "");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.e("onConnectionFailed", connectionResult.getErrorMessage());
     }
 
     @Override
