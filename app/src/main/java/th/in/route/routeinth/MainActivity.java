@@ -1,12 +1,14 @@
 package th.in.route.routeinth;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -31,7 +33,7 @@ import th.in.route.routeinth.model.result.Result;
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener,
         BottomNavigationView.OnNavigationItemSelectedListener,
-        ResultFragment.OnTest, OnCalculate {
+        ResultFragment.OnTest, OnCalculate{
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     @BindView(R.id.fab) FloatingActionButton fab;
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity
 
         fab.setVisibility(View.GONE);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
+        ((NestedScrollView) findViewById(R.id.main)).setFillViewport(true);
 
         if (savedInstanceState == null) {
             DirectionFragment directionFragment = DirectionFragment.newInstance("test", "test");
@@ -125,8 +129,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_info:
                 return true;
             case R.id.action_announce:
+                fragmentTransaction.replace(R.id.flContent, AnnounceFragment.newInstance("test", "test")).commit();
                 return true;
         }
         return false;
     }
+
 }
