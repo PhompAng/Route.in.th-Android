@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +87,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         }
 
         if (isNavigate && nearestKey != null) {
-            if (routeItem.getRoute().name.key.equals(nearestKey)) {
+            if (!routeItem.getType().equals("between") && routeItem.getRoute().name.key.equals(nearestKey)) {
                 holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 holder.viewHeadingLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
             } else if (routeItem.getType().equals("between")) {

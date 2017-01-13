@@ -387,7 +387,6 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
                 if (!isShow.isEmpty() && !isShow.get(system)) {
                     if (result.BTS_same_line == 0 && routes.get(i+1).code.equals("BCEN") && routes.get(i).station_cnt > 1) {
                         RouteItem routeBetween = new RouteItem();
-                        routeBetween.setRoute(routes.get(i));
                         routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
                         routeBetween.setType("between");
                         routeBetween.setSystem(system);
@@ -426,7 +425,6 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
                 routeItems.add(routeItem);
             } else if(routes.get(i).station_cnt > 1) {
                 RouteItem routeBetween = new RouteItem();
-                routeBetween.setRoute(routes.get(i));
                 routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
                 routeBetween.setType("between");
                 routeBetween.setSystem(system);
@@ -517,9 +515,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     }
 
     private void handleNewLocation(Location location) {
-        Log.d("newLocation", location.toString());
         String nearestKey = DistanceUtils.getInstance().getNearestStation(location.getLatitude(), location.getLongitude());
-        Log.d("nearest", nearestKey);
         routeAdapter.setNearestKey(nearestKey);
         routeAdapter.notifyDataSetChanged();
     }
