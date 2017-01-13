@@ -39,6 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import th.in.route.routeinth.adapter.RouteAdapter;
+import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.result.Route;
@@ -488,10 +489,9 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
             return;
         }
         LocationAvailability locationAvailability = LocationServices.FusedLocationApi.getLocationAvailability(mGoogleApiClient);
-        if (!locationAvailability.isLocationAvailable()) {
-            setLocationRequest();
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
+        setLocationRequest();
+        Log.d("avi", locationAvailability.isLocationAvailable() + "");
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation == null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -518,7 +518,9 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
 
     private void handleNewLocation(Location location) {
         Log.d("newLocation", location.toString());
-        routeAdapter.setLocation(location);
+        String nearestKey = DistanceUtils.getInstance().getNearestStation(location.getLatitude(), location.getLongitude());
+        Log.d("nearest", nearestKey);
+        routeAdapter.setNearestKey(nearestKey);
         routeAdapter.notifyDataSetChanged();
     }
 }

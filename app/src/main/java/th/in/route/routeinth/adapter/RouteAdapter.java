@@ -3,10 +3,8 @@ package th.in.route.routeinth.adapter;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
-import android.location.Location;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import java.util.List;
 
 import th.in.route.routeinth.R;
 import th.in.route.routeinth.ResultFragment;
-import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.model.result.Route;
 import th.in.route.routeinth.model.view.RouteItem;
 
@@ -31,7 +28,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     private Context mContext;
     private List<RouteItem> routeItems;
     private ResultFragment fragment;
-    private Location location;
+    private String nearestKey;
     private boolean isNavigate;
 
     public RouteAdapter(List<RouteItem> routeItems, Context mContext, ResultFragment resultFragment) {
@@ -41,8 +38,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         isNavigate = false;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setNearestKey(String nearestKey) {
+        this.nearestKey = nearestKey;
     }
 
     public void setNavigate(boolean isNavigate) {
@@ -88,9 +85,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             color = R.color.colorMrt;
         }
 
-        if (isNavigate && location != null) {
-            String nearestKey = DistanceUtils.getInstance().getNearestStation(location.getLatitude(), location.getLongitude());
-            Log.d("nearest", nearestKey + " " + location.getLatitude() + " " + location.getLongitude());
+        if (isNavigate && nearestKey != null) {
             if (routeItem.getRoute().name.key.equals(nearestKey)) {
                 holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 holder.viewHeadingLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
