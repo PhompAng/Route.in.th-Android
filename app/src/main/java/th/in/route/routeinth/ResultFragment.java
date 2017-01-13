@@ -1,5 +1,6 @@
 package th.in.route.routeinth;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -21,12 +22,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,11 +42,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import rx.Subscriber;
 import th.in.route.routeinth.adapter.RouteAdapter;
+import th.in.route.routeinth.app.DatabaseUtils;
 import th.in.route.routeinth.app.DistanceUtils;
+import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.StationEvent;
+import th.in.route.routeinth.model.User;
 import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.result.Route;
+import th.in.route.routeinth.model.view.Card;
 import th.in.route.routeinth.model.view.RouteItem;
 import th.in.route.routeinth.view.StationChip;
 
@@ -61,6 +70,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     private OnTest mListener;
 
     private Unbinder unbinder;
+    private ProgressDialog progressDialog;
 //    @BindView(R.id.resultOrigin) TextView resultOrigin;
 //    @BindView(R.id.resultDestination) TextView resultDestination;
     @BindView(R.id.origin)
@@ -79,8 +89,9 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     @BindView(R.id.arl_station_cnt) TextView arlStationCnt;
     @BindView(R.id.resultARLFare) TextView resultARLFare;
     @BindView(R.id.routeRecycler) RecyclerView routeRecycler;
-    @BindView(R.id.calculate)
-    Button pay;
+    @BindView(R.id.calculate) Button navigate;
+    @BindView(R.id.pay) Button pay;
+
     RouteAdapter routeAdapter;
     LinearLayoutManager linearLayoutManager;
     private Result result;
@@ -88,6 +99,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     private List<RouteItem> routeItems;
     private List<Boolean> isShow;
     private Map<String, Integer> stationCnt;
+    private Map<String, Card> cardMap;
     private int flag = 0;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -120,6 +132,8 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
 
         setLocationRequest();
 
+        showProgressDialog();
+
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addConnectionCallbacks(this)
@@ -141,6 +155,28 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         if (savedInstanceState != null) {
             isShow = toList(savedInstanceState.getBooleanArray("isShow"));
         }
+
+        UIDUtils uidUtils = new UIDUtils(getContext());
+        DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
+        RxFirebaseDatabase.getInstance().observeSingleValue(reference.child("users").child(uidUtils.getUID()))
+                .subscribe(new Subscriber<DataSnapshot>() {
+                    @Override
+                    public void onCompleted() {
+                        ResultFragment.this.hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("ResultFragment", e.getMessage());
+                        ResultFragment.this.hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(DataSnapshot dataSnapshot) {
+                        cardMap = dataSnapshot.getValue(User.class).getCardMap();
+                        setPay();
+                    }
+                });
     }
 
     private void setLocationRequest() {
@@ -174,8 +210,8 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         ((MainActivity) getActivity()).hideFab();
 
         v.findViewById(R.id.swap).setVisibility(View.INVISIBLE);
-        pay.setVisibility(View.VISIBLE);
-        pay.setText("Navigate");
+        navigate.setVisibility(View.VISIBLE);
+        navigate.setText("Navigate");
         setStation();
         resultTripFareTotal.setText(String.format(Locale.getDefault(), "%d", this.result.fare.total));
         if(this.result.fare.BTS != 0){
@@ -208,6 +244,33 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         return v;
     }
 
+    private void setPay() {
+        boolean isShow = true;
+        for (Map.Entry<String, Card> entry: cardMap.entrySet()) {
+            switch (entry.getKey()) {
+                case "BTS":
+                    if (!entry.getValue().getType().equals(result.card_type_bts.en)) {
+                        isShow = false;
+                    }
+                    break;
+                case "MRT":
+                    if (!entry.getValue().getType().equals(result.card_type_mrt.en)) {
+                        isShow = false;
+                    }
+                    break;
+                case "ARL":
+                    if (!entry.getValue().getType().equals(result.card_type_arl.en)) {
+                        isShow = false;
+                    }
+                    break;
+            }
+        }
+
+        if (!isShow) {
+            pay.setVisibility(View.GONE);
+        }
+    }
+
     public void onButtonPressed() {
         if (mListener != null) {
             mListener.onTest();
@@ -218,23 +281,23 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     public void navigate() {
         routeAdapter.setNavigate(true);
         routeAdapter.notifyDataSetChanged();
-        pay.setEnabled(false);
-        pay.setText("Navigating");
+        navigate.setEnabled(false);
+        navigate.setText("Navigating");
     }
 
 //    @OnClick(R.id.calculate)
-//    public void pay() {
+//    public void navigate() {
 //        int btsFare = result.fare.BTS;
 //        int mrtFare = result.fare.MRT;
 //        int arlFare = result.fare.ARL;
 //
 //        UIDUtils uidUtils = new UIDUtils(getContext());
 //
-//        FirebaseUtils.pay(uidUtils.getUID(), btsFare, mrtFare, arlFare);
+//        FirebaseUtils.navigate(uidUtils.getUID(), btsFare, mrtFare, arlFare);
 //
 //        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
-//        pay.setText("Payed");
-//        pay.setEnabled(false);
+//        navigate.setText("Payed");
+//        navigate.setEnabled(false);
 //    }
 
     @Override
@@ -518,6 +581,21 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         String nearestKey = DistanceUtils.getInstance().getNearestStation(location.getLatitude(), location.getLongitude());
         routeAdapter.setNearestKey(nearestKey);
         routeAdapter.notifyDataSetChanged();
+    }
+
+    private void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Loading User Data");
+            progressDialog.setIndeterminate(true);
+        }
+        progressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 }
 
