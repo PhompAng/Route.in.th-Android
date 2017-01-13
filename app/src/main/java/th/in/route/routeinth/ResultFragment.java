@@ -384,6 +384,11 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
                         routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
                         routeBetween.setType("between");
                         routeBetween.setSystem(system);
+                        ArrayList<Route> routeInIt = new ArrayList<>();
+                        for (int j = i+1; j<=i+routes.get(i).station_cnt-2; j++){
+                            routeInIt.add(routes.get(j));
+                        }
+                        routeBetween.setRoutes(routeInIt);
                         i+=routes.get(i).station_cnt-2;
                         routeItems.add(routeBetween);
                     } else if(routes.get(i).station_cnt > 1) {
@@ -392,6 +397,11 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
                         routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
                         routeBetween.setType("between");
                         routeBetween.setSystem(system);
+                        ArrayList<Route> routeInIt = new ArrayList<>();
+                        for (int j = i+1; j<=i+routes.get(i).station_cnt-1; j++){
+                            routeInIt.add(routes.get(j));
+                        }
+                        routeBetween.setRoutes(routeInIt);
                         i+=routes.get(i).station_cnt-1;
                         routeItems.add(routeBetween);
                     }
@@ -413,6 +423,11 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
                 routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
                 routeBetween.setType("between");
                 routeBetween.setSystem(system);
+                ArrayList<Route> routeInIt = new ArrayList<>();
+                for (int j = i+1; j<=i+routes.get(i).station_cnt-1; j++){
+                    routeInIt.add(routes.get(j));
+                }
+                routeBetween.setRoutes(routeInIt);
                 i+=routes.get(i).station_cnt-1;
                 routeItems.add(routeBetween);
             }
