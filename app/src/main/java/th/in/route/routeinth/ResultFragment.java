@@ -46,6 +46,7 @@ import rx.Subscriber;
 import th.in.route.routeinth.adapter.RouteAdapter;
 import th.in.route.routeinth.app.DatabaseUtils;
 import th.in.route.routeinth.app.DistanceUtils;
+import th.in.route.routeinth.app.FirebaseUtils;
 import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.User;
@@ -285,20 +286,20 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         navigate.setText("Navigating");
     }
 
-//    @OnClick(R.id.calculate)
-//    public void navigate() {
-//        int btsFare = result.fare.BTS;
-//        int mrtFare = result.fare.MRT;
-//        int arlFare = result.fare.ARL;
-//
-//        UIDUtils uidUtils = new UIDUtils(getContext());
-//
-//        FirebaseUtils.navigate(uidUtils.getUID(), btsFare, mrtFare, arlFare);
-//
-//        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
-//        navigate.setText("Payed");
-//        navigate.setEnabled(false);
-//    }
+    @OnClick(R.id.pay)
+    public void pay() {
+        int btsFare = result.fare.BTS;
+        int mrtFare = result.fare.MRT;
+        int arlFare = result.fare.ARL;
+
+        UIDUtils uidUtils = new UIDUtils(getContext());
+
+        FirebaseUtils.pay(uidUtils.getUID(), btsFare, mrtFare, arlFare);
+
+        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+        pay.setText("Payed");
+        pay.setEnabled(false);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
