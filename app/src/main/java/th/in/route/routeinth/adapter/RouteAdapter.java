@@ -19,6 +19,7 @@ import java.util.List;
 import th.in.route.routeinth.R;
 import th.in.route.routeinth.ResultFragment;
 import th.in.route.routeinth.app.DistanceUtils;
+import th.in.route.routeinth.model.result.Route;
 import th.in.route.routeinth.model.view.RouteItem;
 
 /**
@@ -93,6 +94,17 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             if (routeItem.getRoute().name.key.equals(nearestKey)) {
                 holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 holder.viewHeadingLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+            } else if (routeItem.getType().equals("between")) {
+                boolean found = false;
+                for (Route route: routeItem.getRoutes()) {
+                    if (route.name.key.equals(nearestKey)) {
+                        found = true;
+                    }
+                }
+
+                if (found) {
+                    holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                }
             } else {
                 holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.textSecondary));
                 holder.viewHeadingLabel.setTextColor(ContextCompat.getColor(mContext, R.color.textSecondary));
