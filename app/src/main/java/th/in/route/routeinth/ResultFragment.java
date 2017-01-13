@@ -1,8 +1,15 @@
 package th.in.route.routeinth;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +22,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,12 +42,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import rx.Subscriber;
 import th.in.route.routeinth.adapter.RouteAdapter;
+import th.in.route.routeinth.app.DatabaseUtils;
+import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.app.FirebaseUtils;
 import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.StationEvent;
+import th.in.route.routeinth.model.User;
 import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.result.Route;
+import th.in.route.routeinth.model.view.Card;
 import th.in.route.routeinth.model.view.RouteItem;
 import th.in.route.routeinth.view.StationChip;
 
@@ -42,10 +64,14 @@ import th.in.route.routeinth.view.StationChip;
  * Use the {@link ResultFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ResultFragment extends Fragment {
+public class ResultFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+    public static final int REQUEST_CODE_ASK_PERMISSIONS = 8000;
+
     private OnTest mListener;
 
     private Unbinder unbinder;
+    private ProgressDialog progressDialog;
 //    @BindView(R.id.resultOrigin) TextView resultOrigin;
 //    @BindView(R.id.resultDestination) TextView resultDestination;
     @BindView(R.id.origin)
@@ -64,8 +90,9 @@ public class ResultFragment extends Fragment {
     @BindView(R.id.arl_station_cnt) TextView arlStationCnt;
     @BindView(R.id.resultARLFare) TextView resultARLFare;
     @BindView(R.id.routeRecycler) RecyclerView routeRecycler;
-    @BindView(R.id.calculate)
-    Button pay;
+    @BindView(R.id.calculate) Button navigate;
+    @BindView(R.id.pay) Button pay;
+
     RouteAdapter routeAdapter;
     LinearLayoutManager linearLayoutManager;
     private Result result;
@@ -73,7 +100,11 @@ public class ResultFragment extends Fragment {
     private List<RouteItem> routeItems;
     private List<Boolean> isShow;
     private Map<String, Integer> stationCnt;
+    private Map<String, Card> cardMap;
     private int flag = 0;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private LocationRequest mLocationRequest;
 
     public ResultFragment() {
         // Required empty public constructor
@@ -100,6 +131,18 @@ public class ResultFragment extends Fragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
+        setLocationRequest();
+
+        showProgressDialog();
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
         routeItems = new ArrayList<>();
         isShow = new ArrayList<>();
 
@@ -113,6 +156,35 @@ public class ResultFragment extends Fragment {
         if (savedInstanceState != null) {
             isShow = toList(savedInstanceState.getBooleanArray("isShow"));
         }
+
+        UIDUtils uidUtils = new UIDUtils(getContext());
+        DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
+        RxFirebaseDatabase.getInstance().observeSingleValue(reference.child("users").child(uidUtils.getUID()))
+                .subscribe(new Subscriber<DataSnapshot>() {
+                    @Override
+                    public void onCompleted() {
+                        ResultFragment.this.hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("ResultFragment", e.getMessage());
+                        ResultFragment.this.hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(DataSnapshot dataSnapshot) {
+                        cardMap = dataSnapshot.getValue(User.class).getCardMap();
+                        setPay();
+                    }
+                });
+    }
+
+    private void setLocationRequest() {
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
     }
 
     private void calculateStationCnt() {
@@ -138,11 +210,9 @@ public class ResultFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).hideFab();
 
-//        resultOrigin.setText(this.result.origin.th);
-//        resultDestination.setText(this.result.destination.th);
         v.findViewById(R.id.swap).setVisibility(View.INVISIBLE);
-        pay.setVisibility(View.VISIBLE);
-        pay.setText("Pay");
+        navigate.setVisibility(View.VISIBLE);
+        navigate.setText("Navigate");
         setStation();
         resultTripFareTotal.setText(String.format(Locale.getDefault(), "%d", this.result.fare.total));
         if(this.result.fare.BTS != 0){
@@ -175,6 +245,33 @@ public class ResultFragment extends Fragment {
         return v;
     }
 
+    private void setPay() {
+        boolean isShow = true;
+        for (Map.Entry<String, Card> entry: cardMap.entrySet()) {
+            switch (entry.getKey()) {
+                case "BTS":
+                    if (!entry.getValue().getType().equals(result.card_type_bts.en)) {
+                        isShow = false;
+                    }
+                    break;
+                case "MRT":
+                    if (!entry.getValue().getType().equals(result.card_type_mrt.en)) {
+                        isShow = false;
+                    }
+                    break;
+                case "ARL":
+                    if (!entry.getValue().getType().equals(result.card_type_arl.en)) {
+                        isShow = false;
+                    }
+                    break;
+            }
+        }
+
+        if (!isShow) {
+            pay.setVisibility(View.GONE);
+        }
+    }
+
     public void onButtonPressed() {
         if (mListener != null) {
             mListener.onTest();
@@ -182,6 +279,14 @@ public class ResultFragment extends Fragment {
     }
 
     @OnClick(R.id.calculate)
+    public void navigate() {
+        routeAdapter.setNavigate(true);
+        routeAdapter.notifyDataSetChanged();
+        navigate.setEnabled(false);
+        navigate.setText("Navigating");
+    }
+
+    @OnClick(R.id.pay)
     public void pay() {
         int btsFare = result.fare.BTS;
         int mrtFare = result.fare.MRT;
@@ -195,6 +300,7 @@ public class ResultFragment extends Fragment {
         pay.setText("Payed");
         pay.setEnabled(false);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -240,6 +346,21 @@ public class ResultFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -249,6 +370,24 @@ public class ResultFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_PERMISSIONS:
+                Log.d("permission", grantResults[0] + "");
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                        grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    onConnected(null);
+                } else {
+                    Toast.makeText(getContext(), "Need Location Permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     public void setResult(Result result) {
@@ -278,16 +417,15 @@ public class ResultFragment extends Fragment {
         routeItems.clear();
         Character now = 'N';
         int system = 0;
-        for (int i=0; i<routes.size(); i++){
-            Log.wtf("route", routes.get(i).code);
+        for (int i=0; i<routes.size(); i++) {
             RouteItem routeItem = new RouteItem();
             routeItem.setStationOf(routes.get(i).code.charAt(0)+"");
             routeItem.setRoute(routes.get(i));
             routeItem.setSystem(system);
-            if(routes.get(i).station_cnt == 0){
-                if(i == 0){
+            if (routes.get(i).station_cnt == 0) {
+                if (i == 0) {
                     routeItem.setType("ori_one");
-                }else {
+                } else {
                     routeItem.setType("des_one");
                 }
                 if(flag == 0){
@@ -295,79 +433,80 @@ public class ResultFragment extends Fragment {
                 }
                 system += 1;
                 routeItems.add(routeItem);
-            }else
-            if(routes.get(i).code.charAt(0) != now || routes.get(i).station_cnt > 0) {
-                Log.wtf("agggggggg", routes.get(i).code);
+            } else if (routes.get(i).code.charAt(0) != now || routes.get(i).station_cnt > 0) {
                 if (i == 0) {
                     routeItem.setType("ori");
-                }else if(routes.get(i).code.equals("BCEN") && result.BTS_same_line == 0){
+                } else if(routes.get(i).code.equals("BCEN") && result.BTS_same_line == 0) {
                     system+=1;
                     routeItem.setType("siam");
                     routeItem.setSystem(system);
                 } else {
                     routeItem.setType("start");
                 }
-                if(flag == 0){
+                if (flag == 0) {
                     isShow.add(false);
-                    Log.wtf("isshow add false>>>>>", routeItem.getRoute().name.en);
                 }
-                Log.wtf("isshow", isShow.toString());
                 now = routes.get(i).code.charAt(0);
                 routeItems.add(routeItem);
-                if (!isShow.isEmpty() && !isShow.get(system)){
-                    if(result.BTS_same_line == 0 && routes.get(i+1).code.equals("BCEN") && routes.get(i).station_cnt > 1){
+                if (!isShow.isEmpty() && !isShow.get(system)) {
+                    if (result.BTS_same_line == 0 && routes.get(i+1).code.equals("BCEN") && routes.get(i).station_cnt > 1) {
                         RouteItem routeBetween = new RouteItem();
-                        routeBetween.setRoute(routes.get(i));
                         routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
                         routeBetween.setType("between");
                         routeBetween.setSystem(system);
+                        ArrayList<Route> routeInIt = new ArrayList<>();
+                        for (int j = i+1; j<=i+routes.get(i).station_cnt-2; j++){
+                            routeInIt.add(routes.get(j));
+                        }
+                        routeBetween.setRoutes(routeInIt);
                         i+=routes.get(i).station_cnt-2;
                         routeItems.add(routeBetween);
-                    }else if(routes.get(i).station_cnt > 1) {
-                        Log.wtf("BCEN", "BCEN3");
+                    } else if(routes.get(i).station_cnt > 1) {
                         RouteItem routeBetween = new RouteItem();
                         routeBetween.setRoute(routes.get(i));
                         routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
                         routeBetween.setType("between");
                         routeBetween.setSystem(system);
+                        ArrayList<Route> routeInIt = new ArrayList<>();
+                        for (int j = i+1; j<=i+routes.get(i).station_cnt-1; j++){
+                            routeInIt.add(routes.get(j));
+                        }
+                        routeBetween.setRoutes(routeInIt);
                         i+=routes.get(i).station_cnt-1;
                         routeItems.add(routeBetween);
                     }
                 }
-            }else if(i == routes.size()-1 || routes.get(i).code.charAt(0) != routes.get(i+1).code.charAt(0)){
-                if(i == routes.size()-1){
+            } else if(i == routes.size()-1 || routes.get(i).code.charAt(0) != routes.get(i+1).code.charAt(0)) {
+                if (i == routes.size()-1) {
                     routeItem.setType("des");
-                }else{
+                } else {
                     routeItem.setType("end");
                 }
                 system += 1;
                 routeItems.add(routeItem);
-            }else if(routes.get(i).code.charAt(0) == now && isShow.get(system)){
+            } else if(routes.get(i).code.charAt(0) == now && isShow.get(system)) {
                 routeItem.setType("station");
                 routeItems.add(routeItem);
-            } else if(routes.get(i).station_cnt > 1){
+            } else if(routes.get(i).station_cnt > 1) {
                 RouteItem routeBetween = new RouteItem();
-                routeBetween.setRoute(routes.get(i));
                 routeBetween.setStationOf(routes.get(i).code.charAt(0)+"");
                 routeBetween.setType("between");
                 routeBetween.setSystem(system);
+                ArrayList<Route> routeInIt = new ArrayList<>();
+                for (int j = i+1; j<=i+routes.get(i).station_cnt-1; j++){
+                    routeInIt.add(routes.get(j));
+                }
+                routeBetween.setRoutes(routeInIt);
                 i+=routes.get(i).station_cnt-1;
                 routeItems.add(routeBetween);
-                Log.wtf("subRoute", routeItem.getSystem()+"");
             }
-//            Log.wtf(">>>>>", routes.get(i).code + routeItem.getType());
         }
         flag = 1;
         routeAdapter.notifyDataSetChanged();
-        Log.wtf("subRoute", routeItems.toString());
     }
 
     public void setIsShow(int system, Boolean show){
         this.isShow.set(system, show);
-        for (boolean a: isShow){
-            Log.d("aaaaa", String.valueOf(a));
-        }
-        Log.d("flag", String.valueOf(flag));
         getStation();
     }
 
@@ -404,6 +543,61 @@ public class ResultFragment extends Fragment {
         return isShow.get(position);
     }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_ASK_PERMISSIONS);
+            return;
+        }
+        LocationAvailability locationAvailability = LocationServices.FusedLocationApi.getLocationAvailability(mGoogleApiClient);
+        setLocationRequest();
+        Log.d("avi", locationAvailability.isLocationAvailable() + "");
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation == null) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } else {
+            handleNewLocation(mLastLocation);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.w("onConnectionSuspended", i + "");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e("onConnectionFailed", connectionResult.getErrorMessage());
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+        handleNewLocation(location);
+    }
+
+    private void handleNewLocation(Location location) {
+        String nearestKey = DistanceUtils.getInstance().getNearestStation(location.getLatitude(), location.getLongitude());
+        routeAdapter.setNearestKey(nearestKey);
+        routeAdapter.notifyDataSetChanged();
+    }
+
+    private void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Loading User Data");
+            progressDialog.setIndeterminate(true);
+        }
+        progressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
 }
 
 

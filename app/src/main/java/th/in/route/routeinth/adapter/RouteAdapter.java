@@ -17,6 +17,7 @@ import java.util.List;
 
 import th.in.route.routeinth.R;
 import th.in.route.routeinth.ResultFragment;
+import th.in.route.routeinth.model.result.Route;
 import th.in.route.routeinth.model.view.RouteItem;
 
 /**
@@ -28,11 +29,22 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     private Context mContext;
     private List<RouteItem> routeItems;
     private ResultFragment fragment;
+    private String nearestKey;
+    private boolean isNavigate;
 
     public RouteAdapter(List<RouteItem> routeItems, Context mContext, ResultFragment resultFragment) {
         this.routeItems = routeItems;
         this.mContext = mContext;
         this.fragment = resultFragment;
+        isNavigate = false;
+    }
+
+    public void setNearestKey(String nearestKey) {
+        this.nearestKey = nearestKey;
+    }
+
+    public void setNavigate(boolean isNavigate) {
+        this.isNavigate = isNavigate;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,6 +84,27 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             color = R.color.colorBtsSilom;
         } else {
             color = R.color.colorMrt;
+        }
+
+        if (isNavigate && nearestKey != null) {
+            if (!routeItem.getType().equals("between") && routeItem.getRoute().name.key.equals(nearestKey)) {
+                holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                holder.viewHeadingLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+            } else if (routeItem.getType().equals("between")) {
+                boolean found = false;
+                for (Route route: routeItem.getRoutes()) {
+                    if (route.name.key.equals(nearestKey)) {
+                        found = true;
+                    }
+                }
+
+                if (found) {
+                    holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+                }
+            } else {
+                holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.textSecondary));
+                holder.viewHeadingLabel.setTextColor(ContextCompat.getColor(mContext, R.color.textSecondary));
+            }
         }
 
 //        GradientDrawable viewAllStationBg = (GradientDrawable) holder.viewAllStationLabel.getBackground();

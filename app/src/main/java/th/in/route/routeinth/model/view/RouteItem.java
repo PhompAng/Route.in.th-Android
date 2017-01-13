@@ -1,5 +1,7 @@
 package th.in.route.routeinth.model.view;
 
+import java.util.ArrayList;
+
 import th.in.route.routeinth.model.result.Route;
 
 /**
@@ -10,6 +12,7 @@ public class RouteItem {
     private String type;
     private String stationOf;
     private Route route;
+    private ArrayList<Route> routes;
     private int system;
 
     public String getType() {
@@ -44,5 +47,11 @@ public class RouteItem {
         this.system = system;
     }
 
+    public ArrayList<Route> getRoutes() {
+        return routes;
+    }
 
+    public void setRoutes(ArrayList<Route> routes) {
+        this.routes = routes;
+    }
 }
