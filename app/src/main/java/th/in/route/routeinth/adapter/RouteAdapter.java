@@ -31,15 +31,21 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     private List<RouteItem> routeItems;
     private ResultFragment fragment;
     private Location location;
+    private boolean isNavigate;
 
     public RouteAdapter(List<RouteItem> routeItems, Context mContext, ResultFragment resultFragment) {
         this.routeItems = routeItems;
         this.mContext = mContext;
         this.fragment = resultFragment;
+        isNavigate = false;
     }
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public void setNavigate(boolean isNavigate) {
+        this.isNavigate = isNavigate;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -81,7 +87,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             color = R.color.colorMrt;
         }
 
-        if (location != null) {
+        if (isNavigate && location != null) {
             String nearestKey = DistanceUtils.getInstance().getNearestStation(location.getLatitude(), location.getLongitude());
             Log.d("nearest", nearestKey + " " + location.getLatitude() + " " + location.getLongitude());
             if (routeItem.getRoute().name.key.equals(nearestKey)) {

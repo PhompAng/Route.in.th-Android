@@ -210,7 +210,10 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
 
     @OnClick(R.id.calculate)
     public void navigate() {
-
+        routeAdapter.setNavigate(true);
+        routeAdapter.notifyDataSetChanged();
+        pay.setEnabled(false);
+        pay.setText("Navigating");
     }
 
 //    @OnClick(R.id.calculate)
