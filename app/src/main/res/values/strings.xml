@@ -25,4 +25,5 @@
     <string name="navigating">Navigating</string>
     <string name="stop_navigation">Stop Navigation</string>
     <string name="navigate">Navigate</string>
+    <string name="reset">Reset</string>
 </resources>

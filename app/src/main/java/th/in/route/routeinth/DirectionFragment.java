@@ -84,6 +84,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
 
     private List<StationEvent> stations;
     private StationUtils stationUtils;
+    private Map<String, Card> defaultCardMap;
     private Map<String, Card> cardMap;
 
     public DirectionFragment() {
@@ -137,6 +138,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
                     @Override
                     public void onNext(DataSnapshot dataSnapshot) {
                         cardMap = dataSnapshot.getValue(User.class).getCardMap();
+                        defaultCardMap = dataSnapshot.getValue(User.class).getCardMap();
                     }
                 });
 //        cardMap = UserUtils.getInstance().getUser().getCardMap();
@@ -252,18 +254,29 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
         bottomSheetDialog.setContentView(v);
 
-        RadioGroup btsGroup = (RadioGroup) v.findViewById(R.id.bts_group);
-        th.in.route.routeinth.view.RadioGroup mrtGroup = (th.in.route.routeinth.view.RadioGroup) v.findViewById(R.id.mrt_group);
-        RadioGroup arlGroup = (RadioGroup) v.findViewById(R.id.arl_group);
+        final RadioGroup btsGroup = (RadioGroup) v.findViewById(R.id.bts_group);
+        final th.in.route.routeinth.view.RadioGroup mrtGroup = (th.in.route.routeinth.view.RadioGroup) v.findViewById(R.id.mrt_group);
+        final RadioGroup arlGroup = (RadioGroup) v.findViewById(R.id.arl_group);
         btsGroup.setOnCheckedChangeListener(this);
         mrtGroup.setOnCheckedChangeListener(this);
         arlGroup.setOnCheckedChangeListener(this);
 
-        ((RadioButton) btsGroup.findViewWithTag(Integer.toString(getOrDefault(cardMap, "BTS").getIntType()))).setChecked(true);
-        ((RadioButton) mrtGroup.findViewWithTag(Integer.toString(getOrDefault(cardMap, "MRT").getIntType()))).setChecked(true);
-        ((RadioButton) arlGroup.findViewWithTag(Integer.toString(getOrDefault(cardMap, "ARL").getIntType()))).setChecked(true);
+        setCardCheck(btsGroup, arlGroup, mrtGroup, cardMap);
+
+        v.findViewById(R.id.reset).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCardCheck(btsGroup, arlGroup, mrtGroup, defaultCardMap);
+            }
+        });
 
         bottomSheetDialog.show();
+    }
+
+    private void setCardCheck(RadioGroup btsGroup, RadioGroup arlGroup, th.in.route.routeinth.view.RadioGroup mrtGroup, Map<String, Card> map) {
+        ((RadioButton) btsGroup.findViewWithTag(Integer.toString(getOrDefault(map, "BTS").getIntType()))).setChecked(true);
+        ((RadioButton) mrtGroup.findViewWithTag(Integer.toString(getOrDefault(map, "MRT").getIntType()))).setChecked(true);
+        ((RadioButton) arlGroup.findViewWithTag(Integer.toString(getOrDefault(map, "ARL").getIntType()))).setChecked(true);
     }
 
     private Card getOrDefault(Map<String, Card> map, String key) {
