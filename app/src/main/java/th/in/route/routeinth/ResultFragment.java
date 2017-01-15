@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.ezhome.rxfirebase2.database.RxFirebaseDatabase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -106,6 +105,8 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
 
+    private boolean navigating = false;
+
     public ResultFragment() {
         // Required empty public constructor
     }
@@ -178,13 +179,6 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
                         setPay();
                     }
                 });
-    }
-
-    private void setLocationRequest() {
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
     }
 
     private void calculateStationCnt() {
@@ -280,10 +274,10 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
 
     @OnClick(R.id.calculate)
     public void navigate() {
-        routeAdapter.setNavigate(true);
+        navigate.setText(navigating ? R.string.navigate:R.string.stop_navigation);
+        navigating = !navigating;
+        routeAdapter.setNavigate(navigating);
         routeAdapter.notifyDataSetChanged();
-        navigate.setEnabled(false);
-        navigate.setText("Navigating");
     }
 
     @OnClick(R.id.pay)
@@ -550,9 +544,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
             ActivityCompat.requestPermissions(getActivity(), new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_ASK_PERMISSIONS);
             return;
         }
-        LocationAvailability locationAvailability = LocationServices.FusedLocationApi.getLocationAvailability(mGoogleApiClient);
         setLocationRequest();
-        Log.d("avi", locationAvailability.isLocationAvailable() + "");
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation == null) {
@@ -582,6 +574,13 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         String nearestKey = DistanceUtils.getInstance().getNearestStation(location.getLatitude(), location.getLongitude());
         routeAdapter.setNearestKey(nearestKey);
         routeAdapter.notifyDataSetChanged();
+    }
+
+    private void setLocationRequest() {
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
     }
 
     private void showProgressDialog() {

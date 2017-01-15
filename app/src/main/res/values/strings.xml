@@ -22,4 +22,7 @@
     <string name="elder">Elder</string>
     <string name="child">Child</string>
     <string name="top_up">Top Up</string>
+    <string name="navigating">Navigating</string>
+    <string name="stop_navigation">Stop Navigation</string>
+    <string name="navigate">Navigate</string>
 </resources>
