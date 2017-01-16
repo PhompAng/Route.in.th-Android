@@ -1,5 +1,6 @@
 package th.in.route.routeinth;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -55,6 +56,7 @@ import th.in.route.routeinth.model.result.Route;
 import th.in.route.routeinth.model.view.Card;
 import th.in.route.routeinth.model.view.RouteItem;
 import th.in.route.routeinth.services.BackgroundLocationService;
+import th.in.route.routeinth.services.LocationReceiver;
 import th.in.route.routeinth.view.StationChip;
 
 /**
@@ -106,6 +108,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
+    private NotificationManager mNotificationManager;
 
     private boolean navigating = false;
 
@@ -145,6 +148,8 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
                     .addApi(LocationServices.API)
                     .build();
         }
+
+        mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         routeItems = new ArrayList<>();
         isShow = new ArrayList<>();
@@ -278,10 +283,13 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     public void navigate() {
         navigate.setText(navigating ? R.string.navigate:R.string.stop_navigation);
         navigating = !navigating;
+        Intent intent = new Intent(getActivity(), BackgroundLocationService.class);
         if (navigating) {
-            getActivity().startService(new Intent(getActivity(), BackgroundLocationService.class));
+            intent.putStringArrayListExtra("route", new ArrayList<>(result.route));
+            getActivity().startService(intent);
         } else {
-            getActivity().stopService(new Intent(getActivity(), BackgroundLocationService.class));
+            getActivity().stopService(intent);
+            mNotificationManager.cancel(LocationReceiver.notifyID);
         }
         routeAdapter.setNavigate(navigating);
         routeAdapter.notifyDataSetChanged();

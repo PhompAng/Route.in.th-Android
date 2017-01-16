@@ -22,7 +22,10 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -48,6 +51,7 @@ public class BackgroundLocationService extends Service implements
     private PendingIntent pendingIntent;
     private Boolean servicesAvailable = false;
 
+    private ArrayList<String> route;
     public class LocalBinder extends Binder {
         public BackgroundLocationService getServerInstance() {
             return BackgroundLocationService.this;
@@ -93,6 +97,10 @@ public class BackgroundLocationService extends Service implements
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
+
+        if (intent != null) {
+            route = intent.getStringArrayListExtra("route");
+        }
 
         PowerManager mgr = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
@@ -186,6 +194,7 @@ public class BackgroundLocationService extends Service implements
         Intent intent = new Intent(this, LocationReceiver.class);
         pendingIntent = PendingIntent.getService(this, 54321, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient, mLocationRequest, pendingIntent);
+        EventBus.getDefault().postSticky(route);
         Log.d(TAG, "Connected");
     }
 
