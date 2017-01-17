@@ -12,7 +12,7 @@ import th.in.route.routeinth.TweetPageFragment;
  * Created by Acer on 12/1/2560.
  */
 
-public class TweetPagerAdapter extends FragmentPagerAdapter {
+public class TweetPagerAdapter extends FragmentStatePagerAdapter {
 
     public TweetPagerAdapter(FragmentManager fm) {
         super(fm);
