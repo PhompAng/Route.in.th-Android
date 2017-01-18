@@ -64,7 +64,7 @@ public class LocationReceiver extends IntentService {
     private void buildNotification() {
         mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentTitle(getString(R.string.navigating))
-                .setContentText("Current Station: " + getNearestStation().getEn())
+                .setContentText("Current Station: " + getNearestStation())
                 .setSmallIcon(R.drawable.ic_directions_subway_black_24dp)
                 .setOngoing(true);
 
@@ -73,9 +73,10 @@ public class LocationReceiver extends IntentService {
                 mBuilder.build());
     }
 
-    private Station getNearestStation() {
+    private String getNearestStation() {
         String nearestKey = DistanceUtils.getInstance().getNearestStation(this.mLocationResult.getLastLocation().getLatitude(), this.mLocationResult.getLastLocation().getLongitude());
-        return StationUtils.getInstance().getStationFromKey(nearestKey);
+        Station station = StationUtils.getInstance().getStationFromKey(nearestKey);
+        return station == null ? "Unknown":station.getEn();
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.BACKGROUND)
@@ -85,6 +86,7 @@ public class LocationReceiver extends IntentService {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "ondestroy");
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

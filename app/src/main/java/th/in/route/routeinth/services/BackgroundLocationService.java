@@ -1,6 +1,7 @@
 package th.in.route.routeinth.services;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -151,7 +152,10 @@ public class BackgroundLocationService extends Service implements
         // Turn off the request flag
         this.mInProgress = false;
 
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, pendingIntent);
+        if (mGoogleApiClient.isConnected()) {
+            Log.d(TAG, "remove");
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, pendingIntent);
+        }
 
         if (this.servicesAvailable && this.mGoogleApiClient != null) {
             this.mGoogleApiClient.unregisterConnectionCallbacks(this);
@@ -191,10 +195,17 @@ public class BackgroundLocationService extends Service implements
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        if (route == null) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(LocationReceiver.notifyID);
+            stopSelf();
+            return;
+        } else {
+            EventBus.getDefault().postSticky(route);
+        }
         Intent intent = new Intent(this, LocationReceiver.class);
         pendingIntent = PendingIntent.getService(this, 54321, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient, mLocationRequest, pendingIntent);
-        EventBus.getDefault().postSticky(route);
         Log.d(TAG, "Connected");
     }
 
