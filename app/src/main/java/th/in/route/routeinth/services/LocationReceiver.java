@@ -57,26 +57,56 @@ public class LocationReceiver extends IntentService {
         if(LocationResult.hasResult(intent)) {
             this.mLocationResult = LocationResult.extractResult(intent);
             Log.i(TAG, "Location Received: " + this.mLocationResult.toString());
-            buildNotification();
+            Station station = getNearestStation();
+            String stationName = station == null ? "Unknown":station.getEn();
+            buildNotification(getString(R.string.navigating), "Current Station: " + stationName, true, notifyID);
+
+            String changeText = needChangeSystem(station.getKey());
+            if (changeText != null) {
+                //TODO change title
+                buildNotification("Route.in.th", changeText, false, 123);
+            }
         }
     }
 
-    private void buildNotification() {
+    private void buildNotification(String title, String text, boolean onGoing, int id) {
         mBuilder = new NotificationCompat.Builder(this);
-        mBuilder.setContentTitle(getString(R.string.navigating))
-                .setContentText("Current Station: " + getNearestStation())
+        mBuilder.setContentTitle(title)
+                .setContentText(text)
                 .setSmallIcon(R.drawable.ic_directions_subway_black_24dp)
-                .setOngoing(true);
+                .setOngoing(onGoing);
 
+        if (onGoing) {
+            mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+        }
         mNotificationManager.notify(
-                notifyID,
+                id,
                 mBuilder.build());
     }
 
-    private String getNearestStation() {
+    private String needChangeSystem(String currentKey) {
+        if (route == null) {
+            return null;
+        }
+        for (int i=0;i<route.size()-2;i++) {
+            if (currentKey.equals(route.get(route.size()-1))) {
+                return "End of route";
+            } else if (currentKey.equals(route.get(i))) {
+                //TODO BCEN
+                if (currentKey.charAt(0) != route.get(i+1).charAt(0)) {
+                    return "Change system to : " + StationUtils.getInstance().getStationFromKey(route.get(i+1));
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Station getNearestStation() {
         String nearestKey = DistanceUtils.getInstance().getNearestStation(this.mLocationResult.getLastLocation().getLatitude(), this.mLocationResult.getLastLocation().getLongitude());
-        Station station = StationUtils.getInstance().getStationFromKey(nearestKey);
-        return station == null ? "Unknown":station.getEn();
+        return StationUtils.getInstance().getStationFromKey(nearestKey);
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.BACKGROUND)
@@ -86,7 +116,6 @@ public class LocationReceiver extends IntentService {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "ondestroy");
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
