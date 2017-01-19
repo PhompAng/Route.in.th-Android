@@ -1,7 +1,6 @@
 package th.in.route.routeinth;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -18,15 +17,15 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
-
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import io.fabric.sdk.android.Fabric;
+
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.fabric.sdk.android.Fabric;
 import th.in.route.routeinth.DirectionFragment.OnCalculate;
 import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.app.FirebaseUtils;
@@ -45,6 +44,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     @BindView(R.id.fab) FloatingActionButton fab;
+    private NestedScrollView main;
     private GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
         fab.setVisibility(View.GONE);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-        ((NestedScrollView) findViewById(R.id.main)).setFillViewport(true);
+        main = (NestedScrollView) findViewById(R.id.main);
 
         if (savedInstanceState == null) {
             DirectionFragment directionFragment = DirectionFragment.newInstance("test", "test");
@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, directionFragment).commit();
         }
+    }
+
+    public void setFill(boolean isFill) {
+        main.setFillViewport(isFill);
     }
 
     public void showFab() {

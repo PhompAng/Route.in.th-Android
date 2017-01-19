@@ -1,20 +1,16 @@
 package th.in.route.routeinth;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import th.in.route.routeinth.adapter.TweetPagerAdapter;
+import th.in.route.routeinth.view.WrapContentViewPager;
 
 
 /**
@@ -36,7 +32,7 @@ public class AnnounceFragment extends Fragment {
 
     private Unbinder unbinder;
     @BindView(R.id.tweetPager)
-    ViewPager tweetViewPager;
+    WrapContentViewPager tweetViewPager;
     private TweetPagerAdapter tweetPagerAdapter;
     public AnnounceFragment() {
         // Required empty public constructor
@@ -67,6 +63,7 @@ public class AnnounceFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        ((MainActivity) getActivity()).setFill(true);
     }
 
     @Override
@@ -82,4 +79,9 @@ public class AnnounceFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((MainActivity) getActivity()).setFill(false);
+    }
 }

@@ -4,12 +4,10 @@ package th.in.route.routeinth;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -100,6 +98,7 @@ public class TweetPageFragment extends Fragment {
                 .setTimeline(userTimeline)
                 .build();
 
+        list.setNestedScrollingEnabled(true);
         list.setAdapter(adapter);
 
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

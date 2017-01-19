@@ -2,9 +2,7 @@ package th.in.route.routeinth.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 import th.in.route.routeinth.TweetPageFragment;
 
@@ -20,7 +18,6 @@ public class TweetPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Log.d("position", position+"");
         return TweetPageFragment.newInstance(position, "test");
     }
 
