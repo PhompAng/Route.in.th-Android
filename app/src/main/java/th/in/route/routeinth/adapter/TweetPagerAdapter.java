@@ -21,7 +21,7 @@ public class TweetPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Log.d("position", position+"");
-        return TweetPageFragment.newInstance("test", "test");
+        return TweetPageFragment.newInstance(position, "test");
     }
 
     @Override

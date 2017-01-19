@@ -3,10 +3,25 @@ package th.in.route.routeinth;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.tweetui.TimelineResult;
+import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
+import com.twitter.sdk.android.tweetui.UserTimeline;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,8 +35,10 @@ public class TweetPageFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private int mParam1;
     private String mParam2;
+    private String[] systemList = {"BTS_SkyTrain", "BTS_SkyTrain", "BEM_MRT", "AirportRailLink"};
+    private int position;
 
 
     public TweetPageFragment() {
@@ -37,10 +54,10 @@ public class TweetPageFragment extends Fragment {
      * @return A new instance of fragment TweetPageFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TweetPageFragment newInstance(String param1, String param2) {
+    public static TweetPageFragment newInstance(int param1, String param2) {
         TweetPageFragment fragment = new TweetPageFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putInt(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -50,15 +67,60 @@ public class TweetPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam1 = getArguments().getInt(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            position = mParam1;
         }
     }
+
+    private Unbinder unbinder;
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @BindView(R.id.list)
+    ListView list;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tweet_page, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_tweet_page, container, false);
+        unbinder = ButterKnife.bind(this, v);
+
+        final UserTimeline userTimeline = new UserTimeline.Builder()
+                .screenName(systemList[position])
+                .build();
+        final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(getContext())
+                .setTimeline(userTimeline)
+                .build();
+
+        list.setAdapter(adapter);
+
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeLayout.setRefreshing(true);
+                adapter.refresh(new Callback<TimelineResult<Tweet>>() {
+                    @Override
+                    public void success(Result<TimelineResult<Tweet>> result) {
+                        swipeLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void failure(TwitterException exception) {
+                        // Toast or some other action
+                    }
+                });
+            }
+        });
+
+        return v;
     }
 
 }

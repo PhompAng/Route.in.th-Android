@@ -1,19 +1,16 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:id="@+id/tweetCard"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    cardview:cardCornerRadius="2dp"
-    cardview:cardElevation="8dp">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="match_parent"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/aaa"
-        android:text="aaaaaaaaaaaaaaaaaa"/>
+        android:id="@+id/swipeRefreshLayout">
 
- </android.support.v7.widget.CardView>
+        <ListView android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>
