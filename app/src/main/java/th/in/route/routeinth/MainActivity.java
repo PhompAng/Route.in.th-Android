@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.flContent, new CardFragment()).commit();
                 return true;
             case R.id.action_info:
+                fragmentTransaction.replace(R.id.flContent, new InformationFragment()).commit();
                 return true;
             case R.id.action_announce:
                 return true;
