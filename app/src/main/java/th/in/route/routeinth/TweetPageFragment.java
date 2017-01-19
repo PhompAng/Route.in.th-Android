@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -113,7 +114,8 @@ public class TweetPageFragment extends Fragment {
 
                     @Override
                     public void failure(TwitterException exception) {
-                        // Toast or some other action
+                        swipeLayout.setRefreshing(false);
+                        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
