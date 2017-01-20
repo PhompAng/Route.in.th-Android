@@ -66,6 +66,7 @@ public class CardFragment extends Fragment implements
         getCardFromFirebase();
 
         uidUtils = new UIDUtils(getContext());
+        ((MainActivity) getActivity()).tabVisibility(View.GONE);
     }
 
     @BindView(R.id.list)

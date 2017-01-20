@@ -2,6 +2,7 @@ package th.in.route.routeinth;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,11 @@ public class AnnounceFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((MainActivity) getActivity()).hideFab();
         ((MainActivity) getActivity()).setFill(true);
+        ((MainActivity) getActivity()).tabVisibility(View.VISIBLE);
     }
 
     @Override
@@ -75,6 +80,8 @@ public class AnnounceFragment extends Fragment {
         unbinder = ButterKnife.bind(this, v);
         tweetPagerAdapter = new TweetPagerAdapter(getChildFragmentManager());
         tweetViewPager.setAdapter(tweetPagerAdapter);
+
+        ((MainActivity) getActivity()).setViewPager(tweetViewPager);
 
         return v;
     }

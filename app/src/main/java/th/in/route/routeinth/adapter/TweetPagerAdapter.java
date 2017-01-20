@@ -12,6 +12,8 @@ import th.in.route.routeinth.TweetPageFragment;
 
 public class TweetPagerAdapter extends FragmentStatePagerAdapter {
 
+    private String[] tabTitle = new String[] {"News", "BTS", "MRT", "ARL"};
+
     public TweetPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -24,5 +26,10 @@ public class TweetPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return 4;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return tabTitle[position];
     }
 }

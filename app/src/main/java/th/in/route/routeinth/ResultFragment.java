@@ -210,6 +210,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) getActivity()).hideFab();
+        ((MainActivity) getActivity()).tabVisibility(View.GONE);
 
         v.findViewById(R.id.swap).setVisibility(View.INVISIBLE);
         navigate.setVisibility(View.VISIBLE);

@@ -44,6 +44,7 @@ public class InformationFragment extends Fragment
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         ((MainActivity) getActivity()).hideFab();
+        ((MainActivity) getActivity()).tabVisibility(View.GONE);
     }
 
     private Unbinder unbinder;

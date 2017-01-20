@@ -145,6 +145,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
         stations = new ArrayList<>();
         stations.add(null);
         stations.add(null);
+        ((MainActivity) getActivity()).tabVisibility(View.GONE);
     }
 
     private Unbinder unbinder;

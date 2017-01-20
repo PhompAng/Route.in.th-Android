@@ -101,6 +101,7 @@ public class StationSelectFragment extends Fragment implements
         unbinder = ButterKnife.bind(this, v);
 
         ((MainActivity) getActivity()).hideFab();
+        ((MainActivity) getActivity()).tabVisibility(View.GONE);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mStationAdapter = new StationAdapter(getContext(), new ArrayList<RailSystem>(), this);

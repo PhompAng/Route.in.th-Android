@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.tabLayout) TabLayout tabLayout;
     private NestedScrollView main;
     private GoogleApiClient mGoogleApiClient;
 
@@ -90,6 +93,14 @@ public class MainActivity extends AppCompatActivity
 
     public void hideFab() {
         fab.setVisibility(View.GONE);
+    }
+
+    public void tabVisibility(int visibility) {
+        tabLayout.setVisibility(visibility);
+    }
+
+    public void setViewPager(ViewPager viewPager) {
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @OnClick(R.id.fab)
