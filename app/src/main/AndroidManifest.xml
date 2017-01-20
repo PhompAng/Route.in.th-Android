@@ -30,6 +30,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddCardActivity" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="1cd4b4143f706704ff666b279bb801789ec5b753" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="1cd4b4143f706704ff666b279bb801789ec5b753" />
         <activity android:name=".EditCardActivity" />
         <service android:name=".services.BackgroundLocationService"
             android:enabled="true"
