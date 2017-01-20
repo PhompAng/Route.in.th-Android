@@ -306,7 +306,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         FirebaseUtils.pay(uidUtils.getUID(), btsFare, mrtFare, arlFare);
 
         Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
-        pay.setText("Payed");
+        pay.setText("Paid");
         pay.setEnabled(false);
     }
 
