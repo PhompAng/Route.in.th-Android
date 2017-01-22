@@ -7,10 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -48,6 +50,7 @@ public class StationSelectFragment extends Fragment implements
         FloatingSearchView.OnMenuItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String TAG = StationSelectFragment.class.getSimpleName();
     private static final String ARG_PARAM1 = "type";
     private static final int PLACE_PICKER_REQUEST = 1;
 
@@ -83,6 +86,14 @@ public class StationSelectFragment extends Fragment implements
         }
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
+        try {
+            systems.addAll(StationUtils.getInstance().getSystems());
+        } catch (RuntimeException e) {
+            Log.e(TAG, e.getMessage());
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            getFragmentManager().popBackStack();
+        }
     }
 
     private Unbinder unbinder;
@@ -112,7 +123,6 @@ public class StationSelectFragment extends Fragment implements
         mSearchView.setOnQueryChangeListener(this);
         mSearchView.setOnMenuItemClickListener(this);
 
-        systems.addAll(StationUtils.getInstance().getSystems());
         mStationAdapter.setParentList(systems, false);
 
         return v;

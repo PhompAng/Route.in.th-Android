@@ -361,8 +361,8 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
         }).doOnError(new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
-                Log.e("calculate", input.toString());
                 Log.e("calculate", throwable.getMessage());
+                Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
             }
         })
         .subscribe();

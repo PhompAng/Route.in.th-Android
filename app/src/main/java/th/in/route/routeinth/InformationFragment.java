@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 
@@ -33,6 +35,8 @@ public class InformationFragment extends Fragment
         implements StationViewHolder.OnStationClickListener,
         FloatingSearchView.OnQueryChangeListener {
 
+    private static final String TAG = InformationFragment.class.getSimpleName();
+
     public InformationFragment() {
         // Required empty public constructor
     }
@@ -45,6 +49,13 @@ public class InformationFragment extends Fragment
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         ((MainActivity) getActivity()).hideFab();
         ((MainActivity) getActivity()).tabVisibility(View.GONE);
+
+        try {
+            systems.addAll(StationUtils.getInstance().getSystems());
+        } catch (RuntimeException e) {
+            Log.e(TAG, e.getMessage());
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private Unbinder unbinder;
@@ -69,7 +80,6 @@ public class InformationFragment extends Fragment
 
         mSearchView.setOnQueryChangeListener(this);
 
-        systems.addAll(StationUtils.getInstance().getSystems());
         mStationAdapter.setParentList(systems, false);
 
         return v;

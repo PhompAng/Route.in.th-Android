@@ -1,6 +1,7 @@
 package th.in.route.routeinth.app;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,6 +15,8 @@ import java.util.Map;
  */
 
 public class DistanceUtils {
+
+    private static final String TAG = DistanceUtils.class.getSimpleName();
     private static DistanceUtils sDistanceUtils;
 
     private Map<String, Location> locationMap;
@@ -33,7 +36,7 @@ public class DistanceUtils {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.e(TAG, databaseError.getMessage());
             }
         });
 //        for (RailSystem system: systems) {

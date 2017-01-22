@@ -387,7 +387,6 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
 
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
-                Log.d("permission", grantResults[0] + "");
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                         grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     onConnected(null);

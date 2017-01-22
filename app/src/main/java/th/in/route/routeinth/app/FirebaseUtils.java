@@ -16,10 +16,11 @@ import th.in.route.routeinth.model.view.Card;
  */
 
 public class FirebaseUtils {
+    private static final String TAG = FirebaseUtils.class.getSimpleName();
+
     public static void regisUser(Context context) {
         DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
         UIDUtils uidUtils = new UIDUtils(context);
-        Log.d("uid", uidUtils.getUID());
         if (TextUtils.isEmpty(uidUtils.getUID())) {
             DatabaseReference uid = reference.child("users").push();
             uidUtils.putUID(uid.getKey());
@@ -60,7 +61,7 @@ public class FirebaseUtils {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.e(TAG, databaseError.getMessage());
             }
         });
     }
