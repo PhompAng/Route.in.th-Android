@@ -47,6 +47,10 @@
         </service>
         <service android:name=".services.LocationReceiver"
             android:enabled="true" />
+
+        <service android:name=".services.CardService"
+            android:enabled="true"
+            android:stopWithTask="true" />
     </application>
 
 </manifest>

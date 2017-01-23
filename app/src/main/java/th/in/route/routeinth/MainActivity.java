@@ -33,6 +33,7 @@ import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.app.FirebaseUtils;
 import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.result.Result;
+import th.in.route.routeinth.services.CardService;
 
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener,
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         main = (NestedScrollView) findViewById(R.id.main);
+        startService(new Intent(this, CardService.class));
 
         if (savedInstanceState == null) {
             DirectionFragment directionFragment = DirectionFragment.newInstance("test", "test");
