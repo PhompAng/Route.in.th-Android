@@ -96,4 +96,8 @@ public class DistanceUtils {
 
         return out;
     }
+
+    public Map<String, Location> getLocationMap(){
+        return this.locationMap;
+    }
 }
