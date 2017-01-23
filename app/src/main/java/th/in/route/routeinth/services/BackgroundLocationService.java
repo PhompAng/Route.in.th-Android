@@ -53,6 +53,8 @@ public class BackgroundLocationService extends Service implements
     private Boolean servicesAvailable = false;
 
     private ArrayList<String> route;
+    private int btsSameLine;
+
     public class LocalBinder extends Binder {
         public BackgroundLocationService getServerInstance() {
             return BackgroundLocationService.this;
@@ -101,6 +103,7 @@ public class BackgroundLocationService extends Service implements
 
         if (intent != null) {
             route = intent.getStringArrayListExtra("route");
+            btsSameLine = intent.getIntExtra("bts_same_line", -1);
         }
 
         PowerManager mgr = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -205,6 +208,7 @@ public class BackgroundLocationService extends Service implements
             return;
         } else {
             EventBus.getDefault().postSticky(route);
+            EventBus.getDefault().postSticky(btsSameLine);
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient, mLocationRequest, pendingIntent);
         Log.d(TAG, "Connected");

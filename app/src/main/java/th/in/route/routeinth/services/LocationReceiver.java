@@ -33,6 +33,7 @@ public class LocationReceiver extends IntentService {
     public static final int notifyID = 1234;
 
     private ArrayList<String> route;
+    private int btsSameLine;
 
     public LocationReceiver() {
         super("LocationReceiver");
@@ -96,9 +97,10 @@ public class LocationReceiver extends IntentService {
             if (currentKey.equals(route.get(route.size()-1))) {
                 return "End of route";
             } else if (currentKey.equals(route.get(i))) {
-                //TODO BCEN
                 if (currentKey.charAt(0) != route.get(i+1).charAt(0)) {
-                    return "Change system to : " + StationUtils.getInstance().getStationFromKey(route.get(i+1));
+                    return "Change system to : " + StationUtils.getInstance().getStationFromKey(route.get(i + 1));
+                } else if (route.get(i+1).charAt(1) == 'C' && btsSameLine == 0) {
+                    return "Change system to : " + StationUtils.getInstance().getStationFromKey(route.get(i + 1));
                 } else {
                     return null;
                 }
@@ -118,6 +120,10 @@ public class LocationReceiver extends IntentService {
         this.route = route;
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.BACKGROUND)
+    public void btsSameLine(Integer btsSameLine) {
+        this.btsSameLine = btsSameLine;
+    }
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);

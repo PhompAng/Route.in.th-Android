@@ -287,6 +287,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         Intent intent = new Intent(getActivity(), BackgroundLocationService.class);
         if (navigating) {
             intent.putStringArrayListExtra("route", new ArrayList<>(result.route));
+            intent.putExtra("bts_same_line", result.BTS_same_line);
             getActivity().startService(intent);
         } else {
             getActivity().stopService(intent);
