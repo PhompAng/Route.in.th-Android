@@ -58,7 +58,11 @@ public class LocationReceiver extends IntentService {
             this.mLocationResult = LocationResult.extractResult(intent);
             Log.i(TAG, "Location Received: " + this.mLocationResult.toString());
             Station station = getNearestStation();
-            String stationName = station == null ? "Unknown":station.getEn();
+            if (station == null) {
+                stopSelf();
+                return;
+            }
+            String stationName = station.getEn();
             buildNotification(getString(R.string.navigating), "Current Station: " + stationName, true, notifyID);
 
             String changeText = needChangeSystem(station.getKey());

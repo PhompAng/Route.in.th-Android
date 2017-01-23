@@ -155,6 +155,7 @@ public class BackgroundLocationService extends Service implements
         if (mGoogleApiClient.isConnected()) {
             Log.d(TAG, "remove");
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, pendingIntent);
+            pendingIntent.cancel();
         }
 
         if (this.servicesAvailable && this.mGoogleApiClient != null) {
@@ -195,6 +196,8 @@ public class BackgroundLocationService extends Service implements
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        Intent intent = new Intent(this, LocationReceiver.class);
+        pendingIntent = PendingIntent.getService(this, 54321, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (route == null) {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(LocationReceiver.notifyID);
@@ -203,8 +206,6 @@ public class BackgroundLocationService extends Service implements
         } else {
             EventBus.getDefault().postSticky(route);
         }
-        Intent intent = new Intent(this, LocationReceiver.class);
-        pendingIntent = PendingIntent.getService(this, 54321, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient, mLocationRequest, pendingIntent);
         Log.d(TAG, "Connected");
     }
