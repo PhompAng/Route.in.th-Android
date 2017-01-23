@@ -248,25 +248,29 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     }
 
     private void setPay() {
-        boolean isShow = true;
+        boolean isShow = false;
         for (Map.Entry<String, Card> entry: cardMap.entrySet()) {
             switch (entry.getKey()) {
                 case "BTS":
-                    if (!entry.getValue().getType().equals(result.card_type_bts.en)) {
-                        isShow = false;
+                    if (entry.getValue().getType().equals(result.card_type_bts.en)) {
+                        isShow = true;
                     }
                     break;
                 case "MRT":
-                    if (!entry.getValue().getType().equals(result.card_type_mrt.en)) {
-                        isShow = false;
+                    if (entry.getValue().getType().equals(result.card_type_mrt.en)) {
+                        isShow = true;
                     }
                     break;
                 case "ARL":
-                    if (!entry.getValue().getType().equals(result.card_type_arl.en)) {
-                        isShow = false;
+                    if (entry.getValue().getType().equals(result.card_type_arl.en)) {
+                        isShow = true;
                     }
                     break;
             }
+        }
+
+        if (result.fare.total == 0) {
+            isShow = false;
         }
 
         if (!isShow) {
