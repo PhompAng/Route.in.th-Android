@@ -8,9 +8,13 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -20,13 +24,21 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import th.in.route.routeinth.adapter.viewholder.FacilityAdapter;
 import th.in.route.routeinth.app.DpiUtils;
 import th.in.route.routeinth.model.system.Station;
 
@@ -37,6 +49,9 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
     private Station station;
     Unbinder unbinder;
     BottomSheetBehavior behavior;
+    private ArrayList<String> facilities;
+    private FacilityAdapter adapter;
+    private LinearLayoutManager linearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +63,20 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        facilities = new ArrayList<>();
+
         Intent intent = getIntent();
         stationLocation = intent.getParcelableExtra("location");
         station = Parcels.unwrap(intent.getParcelableExtra("station"));
+        getFacilities();
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.facilityRecycler);
+        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
+        adapter = new FacilityAdapter(getApplicationContext(), facilities);
+        recyclerView.setAdapter(adapter);
 
     }
 
@@ -70,5 +96,24 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
         behavior = BottomSheetBehavior.from(mBottomSheetLayout);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
+    }
+
+    private void getFacilities(){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference fireDatabaseReference = firebaseDatabase.getReference();
+        fireDatabaseReference.child("facilities").child(station.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                facilities.clear();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    facilities.add(snapshot.getValue(String.class));
+                }
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
