@@ -33,25 +33,36 @@ import com.google.firebase.database.ValueEventListener;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import th.in.route.routeinth.adapter.viewholder.FacilityAdapter;
 import th.in.route.routeinth.app.DpiUtils;
+import th.in.route.routeinth.model.place.PlaceResponse;
+import th.in.route.routeinth.model.place.Results;
+import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.system.Station;
+import th.in.route.routeinth.services.GooglePlaceService;
 
 public class StationMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Location stationLocation;
     private Station station;
-    Unbinder unbinder;
-    BottomSheetBehavior behavior;
+    private Unbinder unbinder;
+    private BottomSheetBehavior behavior;
     private ArrayList<String> facilities;
     private FacilityAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
+    private List<Results> results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +75,13 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
         mapFragment.getMapAsync(this);
 
         facilities = new ArrayList<>();
+        results = new ArrayList<>();
 
         Intent intent = getIntent();
         stationLocation = intent.getParcelableExtra("location");
         station = Parcels.unwrap(intent.getParcelableExtra("station"));
         getFacilities();
+        getNearbyPlace();
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.facilityRecycler);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -116,4 +129,32 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
             }
         });
     }
+
+    private void getNearbyPlace() {
+        th.in.route.routeinth.model.place.Location location = new th.in.route.routeinth.model.place.Location();
+        location.setLat(stationLocation.getLatitude());
+        location.setLng(stationLocation.getLongitude());
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://maps.googleapis.com/maps/")
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        GooglePlaceService service = retrofit.create(GooglePlaceService.class);
+        service.getNearbyPlace(location)
+                .subscribeOn(Schedulers.newThread())
+                .doOnNext(new Action1<PlaceResponse>() {
+                    @Override
+                    public void call(PlaceResponse response) {
+                        results = response.getResults();
+                    }
+                })
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.e("DistanceUtils", throwable.getMessage());
+                    }
+                })
+                .subscribe();
+    }
+
 }
