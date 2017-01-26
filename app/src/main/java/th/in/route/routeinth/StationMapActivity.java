@@ -2,28 +2,19 @@ package th.in.route.routeinth;
 
 import android.content.Intent;
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,20 +26,18 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import th.in.route.routeinth.adapter.NearbyPlaceAdapter;
 import th.in.route.routeinth.adapter.viewholder.FacilityAdapter;
-import th.in.route.routeinth.app.DpiUtils;
 import th.in.route.routeinth.model.place.PlaceResponse;
 import th.in.route.routeinth.model.place.Results;
-import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.model.system.Station;
 import th.in.route.routeinth.services.GooglePlaceService;
 
@@ -61,8 +50,10 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
     private BottomSheetBehavior behavior;
     private ArrayList<String> facilities;
     private FacilityAdapter adapter;
+    private NearbyPlaceAdapter nearbyPlaceAdapter;
     private LinearLayoutManager linearLayoutManager;
-    private List<Results> results;
+    private LinearLayoutManager nearbyLinearLayoutManager;
+    private List<Results> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +66,7 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
         mapFragment.getMapAsync(this);
 
         facilities = new ArrayList<>();
-        results = new ArrayList<>();
+        places = new ArrayList<>();
 
         Intent intent = getIntent();
         stationLocation = intent.getParcelableExtra("location");
@@ -90,6 +81,15 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
         recyclerView.setHasFixedSize(true);
         adapter = new FacilityAdapter(getApplicationContext(), facilities);
         recyclerView.setAdapter(adapter);
+
+        RecyclerView nearbyRecycler = (RecyclerView) findViewById(R.id.nearbyRecycler);
+        nearbyLinearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        nearbyRecycler.setLayoutManager(nearbyLinearLayoutManager);
+        nearbyRecycler.setHasFixedSize(true);
+        nearbyPlaceAdapter = new NearbyPlaceAdapter(places, getApplicationContext());
+        nearbyRecycler.setAdapter(nearbyPlaceAdapter);
+
+
 
     }
 
@@ -142,10 +142,12 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
         GooglePlaceService service = retrofit.create(GooglePlaceService.class);
         service.getNearbyPlace(location)
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Action1<PlaceResponse>() {
                     @Override
                     public void call(PlaceResponse response) {
-                        results = response.getResults();
+                        places.addAll(response.getResults());
+                        nearbyPlaceAdapter.notifyDataSetChanged();
                     }
                 })
                 .doOnError(new Action1<Throwable>() {
