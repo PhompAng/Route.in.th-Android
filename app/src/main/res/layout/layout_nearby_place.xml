@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nearbyPlaceItem"
-    android:background="@color/black"
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:padding="16dp">
@@ -14,6 +13,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/nearbyName"
         android:textSize="16sp"
+
+
+        android:textColor="@color/textPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -21,8 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/nearbyAddress"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:layout_marginTop="8dp"
+        android:textColor="@color/textSecondary"
         app:layout_constraintTop_toBottomOf="@+id/nearbyName"
         app:layout_constraintLeft_toLeftOf="parent"/>
 </android.support.constraint.ConstraintLayout>

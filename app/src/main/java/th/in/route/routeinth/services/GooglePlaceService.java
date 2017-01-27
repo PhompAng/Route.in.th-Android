@@ -14,6 +14,6 @@ public interface GooglePlaceService {
     @GET("api/place/textsearch/json?key=AIzaSyCCItC0aFhqEKphc5NuOnhWEmK2BRLJnqM")
     Observable<PlaceResponse> getPlace(@Query("query") String query);
 
-    @GET("api/place/nearbysearch/json?radius=5000&key=AIzaSyCCItC0aFhqEKphc5NuOnhWEmK2BRLJnqM")
+    @GET("api/place/nearbysearch/json?radius=2000&type=department_store&keyword=  v &key=AIzaSyCCItC0aFhqEKphc5NuOnhWEmK2BRLJnqM")
     Observable<PlaceResponse> getNearbyPlace(@Query("location") Location location);
 }
