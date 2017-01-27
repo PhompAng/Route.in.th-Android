@@ -118,7 +118,6 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             if (!routeItem.getType().equals("between") && routeItem.getRoute().name.key.equals(nearestKey)) {
                 holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 holder.viewHeadingLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
-                holder.infoLabel.setVisibility(View.VISIBLE);
             } else if (routeItem.getType().equals("between")) {
                 boolean found = false;
                 for (Route route: routeItem.getRoutes()) {
@@ -130,9 +129,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                 if (found) {
                     holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 }
-                holder.infoLabel.setVisibility(View.GONE);
             } else {
-                holder.infoLabel.setVisibility(View.VISIBLE);
                 holder.stationNameLabel.setTextColor(ContextCompat.getColor(mContext, R.color.textSecondary));
                 holder.viewHeadingLabel.setTextColor(ContextCompat.getColor(mContext, R.color.textSecondary));
             }
@@ -148,11 +145,11 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.viewCodeLabel.setVisibility(View.VISIBLE);
             holder.viewHeadingLabel.setText("Heading:  " + routeItem.getRoute().heading.en);
             holder.viewHeadingLabel.setVisibility(View.VISIBLE);
-//            holder.infoLabel.setVisibility(View.VISIBLE);
+            holder.infoLabel.setVisibility(View.VISIBLE);
         } else {
             holder.viewCodeLabel.setVisibility(View.GONE);
             holder.viewHeadingLabel.setVisibility(View.GONE);
-//            holder.infoLabel.setVisibility(View.GONE);
+            holder.infoLabel.setVisibility(View.GONE);
         }
 
         //each listview
