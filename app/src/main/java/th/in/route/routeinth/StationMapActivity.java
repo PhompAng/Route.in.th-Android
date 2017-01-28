@@ -2,12 +2,11 @@ package th.in.route.routeinth;
 
 import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,72 +24,59 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import th.in.route.routeinth.adapter.NearbyPlaceAdapter;
 import th.in.route.routeinth.adapter.viewholder.FacilityAdapter;
-import th.in.route.routeinth.model.place.PlaceResponse;
-import th.in.route.routeinth.model.place.Results;
+import th.in.route.routeinth.app.FoursquareUtils;
+import th.in.route.routeinth.model.foursquare.MyCompactVenue;
 import th.in.route.routeinth.model.system.Station;
-import th.in.route.routeinth.services.GooglePlaceService;
 
 public class StationMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Location stationLocation;
     private Station station;
-    private Unbinder unbinder;
     private BottomSheetBehavior behavior;
     private ArrayList<String> facilities;
     private FacilityAdapter adapter;
     private NearbyPlaceAdapter nearbyPlaceAdapter;
-    private LinearLayoutManager linearLayoutManager;
-    private LinearLayoutManager nearbyLinearLayoutManager;
-    private List<Results> places;
+    private List<MyCompactVenue> mVenues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_station_map);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         facilities = new ArrayList<>();
-        places = new ArrayList<>();
+        mVenues = new ArrayList<>();
 
         Intent intent = getIntent();
         stationLocation = intent.getParcelableExtra("location");
         station = Parcels.unwrap(intent.getParcelableExtra("station"));
-        getFacilities();
-        getNearbyPlace();
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.facilityRecycler);
-        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         adapter = new FacilityAdapter(getApplicationContext(), facilities);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
         RecyclerView nearbyRecycler = (RecyclerView) findViewById(R.id.nearbyRecycler);
-        nearbyLinearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        nearbyRecycler.setLayoutManager(nearbyLinearLayoutManager);
+        LinearLayoutManager nearbyLinearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        nearbyPlaceAdapter = new NearbyPlaceAdapter(mVenues, getApplicationContext());
         nearbyRecycler.setHasFixedSize(true);
-        nearbyPlaceAdapter = new NearbyPlaceAdapter(places, getApplicationContext());
+        nearbyRecycler.setLayoutManager(nearbyLinearLayoutManager);
         nearbyRecycler.setAdapter(nearbyPlaceAdapter);
 
-
-
+        getFacilities();
+        getNearbyPlace();
     }
 
     @Override
@@ -131,32 +117,45 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     private void getNearbyPlace() {
-        th.in.route.routeinth.model.place.Location location = new th.in.route.routeinth.model.place.Location();
-        location.setLat(stationLocation.getLatitude());
-        location.setLng(stationLocation.getLongitude());
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://maps.googleapis.com/maps/")
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        GooglePlaceService service = retrofit.create(GooglePlaceService.class);
-        service.getNearbyPlace(location)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Action1<PlaceResponse>() {
-                    @Override
-                    public void call(PlaceResponse response) {
-                        places.addAll(response.getResults());
-                        nearbyPlaceAdapter.notifyDataSetChanged();
-                    }
-                })
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Log.e("DistanceUtils", throwable.getMessage());
-                    }
-                })
-                .subscribe();
+        String ll = String.valueOf(stationLocation.getLatitude()) + "," + String.valueOf(stationLocation.getLongitude());
+        try {
+            mVenues.clear();
+            mVenues.addAll(FoursquareUtils.venuesSearch(ll));
+            nearbyPlaceAdapter.notifyDataSetChanged();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+
+//    private void getNearbyPlace() {
+//        th.in.route.routeinth.model.place.Location location = new th.in.route.routeinth.model.place.Location();
+//        location.setLat(stationLocation.getLatitude());
+//        location.setLng(stationLocation.getLongitude());
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://maps.googleapis.com/maps/")
+//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//        GooglePlaceService service = retrofit.create(GooglePlaceService.class);
+//        service.getNearbyPlace(location)
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .doOnNext(new Action1<PlaceResponse>() {
+//                    @Override
+//                    public void call(PlaceResponse response) {
+//                        places.addAll(response.getResults());
+//                        nearbyPlaceAdapter.notifyDataSetChanged();
+//                    }
+//                })
+//                .doOnError(new Action1<Throwable>() {
+//                    @Override
+//                    public void call(Throwable throwable) {
+//                        Log.e("DistanceUtils", throwable.getMessage());
+//                    }
+//                })
+//                .subscribe();
+//    }
 
 }
