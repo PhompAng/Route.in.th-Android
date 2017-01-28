@@ -91,7 +91,7 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
 
     public void showStationDetail(){
 //        View v = LayoutInflater.from(StationMapActivity.this).inflate(R.layout.bottom_station_detail, null);
-        View mBottomSheetLayout = findViewById(R.id.bottom_statin_detail);
+        View mBottomSheetLayout = findViewById(R.id.bottom_station_detail);
         behavior = BottomSheetBehavior.from(mBottomSheetLayout);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 

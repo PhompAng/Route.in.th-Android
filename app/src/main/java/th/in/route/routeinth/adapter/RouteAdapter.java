@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
 
 import java.util.List;
+import java.util.Locale;
 
 import th.in.route.routeinth.R;
 import th.in.route.routeinth.ResultFragment;
@@ -27,8 +26,6 @@ import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.app.StationUtils;
 import th.in.route.routeinth.model.result.Route;
 import th.in.route.routeinth.model.view.RouteItem;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by Acer on 20/12/2559.
@@ -143,7 +140,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             GradientDrawable labelBg = (GradientDrawable) holder.viewCodeLabel.getBackground();
             labelBg.setColorFilter(ContextCompat.getColor(mContext, color), PorterDuff.Mode.ADD);
             holder.viewCodeLabel.setVisibility(View.VISIBLE);
-            holder.viewHeadingLabel.setText(mContext.getResources().getString(R.string.heading) +": "+ routeItem.getRoute().heading.en);
+            holder.viewHeadingLabel.setText(String.format(Locale.getDefault(), mContext.getResources().getString(R.string.heading), routeItem.getRoute().heading.en));
             holder.viewHeadingLabel.setVisibility(View.VISIBLE);
             holder.infoLabel.setVisibility(View.VISIBLE);
         } else {
@@ -184,7 +181,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                 holder.stationNameLabel.setTextSize(14);
                 break;
             case "between":
-                holder.stationNameLabel.setText(routeItem.getRoute().station_cnt + " " + mContext.getResources().getString(R.string.stations));
+//                holder.stationNameLabel.setText(routeItem.getRoute().station_cnt + " " + mContext.getResources().getString(R.string.stations));
+                holder.stationNameLabel.setText(mContext.getResources().getQuantityString(R.plurals.station, routeItem.getRoute().station_cnt, routeItem.getRoute().station_cnt));
                 holder.stationNameLabel.setTextSize(12);
                 holder.showIcon.setVisibility(View.VISIBLE);
 //                viewAllStationBg.setColorFilter(ContextCompat.getColor(mContext, R.color.gray), PorterDuff.Mode.ADD);

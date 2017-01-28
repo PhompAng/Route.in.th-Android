@@ -214,26 +214,27 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
 
         v.findViewById(R.id.swap).setVisibility(View.INVISIBLE);
         navigate.setVisibility(View.VISIBLE);
-        navigate.setText("Navigate");
+        navigate.setText(getString(R.string.navigate));
         setStation();
         resultTripFareTotal.setText(String.format(Locale.getDefault(), "%d", this.result.fare.total));
         if(this.result.fare.BTS != 0){
             btsStationCnt.setVisibility(View.VISIBLE);
             resultBTSFare.setVisibility(View.VISIBLE);
-            btsStationCnt.setText(String.format(Locale.getDefault(), "BTS %d "+ getResources().getString(R.string.stations) +" (%s)", this.stationCnt.get("bts"), this.result.card_type_bts.en));
-            resultBTSFare.setText(String.format(Locale.getDefault(), "%d " + getResources().getString(R.string.bath), this.result.fare.BTS));
+//            btsStationCnt.setText(String.format(Locale.getDefault(), "BTS %d "+ getResources().getString(R.string.stations) +" (%s)", this.stationCnt.get("bts"), this.result.card_type_bts.en));
+            btsStationCnt.setText(getResources().getQuantityString(R.plurals.station_count, this.stationCnt.get("bts"), "BTS", this.stationCnt.get("bts"), this.result.card_type_bts.en));
+            resultBTSFare.setText(String.format(Locale.getDefault(), getString(R.string.n_baht), this.result.fare.BTS));
         }
         if(this.result.fare.MRT != 0){
             mrtStationCnt.setVisibility(View.VISIBLE);
             resultMRTFare.setVisibility(View.VISIBLE);
-            mrtStationCnt.setText(String.format(Locale.getDefault(), "MRT %d " + getResources().getString(R.string.stations) + " (%s)", this.stationCnt.get("mrt"), this.result.card_type_mrt.en));
-            resultMRTFare.setText(String.format(Locale.getDefault(), "%d " + getResources().getString(R.string.bath),  this.result.fare.MRT));
+            mrtStationCnt.setText(getResources().getQuantityString(R.plurals.station_count, this.stationCnt.get("mrt"), "MRT", this.stationCnt.get("mrt"), this.result.card_type_mrt.en));
+            resultMRTFare.setText(String.format(Locale.getDefault(), getString(R.string.n_baht),  this.result.fare.MRT));
         }
         if(this.result.fare.ARL != 0){
             arlStationCnt.setVisibility(View.VISIBLE);
             resultARLFare.setVisibility(View.VISIBLE);
-            arlStationCnt.setText(String.format(Locale.getDefault(), "ARL %d " + getResources().getString(R.string.stations) + " (%s)", this.stationCnt.get("arl"), this.result.card_type_arl.en));
-            resultARLFare.setText(String.format(Locale.getDefault(), "%d " + getResources().getString(R.string.bath), this.result.fare.ARL));
+            arlStationCnt.setText(getResources().getQuantityString(R.plurals.station_count, this.stationCnt.get("arl"), "ARL", this.stationCnt.get("arl"), this.result.card_type_arl.en));
+            resultARLFare.setText(String.format(Locale.getDefault(), getString(R.string.n_baht), this.result.fare.ARL));
         }
 
         routeAdapter = new RouteAdapter(routeItems, getContext(), ResultFragment.this);
@@ -312,7 +313,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         FirebaseUtils.pay(uidUtils.getUID(), btsFare, mrtFare, arlFare);
 
         Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
-        pay.setText("Paid");
+        pay.setText(R.string.paid);
         pay.setEnabled(false);
     }
 

@@ -24,14 +24,21 @@
     <string name="stop_navigation">Stop Navigation</string>
     <string name="navigate">Navigate</string>
     <string name="reset">Reset</string>
-    <string name="heading">Heading</string>
-    <string name="stations">stations</string>
+    <string name="heading">Heading: %1$s</string>
+    <plurals name="station">
+        <item quantity="one">%1$d Station</item>
+        <item quantity="other">%1$d Stations</item>
+    </plurals>
+    <plurals name="station_count">
+        <item quantity="one">%1$s %2$d station (%3$s)</item>
+        <item quantity="other">%1$s %2$d stations (%3$s)</item>
+    </plurals>
     <string name="trip_fare">Trip Fare</string>
     <string name="bath">Bath</string>
 
     <string name="lang_dialog_title_list_preference">Select Language</string>
     <string name="fare_rate">Fare Rate</string>
-    <string name="n_baht">%d Baht</string>
+    <string name="n_baht">%1$d Baht</string>
     <string name="system_and_type_of_card">System and Type of Card</string>
     <string name="card_balance">Card Balance</string>
     <string name="trip_balance">Trip Balance</string>
@@ -46,4 +53,5 @@
     <string name="set_origin">Set Origin</string>
     <string name="set_destination">Set Destination</string>
     <string name="add_trip">Add Trip</string>
+    <string name="paid">Paid</string>
 </resources>
