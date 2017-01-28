@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="preference_lang"
+        android:title="Language"
+        android:entries="@array/lang_array"
+        android:entryValues="@array/lang_array_val"
+        android:dialogTitle="@string/lang_dialog_title_list_preference"
+        android:defaultValue="en" />
+
+    <SwitchPreference
+        android:key="preference_accessibility"
+        android:title="Show Accessibility"
+        android:summary=""
+        android:defaultValue="false" />
+
+</PreferenceScreen>

@@ -30,12 +30,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddCardActivity" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="1cd4b4143f706704ff666b279bb801789ec5b753" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="1cd4b4143f706704ff666b279bb801789ec5b753" />
+
         <activity android:name=".EditCardActivity" />
 
         <service
@@ -54,12 +56,14 @@
         <service
             android:name=".services.LocationReceiver"
             android:enabled="true" />
-
-        <service android:name=".services.CardService"
+        <service
+            android:name=".services.CardService"
             android:enabled="true"
             android:stopWithTask="true" />
 
-        <activity android:name=".StationMapActivity"></activity>
+        <activity android:name=".StationMapActivity" />
+        <activity android:name=".SettingActivity"
+            android:theme="@style/AppTheme.PreferenceFixTheme"/>
     </application>
 
 </manifest>

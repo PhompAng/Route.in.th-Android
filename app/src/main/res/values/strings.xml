@@ -26,4 +26,6 @@
     <string name="stop_navigation">Stop Navigation</string>
     <string name="navigate">Navigate</string>
     <string name="reset">Reset</string>
+
+    <string name="lang_dialog_title_list_preference">Select Language</string>
 </resources>

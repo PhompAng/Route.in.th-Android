@@ -4,6 +4,7 @@ package th.in.route.routeinth;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -244,7 +245,8 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_setting:
-                showFareSetting();
+                startActivity(new Intent(getActivity(), SettingActivity.class));
+//                showFareSetting();
                 return true;
         }
         return super.onOptionsItemSelected(item);
