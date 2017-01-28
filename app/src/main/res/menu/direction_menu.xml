@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_fare"
+        android:title="@string/fare_rate"
+        android:icon="@drawable/ic_payment_white_24dp"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_setting"
         android:enabled="true"
         android:icon="@drawable/ic_settings_white_24dp"

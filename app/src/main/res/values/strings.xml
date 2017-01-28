@@ -28,4 +28,5 @@
     <string name="reset">Reset</string>
 
     <string name="lang_dialog_title_list_preference">Select Language</string>
+    <string name="fare_rate">Fare Rate</string>
 </resources>

@@ -244,9 +244,11 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_fare:
+                showFareSetting();
+                return true;
             case R.id.action_setting:
                 startActivity(new Intent(getActivity(), SettingActivity.class));
-//                showFareSetting();
                 return true;
         }
         return super.onOptionsItemSelected(item);
