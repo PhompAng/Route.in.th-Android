@@ -1,14 +1,16 @@
 package th.in.route.routeinth.model.system;
 
+import org.parceler.Parcel;
+
 /**
  * Created by phompang on 12/22/2016 AD.
  */
-
+@Parcel
 public class Station {
-    private String th;
-    private String en;
-    private String code;
-    private String key;
+    String th;
+    String en;
+    String code;
+    String key;
 
     public Station() {
     }

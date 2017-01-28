@@ -99,4 +99,12 @@ public class DistanceUtils {
 
         return out;
     }
+
+    public Location getLocationFromKey(String key) {
+        return locationMap.get(key);
+    }
+
+    public Map<String, Location> getLocationMap(){
+        return this.locationMap;
+    }
 }

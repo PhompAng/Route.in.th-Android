@@ -1,6 +1,8 @@
 package th.in.route.routeinth;
 
 
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,14 +17,18 @@ import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import th.in.route.routeinth.adapter.StationAdapter;
 import th.in.route.routeinth.adapter.viewholder.StationViewHolder;
+import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.app.StationUtils;
 import th.in.route.routeinth.model.system.RailSystem;
 import th.in.route.routeinth.model.system.Station;
@@ -56,10 +62,13 @@ public class InformationFragment extends Fragment
             Log.e(TAG, e.getMessage());
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+
+        locationMap = DistanceUtils.getInstance().getLocationMap();
     }
 
     private Unbinder unbinder;
     private List<RailSystem> systems = new ArrayList<>();
+    private Map<String, Location> locationMap;
     private StationAdapter mStationAdapter;
     @BindView(R.id.floating_search_view)
     FloatingSearchView mSearchView;
@@ -95,6 +104,10 @@ public class InformationFragment extends Fragment
     @Override
     public void onClick(int parentPosition, int childPosition) {
         Station station = mStationAdapter.getParentList().get(parentPosition).getChildList().get(childPosition);
+        Intent intent = new Intent(getContext(), StationMapActivity.class);
+        intent.putExtra("station", Parcels.wrap(station));
+        intent.putExtra("location", locationMap.get(station.getKey()));
+        startActivity(intent);
     }
 
     @Override

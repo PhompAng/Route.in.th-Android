@@ -37,20 +37,29 @@
             android:name="io.fabric.ApiKey"
             android:value="1cd4b4143f706704ff666b279bb801789ec5b753" />
         <activity android:name=".EditCardActivity" />
-        <service android:name=".services.BackgroundLocationService"
+
+        <service
+            android:name=".services.BackgroundLocationService"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
-                <data android:scheme="wear" android:host="*" android:pathPrefix="/request-network" />
+
+                <data
+                    android:host="*"
+                    android:pathPrefix="/request-network"
+                    android:scheme="wear" />
             </intent-filter>
         </service>
-        <service android:name=".services.LocationReceiver"
+        <service
+            android:name=".services.LocationReceiver"
             android:enabled="true" />
 
         <service android:name=".services.CardService"
             android:enabled="true"
             android:stopWithTask="true" />
+
+        <activity android:name=".StationMapActivity"></activity>
     </application>
 
 </manifest>
