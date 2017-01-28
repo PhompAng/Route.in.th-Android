@@ -33,7 +33,7 @@
                     android:id="@+id/number"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Card Number"
+                    android:hint="@string/card_number"
                     android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
 
@@ -49,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="number"
-                    android:hint="Card Balance"/>
+                    android:hint="@string/card_balance"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -64,7 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="number"
-                    android:hint="Trip Balance"/>
+                    android:hint="@string/trip_balance"/>
             </android.support.design.widget.TextInputLayout>
 
             <Button
@@ -74,7 +74,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/balance_holder"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:text="Submit"
+                android:text="@string/submit"
                 android:layout_marginTop="16dp" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>

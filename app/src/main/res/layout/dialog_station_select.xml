@@ -8,11 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:text="Set Origin"/>
+        android:text="@string/set_origin"/>
     <Button
         android:id="@+id/destination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:text="Set Destination"/>
+        android:text="@string/set_destination"/>
 </LinearLayout>

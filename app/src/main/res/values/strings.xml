@@ -7,8 +7,6 @@
     <string name="information">Information</string>
     <string name="announcement">Announcement</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="select_destination_station">Select Destination Station</string>
     <string name="select_origin_station">Select Origin Station</string>
     <string name="landmark">Landmark</string>
@@ -33,4 +31,19 @@
 
     <string name="lang_dialog_title_list_preference">Select Language</string>
     <string name="fare_rate">Fare Rate</string>
+    <string name="n_baht">%d Baht</string>
+    <string name="system_and_type_of_card">System and Type of Card</string>
+    <string name="card_balance">Card Balance</string>
+    <string name="trip_balance">Trip Balance</string>
+    <string name="submit">Submit</string>
+    <string name="card_number">Card Number</string>
+    <string name="card_type_setting">Card Type Setting</string>
+    <string name="arl_fare_rate">ARL Fare Rate</string>
+    <string name="bts_fare_rate">BTS Fare Rate</string>
+    <string name="mrt_fare_rate">MRT Fare Rate</string>
+    <string name="station_facilities">Station Facilities</string>
+    <string name="pay">Pay</string>
+    <string name="set_origin">Set Origin</string>
+    <string name="set_destination">Set Destination</string>
+    <string name="add_trip">Add Trip</string>
 </resources>

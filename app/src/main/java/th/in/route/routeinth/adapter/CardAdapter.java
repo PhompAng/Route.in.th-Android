@@ -1,13 +1,8 @@
 package th.in.route.routeinth.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +18,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import th.in.route.routeinth.R;
-import th.in.route.routeinth.app.FirebaseUtils;
-import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.view.Card;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by phompang on 1/3/2017 AD.
@@ -59,7 +50,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         Glide.with(context).load(resourceId).fitCenter().centerCrop().into(holder.img);
         holder.name.setText(card.getName());
         holder.number.setText(card.getNumber());
-        holder.balance.setText(String.format(Locale.getDefault(), "%d Baht", card.getBalance()));
+        holder.balance.setText(String.format(Locale.getDefault(), context.getString(R.string.n_baht), card.getBalance()));
     }
 
     @Override

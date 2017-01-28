@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nearbyPlaceItem"
     android:layout_width="match_parent"
     android:layout_height="80dp"
@@ -13,8 +12,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/nearbyName"
         android:textSize="16sp"
-
-
         android:textColor="@color/textPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />

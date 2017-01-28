@@ -14,7 +14,7 @@
         class="com.google.android.gms.maps.SupportMapFragment"/>
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/bottom_statin_detail"
+        android:id="@+id/bottom_station_detail"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:background="@color/cardview_light_background"
