@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Route.in.th</string>
+    <string name="origin">สถานีต้นทาง</string>
+    <string name="destination">สถานีปลายทาง</string>
+    <string name="direction">เส้นทาง</string>
+    <string name="card">บัตร</string>
+    <string name="information">ข้อมูล</string>
+    <string name="announcement">ประกาศ</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="select_destination_station">เลือกสถานีปลายทาง</string>
+    <string name="select_origin_station">เลือกสถานีต้นทาง</string>
+    <string name="landmark">Landmark</string>
+    <string name="calculate">คำนวณเส้นทาง</string>
+    <string name="action_add">เพิ่ม</string>
+    <string name="required">Required</string>
+    <string name="normal">ปกติ</string>
+    <string name="adult">บุคคลทั่วไป</string>
+    <string name="student">นักเรียน</string>
+    <string name="senior">ผู้สูงอายุ</string>
+    <string name="elder">ผู้สูงอายุ</string>
+    <string name="child">เด็ก</string>
+    <string name="top_up">เติมเงิน</string>
+    <string name="navigating">การนำทาง</string>
+    <string name="stop_navigation">หยุดนำทาง</string>
+    <string name="navigate">นำทาง</string>
+    <string name="reset">ตั้งค่าเริ่มต้น</string>
+    <string name="heading">สถานีปลายทาง</string>
+    <string name="stations">สถานี</string>
+    <string name="trip_fare">ค่าโดยสาร</string>
+    <string name="bath">บาท</string>
+
+    <string name="lang_dialog_title_list_preference">เลือกภาษา</string>
+    <string name="fare_rate">อัตราค่าโดยสาร</string>
+</resources>
