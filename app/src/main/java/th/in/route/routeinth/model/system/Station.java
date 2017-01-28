@@ -7,10 +7,10 @@ import org.parceler.Parcel;
  */
 @Parcel
 public class Station {
-    private String th;
-    private String en;
-    private String code;
-    private String key;
+    String th;
+    String en;
+    String code;
+    String key;
 
     public Station() {
     }
