@@ -26,6 +26,10 @@
     <string name="stop_navigation">Stop Navigation</string>
     <string name="navigate">Navigate</string>
     <string name="reset">Reset</string>
+    <string name="heading">Heading</string>
+    <string name="stations">stations</string>
+    <string name="trip_fare">Trip Fare</string>
+    <string name="bath">Bath</string>
 
     <string name="lang_dialog_title_list_preference">Select Language</string>
     <string name="fare_rate">Fare Rate</string>

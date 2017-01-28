@@ -220,20 +220,20 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         if(this.result.fare.BTS != 0){
             btsStationCnt.setVisibility(View.VISIBLE);
             resultBTSFare.setVisibility(View.VISIBLE);
-            btsStationCnt.setText(String.format(Locale.getDefault(), "BTS %d Station (%s)", this.stationCnt.get("bts"), this.result.card_type_bts.en));
-            resultBTSFare.setText(String.format(Locale.getDefault(), "%d Baht", this.result.fare.BTS));
+            btsStationCnt.setText(String.format(Locale.getDefault(), "BTS %d "+ getResources().getString(R.string.stations) +" (%s)", this.stationCnt.get("bts"), this.result.card_type_bts.en));
+            resultBTSFare.setText(String.format(Locale.getDefault(), "%d " + getResources().getString(R.string.bath), this.result.fare.BTS));
         }
         if(this.result.fare.MRT != 0){
             mrtStationCnt.setVisibility(View.VISIBLE);
             resultMRTFare.setVisibility(View.VISIBLE);
-            mrtStationCnt.setText(String.format(Locale.getDefault(), "MRT %d Station (%s)", this.stationCnt.get("mrt"), this.result.card_type_mrt.en));
-            resultMRTFare.setText(String.format(Locale.getDefault(), "%d Baht",  this.result.fare.MRT));
+            mrtStationCnt.setText(String.format(Locale.getDefault(), "MRT %d " + getResources().getString(R.string.stations) + " (%s)", this.stationCnt.get("mrt"), this.result.card_type_mrt.en));
+            resultMRTFare.setText(String.format(Locale.getDefault(), "%d " + getResources().getString(R.string.bath),  this.result.fare.MRT));
         }
         if(this.result.fare.ARL != 0){
             arlStationCnt.setVisibility(View.VISIBLE);
             resultARLFare.setVisibility(View.VISIBLE);
-            arlStationCnt.setText(String.format(Locale.getDefault(), "ARL %d Station (%s)", this.stationCnt.get("arl"), this.result.card_type_arl.en));
-            resultARLFare.setText(String.format(Locale.getDefault(), "%d Baht", this.result.fare.ARL));
+            arlStationCnt.setText(String.format(Locale.getDefault(), "ARL %d " + getResources().getString(R.string.stations) + " (%s)", this.stationCnt.get("arl"), this.result.card_type_arl.en));
+            resultARLFare.setText(String.format(Locale.getDefault(), "%d " + getResources().getString(R.string.bath), this.result.fare.ARL));
         }
 
         routeAdapter = new RouteAdapter(routeItems, getContext(), ResultFragment.this);
