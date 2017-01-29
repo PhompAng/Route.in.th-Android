@@ -26,12 +26,12 @@
     <string name="reset">ตั้งค่าเริ่มต้น</string>
     <string name="heading">สถานีปลายทาง: %1$s</string>
     <plurals name="station">
-        <item quantity="one">%1$d Station</item>
-        <item quantity="other">%1$d Stations</item>
+        <item quantity="one">%1$d สถานี</item>
+        <item quantity="other">%1$d สถานี</item>
     </plurals>
     <plurals name="station_count">
-        <item quantity="one">%1$s %2$d station (%3$s)</item>
-        <item quantity="other">%1$s %2$d stations (%3$s)</item>
+        <item quantity="one">%1$s %2$d สถานี (%3$s)</item>
+        <item quantity="other">%1$s %2$d สถานี (%3$s)</item>
     </plurals>
     <string name="trip_fare">ค่าโดยสาร</string>
     <string name="bath">บาท</string>
