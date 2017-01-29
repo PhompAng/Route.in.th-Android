@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 
 import butterknife.ButterKnife;
 import th.in.route.routeinth.adapter.NearbyPlaceAdapter;
-import th.in.route.routeinth.adapter.viewholder.FacilityAdapter;
+import th.in.route.routeinth.adapter.FacilityAdapter;
 import th.in.route.routeinth.app.FoursquareUtils;
 import th.in.route.routeinth.model.foursquare.MyCompactVenue;
 import th.in.route.routeinth.model.system.Station;

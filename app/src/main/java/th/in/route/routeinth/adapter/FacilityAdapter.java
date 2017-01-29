@@ -34,7 +34,7 @@ public class FacilityAdapter extends RecyclerView.Adapter<FacilityAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Resources resources = mContext.getResources();
-        final int resourceId = resources.getIdentifier("ic_" + facilities.get(position), "drawable", mContext.getPackageName());
+        final int resourceId = resources.getIdentifier(facilities.get(position), "drawable", mContext.getPackageName());
         holder.image.setImageResource(resourceId);
     }
 
