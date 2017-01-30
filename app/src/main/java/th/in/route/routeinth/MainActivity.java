@@ -12,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -20,14 +19,10 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -68,6 +63,7 @@ public class MainActivity extends AppCompatActivity
 
         FirebaseUtils.regisUser(getApplicationContext());
         DistanceUtils.getInstance();
+        FirebaseMessaging.getInstance().subscribeToTopic("service_alerts");
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient
                     .Builder(this)
