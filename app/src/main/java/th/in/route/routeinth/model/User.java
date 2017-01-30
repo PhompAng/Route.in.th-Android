@@ -13,6 +13,7 @@ import th.in.route.routeinth.model.view.Card;
 
 public class User {
     private String uid;
+    private String token;
     private Map<String, Card> cardMap;
 
     public String getUid() {
@@ -42,5 +43,13 @@ public class User {
         Set<String> addedCard = cardMap.keySet();
         allCard.removeAll(addedCard);
         return allCard;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
