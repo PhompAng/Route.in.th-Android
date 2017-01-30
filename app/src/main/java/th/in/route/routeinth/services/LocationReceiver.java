@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -64,23 +66,27 @@ public class LocationReceiver extends IntentService {
                 return;
             }
             String stationName = station.getEn();
-            buildNotification(getString(R.string.navigating), "Current Station: " + stationName, true, notifyID);
+            buildNotification(getString(R.string.navigating), "Current Station: " + stationName, true, notifyID, false);
 
             String changeText = needChangeSystem(station.getKey());
             if (changeText != null) {
                 //TODO change title
-                buildNotification("Route.in.th", changeText, false, 123);
+                buildNotification("Route.in.th", changeText, false, 123, changeText.equals("End of route"));
             }
         }
     }
 
-    private void buildNotification(String title, String text, boolean onGoing, int id) {
+    private void buildNotification(String title, String text, boolean onGoing, int id, boolean isSound) {
         mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentTitle(title)
                 .setContentText(text)
                 .setSmallIcon(R.drawable.ic_directions_subway_black_24dp)
                 .setOngoing(onGoing);
 
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        if (isSound) {
+            mBuilder.setSound(defaultSoundUri);
+        }
         if (onGoing) {
             mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
         }

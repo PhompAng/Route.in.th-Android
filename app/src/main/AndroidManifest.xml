@@ -21,6 +21,9 @@
         <meta-data
             android:name="th.in.route.routeinth.app.GlideConfiguration"
             android:value="GlideModule" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_announcement_black_24dp" />
 
         <activity android:name=".MainActivity"
             android:configChanges="locale|layoutDirection">
@@ -63,6 +66,21 @@
             android:name=".services.CardService"
             android:enabled="true"
             android:stopWithTask="true" />
+
+        <service
+            android:name=".services.MyFirebaseInstanceIDService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".services.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
 
         <activity android:name=".StationMapActivity"
             android:configChanges="locale|layoutDirection" />

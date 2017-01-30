@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity
 
         FirebaseUtils.regisUser(getApplicationContext());
         DistanceUtils.getInstance();
+        FirebaseMessaging.getInstance().subscribeToTopic("service_alerts");
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient
                     .Builder(this)
