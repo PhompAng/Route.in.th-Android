@@ -38,7 +38,7 @@ public class StationViewHolder extends ChildViewHolder implements View.OnClickLi
     @Override
     public void onClick(View view) {
         if (listener != null) {
-            listener.onClick(getParentAdapterPosition() ,getChildAdapterPosition());
+            listener.onClick(getParentAdapterPosition(), getChildAdapterPosition());
         }
     }
 }

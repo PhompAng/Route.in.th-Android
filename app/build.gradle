@@ -37,9 +37,16 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile(group: 'me.atlis', name: 'foursquare-api', version: '1.0.6') {
+        exclude group: 'org.json'
+    }
+    compile('com.twitter.sdk.android:twitter:2.3.1@aar') {
+        transitive = true;
+    }
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
     compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.takisoft.fix:preference-v7:25.1.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile 'com.google.android.gms:play-services-places:10.0.1'
     compile 'com.google.android.gms:play-services-location:10.0.1'
@@ -60,12 +67,6 @@ dependencies {
     compile 'com.ezhome:rxfirebase:2.0.0-alpha1'
     compile 'com.github.arimorty:floatingsearchview:2.0.3'
     compile 'org.parceler:parceler-api:1.1.6'
-    compile (group: 'me.atlis', name: 'foursquare-api', version: '1.0.6') {
-        exclude group: 'org.json'
-    }
-    compile('com.twitter.sdk.android:twitter:2.3.1@aar') {
-        transitive = true;
-    }
     testCompile 'junit:junit:4.12'
     apt 'org.parceler:parceler:1.1.6'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'

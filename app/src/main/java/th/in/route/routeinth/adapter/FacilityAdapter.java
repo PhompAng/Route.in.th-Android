@@ -1,15 +1,12 @@
-package th.in.route.routeinth.adapter.viewholder;
+package th.in.route.routeinth.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -37,7 +34,7 @@ public class FacilityAdapter extends RecyclerView.Adapter<FacilityAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Resources resources = mContext.getResources();
-        final int resourceId = resources.getIdentifier("ic_" + facilities.get(position), "drawable", mContext.getPackageName());
+        final int resourceId = resources.getIdentifier(facilities.get(position), "drawable", mContext.getPackageName());
         holder.image.setImageResource(resourceId);
     }
 

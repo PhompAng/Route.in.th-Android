@@ -83,7 +83,7 @@
             android:id="@+id/add_trip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Trip"
+            android:text="@string/add_trip"
             style="@style/Widget.AppCompat.Button.Borderless"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/add_balance"

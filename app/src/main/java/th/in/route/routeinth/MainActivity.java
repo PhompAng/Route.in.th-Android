@@ -1,6 +1,9 @@
 package th.in.route.routeinth;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +36,7 @@ import io.fabric.sdk.android.Fabric;
 import th.in.route.routeinth.DirectionFragment.OnCalculate;
 import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.app.FirebaseUtils;
+import th.in.route.routeinth.app.LocaleHelper;
 import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.result.Result;
 import th.in.route.routeinth.services.CardService;
@@ -53,6 +58,17 @@ public class MainActivity extends AppCompatActivity
     private GoogleApiClient mGoogleApiClient;
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        recreate();
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
@@ -63,7 +79,12 @@ public class MainActivity extends AppCompatActivity
 
         FirebaseUtils.regisUser(getApplicationContext());
         DistanceUtils.getInstance();
-        FirebaseMessaging.getInstance().subscribeToTopic("service_alerts");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (preferences.getBoolean("preference_noti", true)) {
+            FirebaseMessaging.getInstance().subscribeToTopic("service_alerts");
+        } else {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("service_alerts");
+        }
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient
                     .Builder(this)

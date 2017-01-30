@@ -1,5 +1,7 @@
 package th.in.route.routeinth;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +28,7 @@ import butterknife.OnItemSelected;
 import th.in.route.routeinth.adapter.MyArrayAdapter;
 import th.in.route.routeinth.app.DatabaseUtils;
 import th.in.route.routeinth.app.FirebaseUtils;
+import th.in.route.routeinth.app.LocaleHelper;
 import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.User;
 import th.in.route.routeinth.model.view.Card;
@@ -62,14 +65,14 @@ public class AddCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_card);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        setTitle("Add Card");
+        setTitle(getString(R.string.add_card));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         systemSet = new HashSet<>();
         typeList = new ArrayList<>();
-        typeList.add("Adult");
-        typeList.add("Student");
-        typeList.add("Senior");
+        typeList.add(getString(R.string.adult));
+        typeList.add(getString(R.string.student));
+        typeList.add(getString(R.string.senior));
         systemAdapter = new MyArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new ArrayList<>(systemSet));
         systemAdapter.setNotifyOnChange(true);
         typeAdapter = new MyArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, typeList);
@@ -108,13 +111,13 @@ public class AddCardActivity extends AppCompatActivity {
     public void systemChange() {
         typeAdapter.clear();
         typeList.clear();
-        typeList.add("Adult");
-        typeList.add("Student");
+        typeList.add(getString(R.string.adult));
+        typeList.add(getString(R.string.student));
         if (systemSpinner.getSelectedItem().equals("MRT")) {
-            typeList.add("Elder");
-            typeList.add("Child");
+            typeList.add(getString(R.string.elder));
+            typeList.add(getString(R.string.child));
         } else {
-            typeList.add("Senior");
+            typeList.add(getString(R.string.senior));
         }
         typeAdapter.notifyDataSetChanged();
     }
@@ -141,7 +144,7 @@ public class AddCardActivity extends AppCompatActivity {
         if (validator.validate(balance) == null) {
             Integer balanceValidate = (new BalanceRule()).validate(balance, (String) systemSpinner.getSelectedItem());
             if (balanceValidate != null) {
-                balance.setError(String.format(Locale.getDefault(), "Balance should not exceed %d", balanceValidate));
+                balance.setError(String.format(Locale.getDefault(), getString(R.string.balance_exceed), balanceValidate));
                 cancel = true;
                 focusView = balance;
             }
@@ -169,5 +172,16 @@ public class AddCardActivity extends AppCompatActivity {
 
         FirebaseUtils.addCard(uidUtils.getUID(), c);
         finish();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        recreate();
+        super.onConfigurationChanged(newConfig);
     }
 }

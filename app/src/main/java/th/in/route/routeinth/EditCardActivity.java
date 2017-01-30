@@ -1,36 +1,30 @@
 package th.in.route.routeinth;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Spinner;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemSelected;
-import th.in.route.routeinth.adapter.MyArrayAdapter;
 import th.in.route.routeinth.app.DatabaseUtils;
 import th.in.route.routeinth.app.FirebaseUtils;
+import th.in.route.routeinth.app.LocaleHelper;
 import th.in.route.routeinth.app.UIDUtils;
-import th.in.route.routeinth.model.User;
 import th.in.route.routeinth.model.view.Card;
 import th.in.route.routeinth.view.validator.BalanceRule;
 import th.in.route.routeinth.view.validator.EditTextValidate;
@@ -61,13 +55,13 @@ public class EditCardActivity extends AppCompatActivity {
         card = Parcels.unwrap(intent.getParcelableExtra("card"));
 
         setSupportActionBar(toolbar);
-        setTitle("Editing " +  card.getSystem() + " Card");
+        setTitle(String.format(Locale.getDefault(), getString(R.string.editing_card), card.getSystem()));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         reference = DatabaseUtils.getDatabase().getReference();
         uidUtils = new UIDUtils(this);
 
         number.setText(card.getNumber());
-        balance.setText(Integer.toString(card.getBalance()));
+        balance.setText(String.format(Locale.getDefault(), "%d", card.getBalance()));
     }
 
     @Override
@@ -103,7 +97,7 @@ public class EditCardActivity extends AppCompatActivity {
         if (validator.validate(balance) == null) {
             Integer balanceValidate = (new BalanceRule()).validate(balance, card.getSystem());
             if (balanceValidate != null) {
-                balance.setError(String.format(Locale.getDefault(), "Balance should not exceed %d", balanceValidate));
+                balance.setError(String.format(Locale.getDefault(), getString(R.string.balance_exceed), balanceValidate));
                 cancel = true;
                 focusView = balance;
             }
@@ -125,5 +119,16 @@ public class EditCardActivity extends AppCompatActivity {
 
         FirebaseUtils.updateCard(uidUtils.getUID(), card);
         finish();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        recreate();
+        super.onConfigurationChanged(newConfig);
     }
 }

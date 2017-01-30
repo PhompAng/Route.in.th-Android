@@ -12,4 +12,12 @@
         <item name="android:textColorSecondary">@color/textSecondary</item>
     </style>
 
+    <style name="AppTheme.PreferenceFixTheme" parent="PreferenceFixTheme.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textPrimary</item>
+        <item name="android:textColorSecondary">@color/textSecondary</item>
+    </style>
+
 </resources>

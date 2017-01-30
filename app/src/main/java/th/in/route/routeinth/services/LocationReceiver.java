@@ -4,10 +4,12 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gms.location.LocationResult;
@@ -84,7 +86,8 @@ public class LocationReceiver extends IntentService {
                 .setOngoing(onGoing);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        if (isSound) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (isSound && preferences.getBoolean("preference_sound", true)) {
             mBuilder.setSound(defaultSoundUri);
         }
         if (onGoing) {
