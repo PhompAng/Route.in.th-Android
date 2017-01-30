@@ -16,6 +16,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
 import org.parceler.Parcels;
 
 import java.util.List;
@@ -46,6 +53,25 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         this.mContext = mContext;
         this.fragment = resultFragment;
         isNavigate = false;
+    }
+
+    private void hasFacilities(final ImageView holder, String key) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("facilities").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<List<String>> indicator = new GenericTypeIndicator<List<String>>(){};
+                List<String> facilities = dataSnapshot.getValue(indicator);
+                if (facilities.contains("elevator") || facilities.contains("ramp")) {
+                    holder.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void setNearestKey(String nearestKey) {
@@ -106,11 +132,11 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 Log.d("type", routeItem.getType());
-                if(routeItem.getType().equals("station")){
+                if (routeItem.getType().equals("station")) {
                     fragment.setIsShow(routeItem.getSystem(), false);
-                }else if(routeItem.getType().equals("between")){
+                } else if(routeItem.getType().equals("between")) {
                     fragment.setIsShow(routeItem.getSystem(), true);
-                }else {
+                } else {
                     Intent intent = new Intent(mContext, StationMapActivity.class);
                     intent.putExtra("station", Parcels.wrap(StationUtils.getInstance().getStationFromKey(routeItem.getRoute().name.key)));
                     intent.putExtra("location", DistanceUtils.getInstance().getLocationFromKey(routeItem.getRoute().name.key));
@@ -153,6 +179,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
 //        GradientDrawable viewAllStationBg = (GradientDrawable) holder.viewAllStationLabel.getBackground();
 
+        holder.infoLabel.setVisibility(View.GONE);
         //set code label and heading label
         if (!routeItem.getType().equals("between")) {
             holder.viewCodeLabel.setText(routeItem.getRoute().name.code);
@@ -161,11 +188,10 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.viewCodeLabel.setVisibility(View.VISIBLE);
             holder.viewHeadingLabel.setText(String.format(Locale.getDefault(), mContext.getResources().getString(R.string.heading), headingName));
             holder.viewHeadingLabel.setVisibility(View.VISIBLE);
-            holder.infoLabel.setVisibility(View.VISIBLE);
+            hasFacilities(holder.infoLabel, routeItem.getRoute().name.key);
         } else {
             holder.viewCodeLabel.setVisibility(View.GONE);
             holder.viewHeadingLabel.setVisibility(View.GONE);
-            holder.infoLabel.setVisibility(View.GONE);
         }
 
         //each listview
