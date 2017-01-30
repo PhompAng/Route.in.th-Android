@@ -14,4 +14,10 @@
         android:summary=""
         android:defaultValue="false" />
 
+    <SwitchPreference
+        android:key="preference_sound"
+        android:title="Play notification sound"
+        android:summary=""
+        android:defaultValue="true" />
+
 </PreferenceScreen>
