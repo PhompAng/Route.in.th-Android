@@ -1,6 +1,8 @@
 package th.in.route.routeinth;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
@@ -27,9 +29,10 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import butterknife.ButterKnife;
-import th.in.route.routeinth.adapter.NearbyPlaceAdapter;
 import th.in.route.routeinth.adapter.FacilityAdapter;
+import th.in.route.routeinth.adapter.NearbyPlaceAdapter;
 import th.in.route.routeinth.app.FoursquareUtils;
+import th.in.route.routeinth.app.LocaleHelper;
 import th.in.route.routeinth.model.foursquare.MyCompactVenue;
 import th.in.route.routeinth.model.system.Station;
 
@@ -127,6 +130,17 @@ public class StationMapActivity extends AppCompatActivity implements OnMapReadyC
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        recreate();
+        super.onConfigurationChanged(newConfig);
     }
 
 //    private void getNearbyPlace() {

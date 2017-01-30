@@ -1,5 +1,7 @@
 package th.in.route.routeinth;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +28,7 @@ import butterknife.OnItemSelected;
 import th.in.route.routeinth.adapter.MyArrayAdapter;
 import th.in.route.routeinth.app.DatabaseUtils;
 import th.in.route.routeinth.app.FirebaseUtils;
+import th.in.route.routeinth.app.LocaleHelper;
 import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.User;
 import th.in.route.routeinth.model.view.Card;
@@ -169,5 +172,16 @@ public class AddCardActivity extends AppCompatActivity {
 
         FirebaseUtils.addCard(uidUtils.getUID(), c);
         finish();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        recreate();
+        super.onConfigurationChanged(newConfig);
     }
 }

@@ -1,5 +1,7 @@
 package th.in.route.routeinth;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +9,8 @@ import android.support.v7.preference.PreferenceScreen;
 import android.support.v7.widget.Toolbar;
 
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
+
+import th.in.route.routeinth.app.LocaleHelper;
 
 public class SettingActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
 
@@ -42,5 +46,16 @@ public class SettingActivity extends AppCompatActivity implements PreferenceFrag
         ft.commit();
 
         return true;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        recreate();
+        super.onConfigurationChanged(newConfig);
     }
 }

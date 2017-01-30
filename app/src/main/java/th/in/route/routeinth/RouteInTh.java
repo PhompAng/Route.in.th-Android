@@ -1,7 +1,9 @@
 package th.in.route.routeinth;
 
 import android.app.Application;
+import android.content.Context;
 
+import th.in.route.routeinth.app.LocaleHelper;
 import th.in.route.routeinth.app.StationUtils;
 
 /**
@@ -18,5 +20,10 @@ public class RouteInTh extends Application {
 
     public static RouteInTh getInstance() {
         return instance;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
     }
 }
