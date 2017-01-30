@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -81,8 +83,10 @@ public class LocationReceiver extends IntentService {
                 .setSmallIcon(R.drawable.ic_directions_subway_black_24dp)
                 .setOngoing(onGoing);
 
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         if (onGoing) {
             mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+            mBuilder.setSound(defaultSoundUri);
         }
         mNotificationManager.notify(
                 id,
