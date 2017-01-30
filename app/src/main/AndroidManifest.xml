@@ -21,6 +21,9 @@
         <meta-data
             android:name="th.in.route.routeinth.app.GlideConfiguration"
             android:value="GlideModule" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_announcement_black_24dp" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
