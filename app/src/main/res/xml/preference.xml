@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
         android:key="preference_lang"
         android:title="Language"
@@ -12,19 +11,19 @@
     <SwitchPreference
         android:key="preference_accessibility"
         android:title="Show Accessibility"
-        android:summary=""
+        android:summary="Show accessibility icon if station have elevator or ramp."
         android:defaultValue="false" />
 
     <SwitchPreference
         android:key="preference_sound"
         android:title="Play notification sound"
-        android:summary=""
+        android:summary="Play notification sound when arrive destination."
         android:defaultValue="true" />
 
     <SwitchPreference
         android:key="preference_noti"
-        app:title="Receive tweet notification"
-        android:summary=""
+        android:title="Receive tweet notification"
+        android:summary="Subscribe to malfunction announcement of train systems."
         android:defaultValue="true" />
 
 </PreferenceScreen>
