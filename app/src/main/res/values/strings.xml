@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Route.in.th</string>
+    <string name="app_name" translatable="false">Route.in.th</string>
     <string name="origin">Origin</string>
     <string name="destination">Destination</string>
     <string name="direction">Direction</string>
@@ -55,4 +55,14 @@
     <string name="add_trip">Add Trip</string>
     <string name="paid">Paid</string>
     <string name="search">Search...</string>
+    <string name="add_card">Add Card</string>
+    <string name="balance_exceed">Balance should not exceed %d</string>
+    <string name="delete_card">Delete card</string>
+    <string name="delete_card_text">Do you want to delete your\'s %s card?</string>
+    <string name="yes">Yes</string>
+    <string name="delete_success">Card deleted successfully.</string>
+    <string name="cancel">Cancel</string>
+    <string name="value_added">Value added, Have a nice day</string>
+    <string name="select_as">Select As</string>
+    <string name="editing_card">Editing %s Card</string>
 </resources>

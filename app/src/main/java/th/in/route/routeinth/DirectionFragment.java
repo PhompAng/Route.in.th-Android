@@ -443,7 +443,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
     private void showSelectDialog(final Station station) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_station_select, null);
-        builder.setTitle("Select As")
+        builder.setTitle(R.string.select_as)
                 .setView(dialogView)
                 .create();
         final AlertDialog dialog = builder.show();

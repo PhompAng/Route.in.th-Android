@@ -29,6 +29,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -155,17 +156,17 @@ public class CardFragment extends Fragment implements
     public boolean deleteCard(int position) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         final Card card = cards.get(position);
-        builder.setTitle("Delete card");
-        builder.setMessage("Do you want to delete your's " + card.getSystem() + " card?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.delete_card);
+        builder.setMessage(String.format(Locale.getDefault(), getString(R.string.delete_card_text), card.getSystem()));
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 FirebaseUtils.deleteCard(uidUtils.getUID(), card);
-                Toast.makeText(getContext(), "card successfully deleted.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.delete_success, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -190,7 +191,7 @@ public class CardFragment extends Fragment implements
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d("asd", data.toString());
                     FirebaseUtils.addValue(uidUtils.getUID(), (Card) Parcels.unwrap(data.getParcelableExtra(AddValueDialog.ARG_CARD)), data.getIntExtra("value", 0));
-                    Toast.makeText(getContext(), "Value added, Have a nice day", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.value_added, Toast.LENGTH_SHORT).show();
                 }
         }
     }

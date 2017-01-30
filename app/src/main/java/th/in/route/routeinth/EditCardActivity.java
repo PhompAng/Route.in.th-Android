@@ -55,13 +55,13 @@ public class EditCardActivity extends AppCompatActivity {
         card = Parcels.unwrap(intent.getParcelableExtra("card"));
 
         setSupportActionBar(toolbar);
-        setTitle("Editing " +  card.getSystem() + " Card");
+        setTitle(String.format(Locale.getDefault(), getString(R.string.editing_card), card.getSystem()));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         reference = DatabaseUtils.getDatabase().getReference();
         uidUtils = new UIDUtils(this);
 
         number.setText(card.getNumber());
-        balance.setText(Integer.toString(card.getBalance()));
+        balance.setText(String.format(Locale.getDefault(), "%d", card.getBalance()));
     }
 
     @Override
@@ -97,7 +97,7 @@ public class EditCardActivity extends AppCompatActivity {
         if (validator.validate(balance) == null) {
             Integer balanceValidate = (new BalanceRule()).validate(balance, card.getSystem());
             if (balanceValidate != null) {
-                balance.setError(String.format(Locale.getDefault(), "Balance should not exceed %d", balanceValidate));
+                balance.setError(String.format(Locale.getDefault(), getString(R.string.balance_exceed), balanceValidate));
                 cancel = true;
                 focusView = balance;
             }
