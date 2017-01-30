@@ -66,17 +66,17 @@ public class LocationReceiver extends IntentService {
                 return;
             }
             String stationName = station.getEn();
-            buildNotification(getString(R.string.navigating), "Current Station: " + stationName, true, notifyID);
+            buildNotification(getString(R.string.navigating), "Current Station: " + stationName, true, notifyID, false);
 
             String changeText = needChangeSystem(station.getKey());
             if (changeText != null) {
                 //TODO change title
-                buildNotification("Route.in.th", changeText, false, 123);
+                buildNotification("Route.in.th", changeText, false, 123, changeText.equals("End of route"));
             }
         }
     }
 
-    private void buildNotification(String title, String text, boolean onGoing, int id) {
+    private void buildNotification(String title, String text, boolean onGoing, int id, boolean isSound) {
         mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setContentTitle(title)
                 .setContentText(text)
@@ -84,9 +84,11 @@ public class LocationReceiver extends IntentService {
                 .setOngoing(onGoing);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        if (isSound) {
+            mBuilder.setSound(defaultSoundUri);
+        }
         if (onGoing) {
             mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
-            mBuilder.setSound(defaultSoundUri);
         }
         mNotificationManager.notify(
                 id,
