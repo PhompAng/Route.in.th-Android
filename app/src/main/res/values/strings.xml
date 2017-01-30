@@ -54,4 +54,5 @@
     <string name="set_destination">Set Destination</string>
     <string name="add_trip">Add Trip</string>
     <string name="paid">Paid</string>
+    <string name="search">Search...</string>
 </resources>

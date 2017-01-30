@@ -25,7 +25,13 @@ public class StationEvent {
         this.isStation = isStation;
     }
 
-    public String toString() {
+    public String toString(String lang) {
+        switch (lang) {
+            case "en":
+                return isStation() ? getStation().getEn().replaceFirst(" ", "\n"):getPlace().getName().toString();
+            case "th":
+                return isStation() ? getStation().getTh().replaceFirst(" ", "\n"):getPlace().getName().toString();
+        }
         return isStation() ? getStation().getEn().replaceFirst(" ", "\n"):getPlace().getName().toString();
     }
 

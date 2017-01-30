@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -105,6 +107,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
     private Map<String, Integer> stationCnt;
     private Map<String, Card> cardMap;
     private int flag = 0;
+    private String lang;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
@@ -166,6 +169,8 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
         }
 
         UIDUtils uidUtils = new UIDUtils(getContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        lang = preferences.getString("preference_lang", "en");
         DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
         RxFirebaseDatabase.getInstance().observeSingleValue(reference.child("users").child(uidUtils.getUID()))
                 .subscribe(new Subscriber<DataSnapshot>() {
@@ -540,7 +545,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
                 s = R.string.select_destination_station;
             }
             if (stations.get(i) != null) {
-                textView.setText(stations.get(i).toString());
+                textView.setText(stations.get(i).toString(lang));
                 chip.setVisibility(View.VISIBLE);
                 if (stations.get(i).isStation()) {
                     chip.setStation(stations.get(i).getStation());

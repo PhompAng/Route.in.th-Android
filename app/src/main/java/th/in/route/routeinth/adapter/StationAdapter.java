@@ -1,7 +1,9 @@
 package th.in.route.routeinth.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ public class StationAdapter extends ExpandableRecyclerAdapter<RailSystem, Statio
     private StationViewHolder.OnStationClickListener listener;
     private LayoutInflater mInflater;
     private List<RailSystem> systems;
+    private Context mContext;
 
     /**
      * Primary constructor. Sets up {@link #mParentList} and {@link #mFlatItemList}.
@@ -44,6 +47,7 @@ public class StationAdapter extends ExpandableRecyclerAdapter<RailSystem, Statio
      */
     public StationAdapter(Context context, @NonNull List<RailSystem> parentList, StationViewHolder.OnStationClickListener listener) {
         super(parentList);
+        mContext = context;
         mInflater = LayoutInflater.from(context);
         systems = parentList;
         this.listener = listener;
@@ -73,6 +77,19 @@ public class StationAdapter extends ExpandableRecyclerAdapter<RailSystem, Statio
 
     @Override
     public void onBindChildViewHolder(@NonNull StationViewHolder childViewHolder, int parentPosition, int childPosition, @NonNull Station child) {
-        childViewHolder.bind(child.getEn(), child);
+        String stationName;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        switch (preferences.getString("preference_lang", "en")) {
+            case "en":
+                stationName = child.getEn();
+                break;
+            case "th":
+                stationName = child.getTh();
+                break;
+            default:
+                stationName = child.getEn();
+                break;
+        }
+        childViewHolder.bind(stationName, child);
     }
 }

@@ -2,10 +2,12 @@ package th.in.route.routeinth.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -83,6 +85,23 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final RouteAdapter.ViewHolder holder, int position) {
         final RouteItem routeItem = routeItems.get(position);
+        String routeName;
+        String headingName;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        switch (preferences.getString("preference_lang", "en")) {
+            case "en":
+                routeName = routeItem.getRoute().name.en;
+                headingName = routeItem.getRoute().heading.en;
+                break;
+            case "th":
+                routeName = routeItem.getRoute().name.th;
+                headingName = routeItem.getRoute().heading.th;
+                break;
+            default:
+                routeName = routeItem.getRoute().name.en;
+                headingName = routeItem.getRoute().heading.en;
+                break;
+        }
         holder.routeItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,7 +159,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             GradientDrawable labelBg = (GradientDrawable) holder.viewCodeLabel.getBackground();
             labelBg.setColorFilter(ContextCompat.getColor(mContext, color), PorterDuff.Mode.ADD);
             holder.viewCodeLabel.setVisibility(View.VISIBLE);
-            holder.viewHeadingLabel.setText(String.format(Locale.getDefault(), mContext.getResources().getString(R.string.heading), routeItem.getRoute().heading.en));
+            holder.viewHeadingLabel.setText(String.format(Locale.getDefault(), mContext.getResources().getString(R.string.heading), headingName));
             holder.viewHeadingLabel.setVisibility(View.VISIBLE);
             holder.infoLabel.setVisibility(View.VISIBLE);
         } else {
@@ -152,19 +171,19 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         //each listview
         switch (routeItem.getType()) {
             case "siam":
-                holder.stationNameLabel.setText(routeItem.getRoute().name.en);
+                holder.stationNameLabel.setText(routeName);
                 holder.resourceStationImage.setImageResource(R.drawable.route_one_between);
                 holder.showIcon.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
                 break;
             case "ori_one":
-                holder.stationNameLabel.setText(routeItem.getRoute().name.en);
+                holder.stationNameLabel.setText(routeName);
                 holder.resourceStationImage.setImageResource(R.drawable.route_one_ori);
                 holder.stationNameLabel.setTextSize(14);
                 holder.showIcon.setVisibility(View.GONE);
                 break;
             case "des_one":
-                holder.stationNameLabel.setText(routeItem.getRoute().name.en);
+                holder.stationNameLabel.setText(routeName);
                 holder.resourceStationImage.setImageResource(R.drawable.route_one_des);
                 holder.showIcon.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
@@ -176,7 +195,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                 } else {
                     holder.resourceStationImage.setImageResource(R.drawable.route_start);
                 }
-                holder.stationNameLabel.setText(routeItem.getRoute().name.en);
+                holder.stationNameLabel.setText(routeName);
                 holder.showIcon.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
                 break;
@@ -206,7 +225,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
                         }
                         break;
                 }
-                holder.stationNameLabel.setText(routeItem.getRoute().name.en);
+                holder.stationNameLabel.setText(routeName);
                 holder.showIcon.setVisibility(View.GONE);
                 holder.stationNameLabel.setTextSize(14);
                 break;

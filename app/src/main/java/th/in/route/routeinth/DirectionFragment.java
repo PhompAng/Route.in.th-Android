@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -13,6 +14,7 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -88,6 +90,8 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
     private Map<String, Card> defaultCardMap;
     private Map<String, Card> cardMap;
 
+    private String lang;
+
     public DirectionFragment() {
         // Required empty public constructor
     }
@@ -121,6 +125,8 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
         setHasOptionsMenu(true);
         showProgressDialog();
         stationUtils = StationUtils.getInstance();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        lang = preferences.getString("preference_lang", "en");
         UIDUtils uidUtils = new UIDUtils(getContext());
         DatabaseReference reference = DatabaseUtils.getDatabase().getReference();
         RxFirebaseDatabase.getInstance().observeSingleValue(reference.child("users").child(uidUtils.getUID()))
@@ -307,7 +313,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
                 s = R.string.select_destination_station;
             }
             if (stations.get(i) != null) {
-                textView.setText(stations.get(i).toString());
+                textView.setText(stations.get(i).toString(lang));
                 chip.setVisibility(View.VISIBLE);
                 if (stations.get(i).isStation()) {
                     chip.setStation(stations.get(i).getStation());
