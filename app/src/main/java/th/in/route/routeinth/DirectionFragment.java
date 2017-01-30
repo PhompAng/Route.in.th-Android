@@ -434,7 +434,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(getContext(), v.getTag().toString(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), v.getTag().toString(), Toast.LENGTH_SHORT).show();
         setPinsTransparent();
         Station station = stationUtils.getStationFromKey(v.getTag().toString());
         showSelectDialog(station);

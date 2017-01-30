@@ -188,7 +188,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.viewCodeLabel.setVisibility(View.VISIBLE);
             holder.viewHeadingLabel.setText(String.format(Locale.getDefault(), mContext.getResources().getString(R.string.heading), headingName));
             holder.viewHeadingLabel.setVisibility(View.VISIBLE);
-            hasFacilities(holder.infoLabel, routeItem.getRoute().name.key);
+            if (preferences.getBoolean("preference_accessibility", false)) {
+                hasFacilities(holder.infoLabel, routeItem.getRoute().name.key);
+            }
         } else {
             holder.viewCodeLabel.setVisibility(View.GONE);
             holder.viewHeadingLabel.setVisibility(View.GONE);
