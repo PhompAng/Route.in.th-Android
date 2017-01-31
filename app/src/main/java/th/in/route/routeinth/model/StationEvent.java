@@ -1,7 +1,11 @@
 package th.in.route.routeinth.model;
 
-import com.google.android.gms.location.places.Place;
+import android.location.Location;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.maps.model.LatLng;
+
+import th.in.route.routeinth.app.DistanceUtils;
 import th.in.route.routeinth.model.system.Station;
 
 /**
@@ -33,6 +37,15 @@ public class StationEvent {
                 return isStation() ? getStation().getTh().replaceFirst(" ", "\n"):getPlace().getName().toString();
         }
         return isStation() ? getStation().getEn().replaceFirst(" ", "\n"):getPlace().getName().toString();
+    }
+
+    public LatLng toLatLng() {
+        if (isStation()) {
+            Location location = DistanceUtils.getInstance().getLocationFromKey(getStation().getKey());
+            return new LatLng(location.getLatitude(), location.getLongitude());
+        } else {
+            return getPlace().getLatLng();
+        }
     }
 
     public Station getStation() {

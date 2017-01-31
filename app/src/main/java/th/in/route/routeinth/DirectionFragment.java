@@ -332,6 +332,10 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
 
     @OnClick(R.id.calculate)
     void onCalculateClicked(View v) {
+        Intent intent = new Intent(getActivity(), MapDirectionActivity.class);
+        intent.putExtra("origin", stations.get(0).toLatLng());
+        intent.putExtra("destination", stations.get(1).toLatLng());
+        startActivity(intent);
         String departKey = stations.get(0).getStation().getKey();
         String arriveKey = stations.get(1).getStation().getKey();
         final Input input = new Input();

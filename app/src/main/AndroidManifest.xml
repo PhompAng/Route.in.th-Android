@@ -25,7 +25,8 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_announcement_black_24dp" />
 
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:configChanges="locale|layoutDirection">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +34,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddCardActivity"
+        <activity
+            android:name=".AddCardActivity"
             android:configChanges="locale|layoutDirection" />
 
         <meta-data
@@ -43,7 +45,8 @@
             android:name="io.fabric.ApiKey"
             android:value="1cd4b4143f706704ff666b279bb801789ec5b753" />
 
-        <activity android:name=".EditCardActivity"
+        <activity
+            android:name=".EditCardActivity"
             android:configChanges="locale|layoutDirection" />
 
         <service
@@ -66,27 +69,27 @@
             android:name=".services.CardService"
             android:enabled="true"
             android:stopWithTask="true" />
-
         <service
             android:name=".services.MyFirebaseInstanceIDService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
-        <service
-            android:name=".services.MyFirebaseMessagingService">
+        <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <activity android:name=".StationMapActivity"
+        <activity
+            android:name=".StationMapActivity"
             android:configChanges="locale|layoutDirection" />
-        <activity android:name=".SettingActivity"
+        <activity
+            android:name=".SettingActivity"
             android:configChanges="locale|layoutDirection"
-            android:theme="@style/AppTheme.PreferenceFixTheme"/>
+            android:theme="@style/AppTheme.PreferenceFixTheme" />
+        <activity android:name=".MapDirectionActivity"></activity>
     </application>
 
 </manifest>
