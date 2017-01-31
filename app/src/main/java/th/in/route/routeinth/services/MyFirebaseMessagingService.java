@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -32,7 +33,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+            if (remoteMessage.getNotification().getBody().contains("ขัดข้อง") || remoteMessage.getNotification().getBody().contains("ตามปกติ")) {
+                updateSystemState(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+            }
         }
+    }
+
+    private void updateSystemState(String title, String body) {
+        SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String system;
+        if (title.contains("BTS")) {
+            system = "BTS";
+        } else if (title.contains("MRT")) {
+            system = "MRT";
+        } else {
+            system = "ARL";
+        }
+        if (body.contains("ขัดข้อง")) {
+            editor.putBoolean(system, false);
+        } else if (body.contains("ตามปกติ")) {
+            editor.putBoolean(system, true);
+        }
+        editor.apply();
     }
 
     private void sendNotification(String title, String messageBody) {
