@@ -67,6 +67,8 @@ import th.in.route.routeinth.model.view.Card;
 import th.in.route.routeinth.services.APIServices;
 import th.in.route.routeinth.view.StationChip;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -332,10 +334,6 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
 
     @OnClick(R.id.calculate)
     void onCalculateClicked(View v) {
-        Intent intent = new Intent(getActivity(), MapDirectionActivity.class);
-        intent.putExtra("origin", stations.get(0).toLatLng());
-        intent.putExtra("destination", stations.get(1).toLatLng());
-        startActivity(intent);
         String departKey = stations.get(0).getStation().getKey();
         String arriveKey = stations.get(1).getStation().getKey();
         final Input input = new Input();
@@ -370,7 +368,11 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
         .doOnNext(new Action1<Result>() {
             @Override
             public void call(Result result) {
-                calculate(result);
+                if (systemDown(result)) {
+                    fallBackMode();
+                } else {
+                    calculate(result);
+                }
             }
         }).doOnError(new Action1<Throwable>() {
             @Override
@@ -380,6 +382,22 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
             }
         })
         .subscribe();
+    }
+
+    private void fallBackMode() {
+        Intent intent = new Intent(getActivity(), MapDirectionActivity.class);
+        intent.putExtra("origin", stations.get(0).toLatLng());
+        intent.putExtra("destination", stations.get(1).toLatLng());
+        startActivity(intent);
+    }
+
+    private boolean systemDown(Result result) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("status", MODE_PRIVATE);
+        boolean btsDown = result.fare.BTS > 0 && sharedPreferences.getBoolean("BTS", false);
+        boolean mrtDown = result.fare.MRT > 0 && sharedPreferences.getBoolean("MRT", false);
+        boolean arlDown = result.fare.ARL > 0 && sharedPreferences.getBoolean("ARL", false);
+
+        return btsDown || mrtDown || arlDown;
     }
 
     private void calculate(Result result) {
