@@ -39,9 +39,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void updateSystemState(String system, String body) {
+    private void updateSystemState(String title, String body) {
         SharedPreferences sharedPreferences = getSharedPreferences("status", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        String system;
+        if (title.contains("BTS")) {
+            system = "BTS";
+        } else if (title.contains("MRT")) {
+            system = "MRT";
+        } else {
+            system = "ARL";
+        }
         if (body.contains("ขัดข้อง")) {
             editor.putBoolean(system, false);
         } else if (body.contains("ตามปกติ")) {
