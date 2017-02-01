@@ -89,7 +89,8 @@
             android:name=".SettingActivity"
             android:configChanges="locale|layoutDirection"
             android:theme="@style/AppTheme.PreferenceFixTheme" />
-        <activity android:name=".MapDirectionActivity"></activity>
+        <activity android:name=".MapDirectionActivity" />
+        <activity android:name=".DisclaimerActivity"></activity>
     </application>
 
 </manifest>

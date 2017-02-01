@@ -26,4 +26,10 @@
         android:summary="Subscribe to malfunction announcement of train systems."
         android:defaultValue="true" />
 
+    <Preference
+        android:key="preference_disclaimer"
+        android:title="Disclaimer"
+        android:summary=""
+        android:defaultValue="true" />
+
 </PreferenceScreen>
