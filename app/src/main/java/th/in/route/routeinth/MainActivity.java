@@ -2,7 +2,6 @@ package th.in.route.routeinth;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +13,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,32 +21,21 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.twitter.sdk.android.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.fabric.sdk.android.Fabric;
 import th.in.route.routeinth.DirectionFragment.OnCalculate;
-import th.in.route.routeinth.app.DistanceUtils;
-import th.in.route.routeinth.app.FirebaseUtils;
 import th.in.route.routeinth.app.LocaleHelper;
 import th.in.route.routeinth.model.StationEvent;
 import th.in.route.routeinth.model.result.Result;
-import th.in.route.routeinth.services.CardService;
 
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener,
         BottomNavigationView.OnNavigationItemSelectedListener,
         ResultFragment.OnTest, OnCalculate{
-
-    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "olkRGdsGj8d2Wgz31g3OSyXVi";
-    private static final String TWITTER_SECRET = "QAX5BCY8KLGaTu2cxSDXcsgIyZURb81ST4Ujq3xyvC0IkeB7bj";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
@@ -71,20 +58,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        FirebaseUtils.regisUser(getApplicationContext());
-        DistanceUtils.getInstance();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (preferences.getBoolean("preference_noti", true)) {
-            FirebaseMessaging.getInstance().subscribeToTopic("service_alerts");
-        } else {
-            FirebaseMessaging.getInstance().unsubscribeFromTopic("service_alerts");
-        }
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient
                     .Builder(this)
@@ -98,7 +75,6 @@ public class MainActivity extends AppCompatActivity
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         main = (NestedScrollView) findViewById(R.id.main);
-        startService(new Intent(this, CardService.class));
 
         if (savedInstanceState == null) {
             DirectionFragment directionFragment = DirectionFragment.newInstance("test", "test");

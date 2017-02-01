@@ -25,14 +25,16 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_announcement_black_24dp" />
 
-        <activity
-            android:name=".MainActivity"
-            android:configChanges="locale|layoutDirection">
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="locale|layoutDirection">
         </activity>
         <activity
             android:name=".AddCardActivity"
@@ -90,7 +92,7 @@
             android:configChanges="locale|layoutDirection"
             android:theme="@style/AppTheme.PreferenceFixTheme" />
         <activity android:name=".MapDirectionActivity" />
-        <activity android:name=".DisclaimerActivity"></activity>
+        <activity android:name=".DisclaimerActivity" />
     </application>
 
 </manifest>
