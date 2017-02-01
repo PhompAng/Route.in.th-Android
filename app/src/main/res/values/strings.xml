@@ -65,4 +65,5 @@
     <string name="value_added">Value added, Have a nice day</string>
     <string name="select_as">Select As</string>
     <string name="editing_card">Editing %s Card</string>
+    <string name="ok">OK</string>
 </resources>

@@ -4,6 +4,7 @@ package th.in.route.routeinth;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
@@ -369,7 +370,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
             @Override
             public void call(Result result) {
                 if (systemDown(result)) {
-                    fallBackMode();
+                    fallBackModeDialog();
                 } else {
                     calculate(result);
                 }
@@ -382,6 +383,26 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
             }
         })
         .subscribe();
+    }
+
+    private void fallBackModeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Use other public transport ?")
+                .setMessage("Some system is currently down. Do you want to calculate direction using other public transport ?")
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        fallBackMode();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.show();
     }
 
     private void fallBackMode() {
