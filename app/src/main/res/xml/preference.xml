@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
         android:key="preference_lang"
-        android:title="Language"
+        android:title="@string/language"
         android:entries="@array/lang_array"
         android:entryValues="@array/lang_array_val"
         android:dialogTitle="@string/lang_dialog_title_list_preference"
@@ -10,26 +10,25 @@
 
     <SwitchPreference
         android:key="preference_accessibility"
-        android:title="Show Accessibility"
-        android:summary="Show accessibility icon if station have elevator or ramp."
+        android:title="@string/show_accessibility"
+        android:summary="@string/show_accessibility_desc"
         android:defaultValue="false" />
 
     <SwitchPreference
         android:key="preference_sound"
-        android:title="Play notification sound"
-        android:summary="Play notification sound when arrive destination."
+        android:title="@string/notification_sound"
+        android:summary="@string/notification_sound_desc"
         android:defaultValue="true" />
 
     <SwitchPreference
         android:key="preference_noti"
-        android:title="Receive tweet notification"
-        android:summary="Subscribe to malfunction announcement of train systems."
+        android:title="@string/tweet_noti"
+        android:summary="@string/tweet_noti_desc"
         android:defaultValue="true" />
 
     <Preference
         android:key="preference_disclaimer"
-        android:title="Disclaimer"
-        android:summary=""
+        android:title="@string/disclaimer"
         android:defaultValue="true" />
 
 </PreferenceScreen>
