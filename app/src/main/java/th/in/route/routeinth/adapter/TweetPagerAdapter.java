@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import th.in.route.routeinth.ServiceAlertsFragment;
 import th.in.route.routeinth.TweetPageFragment;
 
 /**
@@ -20,7 +21,11 @@ public class TweetPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return TweetPageFragment.newInstance(position, "test");
+        if (position == 0) {
+            return new ServiceAlertsFragment();
+        } else {
+            return TweetPageFragment.newInstance(position, "test");
+        }
     }
 
     @Override
