@@ -53,6 +53,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import th.in.route.routeinth.app.DatabaseUtils;
@@ -366,6 +367,7 @@ public class DirectionFragment extends Fragment implements View.OnClickListener,
         APIServices apiServices = retrofit.create(APIServices.class);
         apiServices.calculate(input)
         .subscribeOn(Schedulers.newThread())
+        .observeOn(AndroidSchedulers.mainThread())
         .doOnNext(new Action1<Result>() {
             @Override
             public void call(Result result) {
