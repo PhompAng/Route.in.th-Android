@@ -12,7 +12,6 @@ public class DatabaseUtils {
     public static FirebaseDatabase getDatabase() {
         if (sDatabaseReference == null) {
             sDatabaseReference = FirebaseDatabase.getInstance();
-            sDatabaseReference.setPersistenceEnabled(true);
         }
         return sDatabaseReference;
     }
