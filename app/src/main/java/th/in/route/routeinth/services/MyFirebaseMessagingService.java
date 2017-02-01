@@ -51,9 +51,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             system = "ARL";
         }
         if (body.contains("ขัดข้อง")) {
-            editor.putBoolean(system, false);
-        } else if (body.contains("ตามปกติ")) {
             editor.putBoolean(system, true);
+        } else if (body.contains("ตามปกติ")) {
+            editor.putBoolean(system, false);
         }
         editor.apply();
     }
