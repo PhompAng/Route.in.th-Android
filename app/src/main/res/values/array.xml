@@ -2,7 +2,7 @@
 <resources>
     <string-array name="lang_array">
         <item>English</item>
-        <item>Thai</item>
+        <item>ไทย</item>
     </string-array>
 
     <string-array name="lang_array_val">
