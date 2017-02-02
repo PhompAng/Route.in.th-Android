@@ -1,3 +1,79 @@
 <resources>
-    <string name="app_name">Route.in.th</string>
+    <string name="app_name" translatable="false">Route.in.th</string>
+    <string name="origin">Origin</string>
+    <string name="destination">Destination</string>
+    <string name="direction">Direction</string>
+    <string name="card">Card</string>
+    <string name="information">Information</string>
+    <string name="announcement">Announcement</string>
+
+    <string name="select_destination_station">Select Destination Station</string>
+    <string name="select_origin_station">Select Origin Station</string>
+    <string name="landmark">Landmark</string>
+    <string name="calculate">Calculate</string>
+    <string name="action_add">Add</string>
+    <string name="required">Required</string>
+    <string name="normal">Normal</string>
+    <string name="adult">Adult</string>
+    <string name="student">Student</string>
+    <string name="senior">Senior</string>
+    <string name="elder">Elder</string>
+    <string name="child">Child</string>
+    <string name="top_up">Top Up</string>
+    <string name="navigating">Navigating</string>
+    <string name="stop_navigation">Stop Navigation</string>
+    <string name="navigate">Navigate</string>
+    <string name="reset">Reset</string>
+    <string name="heading">Heading: %1$s</string>
+    <plurals name="station">
+        <item quantity="one">%1$d Station</item>
+        <item quantity="other">%1$d Stations</item>
+    </plurals>
+    <plurals name="station_count">
+        <item quantity="one">%1$s %2$d station (%3$s)</item>
+        <item quantity="other">%1$s %2$d stations (%3$s)</item>
+    </plurals>
+    <string name="trip_fare">Trip Fare</string>
+    <string name="bath">Bath</string>
+
+    <string name="lang_dialog_title_list_preference">Select Language</string>
+    <string name="fare_rate">Fare Rate</string>
+    <string name="n_baht">%1$d Baht</string>
+    <string name="system_and_type_of_card">System and Type of Card</string>
+    <string name="card_balance">Card Balance</string>
+    <string name="trip_balance">Trip Balance</string>
+    <string name="submit">Submit</string>
+    <string name="card_number">Card Number</string>
+    <string name="card_type_setting">Card Type Setting</string>
+    <string name="arl_fare_rate">ARL Fare Rate</string>
+    <string name="bts_fare_rate">BTS Fare Rate</string>
+    <string name="mrt_fare_rate">MRT Fare Rate</string>
+    <string name="station_facilities">Station Facilities</string>
+    <string name="pay">Pay</string>
+    <string name="set_origin">Set Origin</string>
+    <string name="set_destination">Set Destination</string>
+    <string name="add_trip">Add Trip</string>
+    <string name="paid">Paid</string>
+    <string name="search">Search…</string>
+    <string name="add_card">Add Card</string>
+    <string name="balance_exceed">Balance should not exceed %d</string>
+    <string name="delete_card">Delete card</string>
+    <string name="delete_card_text">Do you want to delete your\'s %s card?</string>
+    <string name="yes">Yes</string>
+    <string name="delete_success">Card deleted successfully.</string>
+    <string name="cancel">Cancel</string>
+    <string name="value_added">Value added, Have a nice day</string>
+    <string name="select_as">Select As</string>
+    <string name="editing_card">Editing %s Card</string>
+    <string name="ok">OK</string>
+    <string name="disclaimer_topic">License Agreement</string>
+    <string name="language">Language</string>
+    <string name="show_accessibility">Show Accessibility</string>
+    <string name="notification_sound">Notification sound</string>
+    <string name="notification_sound_desc">Play notification sound when arrive destination.</string>
+    <string name="tweet_noti">Receive tweet notification</string>
+    <string name="tweet_noti_desc">Subscribe to malfunction announcement of train systems.</string>
+    <string name="show_accessibility_desc">Show accessibility icon if station have elevator or ramp.</string>
+    <string name="disclaimer">Disclaimer</string>
+    <string name="disclaimer_body">This software is a work developed by Pichai Sivawat, Tonsai Singhkangwan, and Tharathip Malaimarn from King Mongkut\'s Institute of Technology Ladkrabang under the provision of Boonprasert Surakratanasakul under The Nineteenth National Software Competition Contest: NSC2017, which has been supported by the National Electronics and Computer Technology Center (NECTEC), in order to encourage pupils and students to learn and practice their skills in developing software.  Therefore, the intellectual property of this software shall belong to the developer and the developer gives NECTEC a permission to distribute this software as an “as is ” and non-modified software for a temporary and non-exclusive use without remuneration to anyone for his or her own purpose or academic purpose, which are not commercial purposes.  In this connection, NECTEC and SIPA shall not be responsible to the user for taking care, maintaining, training or developing the efficiency of this software. Moreover, NECTEC shall not be liable for any error, software efficiency and damages in connection with or arising out of the use of the software.</string>
 </resources>

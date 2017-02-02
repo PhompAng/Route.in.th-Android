@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="350dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <View
+        android:id="@+id/A8"
+        android:tag="A8"
+        android:layout_width="5dp"
+        android:layout_height="9dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="160.5dp"
+        android:layout_marginTop="115dp"/>
+
+    <View
+        android:id="@+id/A7"
+        android:tag="A7"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="198.5dp"
+        android:layout_marginTop="115.5dp"/>
+
+    <View
+        android:id="@+id/A6"
+        android:tag="A6"
+        android:layout_width="5dp"
+        android:layout_height="9dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="224.5dp"
+        android:layout_marginTop="115.5dp"/>
+
+    <View
+        android:id="@+id/A5"
+        android:tag="A5"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="247dp"
+        android:layout_marginTop="115.5dp"/>
+
+    <View
+        android:id="@+id/A4"
+        android:tag="A4"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="268dp"
+        android:layout_marginTop="115.5dp"/>
+
+    <View
+        android:id="@+id/A3"
+        android:tag="A3"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="289dp"
+        android:layout_marginTop="115.5dp"/>
+
+    <View
+        android:id="@+id/A2"
+        android:tag="A2"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="310dp"
+        android:layout_marginTop="115.5dp"/>
+
+    <View
+        android:id="@+id/A1"
+        android:tag="A1"
+        android:layout_width="10dp"
+        android:layout_height="5dp"
+        android:background="@drawable/station_pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="312dp"
+        android:layout_marginTop="147dp"/>
+
+</merge>

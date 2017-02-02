@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="preference_lang"
+        android:title="@string/language"
+        android:entries="@array/lang_array"
+        android:entryValues="@array/lang_array_val"
+        android:dialogTitle="@string/lang_dialog_title_list_preference"
+        android:defaultValue="en" />
+
+    <SwitchPreference
+        android:key="preference_accessibility"
+        android:title="@string/show_accessibility"
+        android:summary="@string/show_accessibility_desc"
+        android:defaultValue="false" />
+
+    <SwitchPreference
+        android:key="preference_sound"
+        android:title="@string/notification_sound"
+        android:summary="@string/notification_sound_desc"
+        android:defaultValue="true" />
+
+    <SwitchPreference
+        android:key="preference_noti"
+        android:title="@string/tweet_noti"
+        android:summary="@string/tweet_noti_desc"
+        android:defaultValue="true" />
+
+    <Preference
+        android:key="preference_disclaimer"
+        android:title="@string/disclaimer"
+        android:defaultValue="true" />
+
+</PreferenceScreen>

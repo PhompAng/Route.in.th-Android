@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="2dp"
+    android:layout_margin="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="24sp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16sp">
+
+        <TextView
+            android:id="@+id/fare_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/trip_fare"
+            android:textSize="24sp"
+            android:textColor="@color/textPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/resultTripFareTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="128"
+            android:textSize="56sp"
+            android:textColor="@color/textSecondary"
+            android:fontFamily="sans-serif-light"
+            app:layout_constraintTop_toBottomOf="@+id/fare_text"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="8dp" />
+        
+        <TextView
+            android:id="@+id/fare_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bath"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-light"
+            app:layout_constraintBottom_toBottomOf="@+id/resultTripFareTotal"
+            app:layout_constraintBaseline_toBaselineOf="@+id/resultTripFareTotal"
+            app:layout_constraintLeft_toRightOf="@+id/resultTripFareTotal"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/bts_station_cnt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="BTS 6 Station (Normal)"
+            android:textColor="@color/textPrimary"
+            android:drawableStart="@drawable/ic_directions_subway_black_24dp"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/textSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/resultTripFareTotal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/resultBTSFare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="35 baht"
+            android:textColor="@color/textPrimary"
+            app:layout_constraintTop_toTopOf="@id/bts_station_cnt"
+            app:layout_constraintBaseline_toBaselineOf="@id/bts_station_cnt"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/mrt_station_cnt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="MRT 9 Station (Normal)"
+            android:textColor="@color/textPrimary"
+            android:drawableStart="@drawable/ic_directions_subway_black_24dp"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/textSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/bts_station_cnt"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/resultMRTFare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="33 baht"
+            android:textColor="@color/textPrimary"
+            app:layout_constraintTop_toTopOf="@id/mrt_station_cnt"
+            app:layout_constraintBaseline_toBaselineOf="@id/mrt_station_cnt"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/arl_station_cnt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="ARL 5 Station (Normal)"
+            android:textColor="@color/textPrimary"
+            android:drawableStart="@drawable/ic_directions_subway_black_24dp"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/textSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/mrt_station_cnt"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/resultARLFare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="30 baht"
+            android:textColor="@color/textPrimary"
+            app:layout_constraintTop_toTopOf="@id/arl_station_cnt"
+            app:layout_constraintBaseline_toBaselineOf="@id/arl_station_cnt"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="gone"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>
+
