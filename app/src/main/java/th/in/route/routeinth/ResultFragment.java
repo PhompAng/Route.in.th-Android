@@ -49,6 +49,7 @@ import rx.Subscriber;
 import th.in.route.routeinth.adapter.RouteAdapter;
 import th.in.route.routeinth.app.DatabaseUtils;
 import th.in.route.routeinth.app.DistanceUtils;
+import th.in.route.routeinth.app.FacilitiesUtils;
 import th.in.route.routeinth.app.FirebaseUtils;
 import th.in.route.routeinth.app.UIDUtils;
 import th.in.route.routeinth.model.StationEvent;
@@ -242,7 +243,7 @@ public class ResultFragment extends Fragment implements GoogleApiClient.Connecti
             resultARLFare.setText(String.format(Locale.getDefault(), getString(R.string.n_baht), this.result.fare.ARL));
         }
 
-        routeAdapter = new RouteAdapter(routeItems, getContext(), ResultFragment.this);
+        routeAdapter = new RouteAdapter(routeItems, getContext(), FacilitiesUtils.getInstance().getFacilitiesMap(), ResultFragment.this);
         linearLayoutManager = new LinearLayoutManager(getContext());
         routeRecycler.setHasFixedSize(true);
         routeRecycler.setLayoutManager(linearLayoutManager);

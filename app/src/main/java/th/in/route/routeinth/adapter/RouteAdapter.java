@@ -16,17 +16,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
-
 import org.parceler.Parcels;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import th.in.route.routeinth.R;
 import th.in.route.routeinth.ResultFragment;
@@ -44,34 +38,17 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
 
     private Context mContext;
     private List<RouteItem> routeItems;
+    private Map<String, List<String>> facilitiesMap;
     private ResultFragment fragment;
     private String nearestKey;
     private boolean isNavigate;
 
-    public RouteAdapter(List<RouteItem> routeItems, Context mContext, ResultFragment resultFragment) {
+    public RouteAdapter(List<RouteItem> routeItems, Context mContext, Map<String, List<String>> facilitiesMap, ResultFragment resultFragment) {
         this.routeItems = routeItems;
         this.mContext = mContext;
+        this.facilitiesMap = facilitiesMap;
         this.fragment = resultFragment;
         isNavigate = false;
-    }
-
-    private void hasFacilities(final ImageView holder, String key) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("facilities").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<List<String>> indicator = new GenericTypeIndicator<List<String>>(){};
-                List<String> facilities = dataSnapshot.getValue(indicator);
-                if (facilities.contains("elevator") || facilities.contains("ramp")) {
-                    holder.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public void setNearestKey(String nearestKey) {
@@ -189,7 +166,10 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             holder.viewHeadingLabel.setText(String.format(Locale.getDefault(), mContext.getResources().getString(R.string.heading), headingName));
             holder.viewHeadingLabel.setVisibility(View.VISIBLE);
             if (preferences.getBoolean("preference_accessibility", false)) {
-                hasFacilities(holder.infoLabel, routeItem.getRoute().name.key);
+                List<String> facilities = facilitiesMap.get(routeItem.getRoute().name.key);
+                if (facilities.contains("elevator") || facilities.contains("ramp")) {
+                    holder.infoLabel.setVisibility(View.VISIBLE);
+                }
             }
         } else {
             holder.viewCodeLabel.setVisibility(View.GONE);

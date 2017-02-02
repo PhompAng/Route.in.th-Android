@@ -19,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.fabric.sdk.android.Fabric;
 import th.in.route.routeinth.app.DistanceUtils;
+import th.in.route.routeinth.app.FacilitiesUtils;
 import th.in.route.routeinth.app.FirebaseUtils;
 import th.in.route.routeinth.app.LocaleHelper;
 import th.in.route.routeinth.services.CardService;
@@ -48,6 +49,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         FirebaseUtils.regisUser(getApplicationContext());
         DistanceUtils.getInstance();
+        FacilitiesUtils.getInstance();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (preferences.getBoolean("preference_noti", true)) {
             FirebaseMessaging.getInstance().subscribeToTopic("service_alerts");
