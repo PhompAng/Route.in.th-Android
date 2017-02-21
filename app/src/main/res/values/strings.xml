@@ -34,7 +34,7 @@
         <item quantity="other">%1$s %2$d stations (%3$s)</item>
     </plurals>
     <string name="trip_fare">Trip Fare</string>
-    <string name="bath">Bath</string>
+    <string name="bath">Baht</string>
 
     <string name="lang_dialog_title_list_preference">Select Language</string>
     <string name="fare_rate">Fare Rate</string>
